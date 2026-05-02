@@ -47,6 +47,9 @@ export const CATEGORIES: Category[] = [
   { id: '2', name: 'Wearables', slug: 'wearables', icon: 'Shirt', description: 'Fashionable clothes and accessories.' },
   { id: '3', name: 'Electronics', slug: 'electronics', icon: 'Zap', description: 'Latest gadgets and hardware.' },
   { id: '4', name: 'Woods', slug: 'woods', icon: 'TreePine', description: 'Premium furniture and woodcraft.' },
+  { id: '5', name: 'Furnitures', slug: 'furnitures', icon: 'Armchair', description: 'Modern and traditional furniture for every space.' },
+  { id: '6', name: 'Computers & Accessories', slug: 'computers', icon: 'Monitor', description: 'Laptops, desktops, and peripherals.' },
+  { id: '7', name: 'Mobiles & Accessories', slug: 'mobiles', icon: 'Smartphone', description: 'Smartphones and mobile gear.' },
 ];
 
 export const VENDORS: Vendor[] = [
@@ -158,6 +161,54 @@ export const PRODUCTS: Product[] = [
     description: 'Traditional Nepalese wood carving.',
     category: 'woods',
     stock: 5
+  },
+  {
+  id: 'p4',
+  vendorId: 'v1',
+  name: 'MacBook Air M3',
+  slug: 'macbook-air-m3',
+  price: 185000,
+  compareAtPrice: 210000,
+  image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca4?q=80&w=800&auto=format&fit=crop',
+  description: 'Lightning-fast M3 chip in a thin aluminum enclosure.',
+  category: 'computers',
+  stock: 8
+  },
+  {
+    id: 'p5',
+    vendorId: 'v1',
+    name: 'Samsung Galaxy S24',
+    slug: 'galaxy-s24',
+    price: 125000,
+    compareAtPrice: 140000,
+    image: 'https://images.unsplash.com/photo-1610945265078-3858a0828671?q=80&w=800&auto=format&fit=crop',
+    description: 'Latest flagship smartphone with AI photography.',
+    category: 'mobiles',
+    stock: 15
+  },
+  {
+    id: 'p6',
+    vendorId: 'v3',
+    name: 'Teakwood Dining Table',
+    slug: 'teak-dining-table',
+    price: 45000,
+    compareAtPrice: 55000,
+    image: 'https://images.unsplash.com/photo-1577140917170-285929fb55b7?q=80&w=800&auto=format&fit=crop',
+    description: 'Solid teakwood craftsmanship, seats six.',
+    category: 'furnitures',
+    stock: 3
+  },
+  {
+    id: 'p7',
+    vendorId: 'v2',
+    name: 'Organic Coffee Beans',
+    slug: 'organic-coffee',
+    price: 850,
+    compareAtPrice: 1200,
+    image: 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?q=80&w=800&auto=format&fit=crop',
+    description: 'Single-origin Himalayan arabica.',
+    category: 'foods',
+    stock: 40
   }
 ];
 
