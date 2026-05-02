@@ -11,5 +11,8 @@
 
   Lets implement authentication flow of user in our application. We will have a static data user with username , email, password (plain for now)
   , role [SuperAdmin, Vendor, User] , etc with any other major fields as required in enterprise ready multitenant application. We will have few users 
-  with multple roles in the static data folder. Now based on the role, we will route each routes abckend after successful login. 
+  with multple roles in the static data folder. Now based on the role, we will route each routes abckend after successful login.
+
+  Make the new MarketplaceHome color responsive light and dark and screen responsive of the added components, category menus.
+  Also add a new section named flashsale with timer on the right corner of the label. and in mobile view just below the label.
   
