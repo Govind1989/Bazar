@@ -1,0 +1,440 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--color-text-primary)}
+.bz-view{display:none}
+.bz-view.show{display:block;animation:bzIn 0.22s ease}
+@keyframes bzIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+.bz-nav{display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1.25rem;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);position:sticky;top:0;z-index:50}
+.bz-logo{font-family:var(--font-serif);font-size:1.25rem;font-weight:500;letter-spacing:-0.02em;cursor:pointer;display:flex;align-items:baseline;gap:6px}
+.bz-logo span{font-size:10px;color:var(--color-text-tertiary);font-family:var(--font-sans);letter-spacing:0.04em;font-weight:400}
+.bz-nav-tabs{display:flex;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden}
+.bz-tab{font-size:11px;padding:5px 13px;cursor:pointer;color:var(--color-text-secondary);transition:all 0.12s;border-right:0.5px solid var(--color-border-tertiary)}
+.bz-tab:last-child{border-right:none}
+.bz-tab:hover,.bz-tab.on{background:var(--color-text-primary);color:var(--color-background-primary)}
+.bz-acts{display:flex;gap:6px}
+.btn{font-size:11px;padding:5px 13px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer;background:transparent;color:var(--color-text-primary);font-family:var(--font-sans);transition:background 0.12s}
+.btn:hover{background:var(--color-background-secondary)}
+.btn-dk{background:var(--color-text-primary);color:var(--color-background-primary);border-color:transparent}
+.btn-dk:hover{opacity:0.82}
+
+.bz-sec{padding:1.5rem 1.25rem;border-bottom:0.5px solid var(--color-border-tertiary)}
+.bz-sh{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.1rem}
+.bz-st{font-size:11px;font-weight:500;letter-spacing:0.04em;color:var(--color-text-secondary)}
+.bz-sm{font-size:11px;color:var(--color-text-tertiary);cursor:pointer}
+.bz-sm:hover{color:var(--color-text-primary)}
+
+.bz-hero{padding:2.5rem 1.25rem 2rem;border-bottom:0.5px solid var(--color-border-tertiary)}
+.bz-hero-tag{font-size:11px;color:var(--color-text-tertiary);letter-spacing:0.06em;margin-bottom:1.25rem;display:flex;align-items:center;gap:10px}
+.bz-hero-tag::after{content:'';flex:1;height:0.5px;background:var(--color-border-tertiary)}
+.bz-h1{font-family:var(--font-serif);font-size:clamp(1.75rem,4.5vw,3rem);font-weight:500;line-height:1.08;letter-spacing:-0.03em;margin-bottom:1rem;max-width:520px}
+.bz-h1 em{font-style:italic;color:var(--color-text-secondary)}
+.bz-hero-p{font-size:13px;color:var(--color-text-secondary);max-width:400px;line-height:1.65;margin-bottom:1.75rem}
+.bz-hero-row{display:flex;gap:8px}
+.bz-hero-nums{display:flex;gap:2rem;margin-top:2rem;padding-top:1.5rem;border-top:0.5px solid var(--color-border-tertiary)}
+.bz-hn-v{font-size:1.2rem;font-weight:500}
+.bz-hn-l{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:7px}
+.cat-c{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:0.875rem 0.5rem;text-align:center;cursor:pointer;transition:all 0.12s}
+.cat-c:hover{border-color:var(--color-text-primary);background:var(--color-background-secondary)}
+.cat-ico{width:34px;height:34px;border:0.5px solid var(--color-border-tertiary);border-radius:6px;background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center;margin:0 auto 7px;font-family:var(--font-serif);font-size:13px;font-weight:500;color:var(--color-text-secondary)}
+.cat-nm{font-size:11px;font-weight:500}
+.cat-ct{font-size:10px;color:var(--color-text-tertiary);margin-top:1px}
+
+.v-strip{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.v-strip::-webkit-scrollbar{display:none}
+.v-chip{flex-shrink:0;display:flex;align-items:center;gap:7px;padding:6px 11px;border:0.5px solid var(--color-border-tertiary);border-radius:100px;cursor:pointer;transition:border-color 0.12s}
+.v-chip:hover{border-color:var(--color-border-primary)}
+.v-av{width:20px;height:20px;border-radius:50%;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:500;color:var(--color-text-secondary)}
+.v-nm{font-size:11px;font-weight:500}
+.v-ct{font-size:10px;color:var(--color-text-tertiary)}
+
+.pg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px}
+.pc{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;cursor:pointer;transition:border-color 0.12s}
+.pc:hover{border-color:var(--color-border-secondary)}
+.pc-img{height:110px;background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center;border-bottom:0.5px solid var(--color-border-tertiary);font-family:var(--font-serif);font-size:1.75rem;font-weight:500;color:var(--color-text-tertiary)}
+.pc-b{padding:9px 11px}
+.pc-v{font-size:10px;color:var(--color-text-tertiary);letter-spacing:0.04em;margin-bottom:2px}
+.pc-n{font-size:12px;font-weight:500;margin-bottom:3px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.pc-p{font-size:12px;font-weight:500}
+.pc-t{font-size:10px;color:var(--color-text-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:100px;padding:1px 7px;margin-top:4px;display:inline-block}
+
+.svc-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:9px}
+.svc-c{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.1rem;cursor:pointer;transition:border-color 0.12s}
+.svc-c:hover{border-color:var(--color-text-primary)}
+.svc-ico{width:38px;height:38px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);font-size:16px;font-weight:500;margin-bottom:10px;color:var(--color-text-secondary)}
+.svc-n{font-size:12px;font-weight:500;margin-bottom:3px}
+.svc-d{font-size:11px;color:var(--color-text-secondary);line-height:1.55}
+.svc-m{font-size:10px;color:var(--color-text-tertiary);margin-top:7px}
+
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:1.1rem 1.25rem;border-bottom:0.5px solid var(--color-border-tertiary)}
+.st-c{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:0.875rem}
+.st-l{font-size:10px;color:var(--color-text-secondary);letter-spacing:0.04em;margin-bottom:5px}
+.st-v{font-size:1.25rem;font-weight:500}
+.st-d{font-size:10px;margin-top:2px;color:var(--color-text-secondary)}
+.st-up{color:var(--color-text-success)}
+.st-dn{color:var(--color-text-danger)}
+
+.dash-l{display:grid;grid-template-columns:minmax(0,1fr) 230px}
+.dash-m{padding:1.1rem 1.25rem;border-right:0.5px solid var(--color-border-tertiary)}
+.dash-s{padding:1.1rem 1rem}
+.dash-h{font-size:11px;font-weight:500;letter-spacing:0.04em;color:var(--color-text-secondary);margin-bottom:0.875rem}
+.qa-row{display:flex;gap:6px;margin-bottom:1rem}
+.qa-b{flex:1;font-size:11px;padding:6px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer;background:transparent;color:var(--color-text-primary);font-family:var(--font-sans);text-align:center;transition:background 0.12s}
+.qa-b:hover{background:var(--color-background-secondary)}
+
+.bz-table-w{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.bz-t{width:100%;border-collapse:collapse;font-size:11px}
+.bz-t th{text-align:left;padding:8px 11px;font-size:10px;font-weight:500;color:var(--color-text-secondary);border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);letter-spacing:0.03em}
+.bz-t td{padding:8px 11px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary)}
+.bz-t tr:last-child td{border-bottom:none}
+.bz-t tr:hover td{background:var(--color-background-secondary)}
+.bdg{display:inline-block;padding:2px 7px;border-radius:100px;font-size:10px;font-weight:500}
+.bdg-s{background:var(--color-background-success);color:var(--color-text-success)}
+.bdg-w{background:var(--color-background-warning);color:var(--color-text-warning)}
+.bdg-i{background:var(--color-background-info);color:var(--color-text-info)}
+
+.bar-row{display:flex;align-items:center;gap:7px;margin-bottom:5px;font-size:10px}
+.bar-lbl{width:55px;text-align:right;color:var(--color-text-secondary);flex-shrink:0}
+.bar-tr{flex:1;height:5px;background:var(--color-background-secondary);border-radius:100px;overflow:hidden}
+.bar-f{height:100%;border-radius:100px;background:var(--color-text-primary);transition:width 0.6s ease}
+.bar-vl{width:42px;color:var(--color-text-secondary)}
+
+.inv-r{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:11px}
+.inv-r:last-child{border-bottom:none}
+.inv-n{color:var(--color-text-primary)}
+.inv-s{font-weight:500;color:var(--color-text-secondary)}
+.inv-low{color:var(--color-text-danger)!important}
+
+.cat-view{display:grid;grid-template-columns:175px minmax(0,1fr)}
+.filt-col{padding:1.1rem;border-right:0.5px solid var(--color-border-tertiary)}
+.fg{margin-bottom:1.25rem}
+.fg-t{font-size:10px;font-weight:500;color:var(--color-text-secondary);margin-bottom:7px;letter-spacing:0.04em}
+.fo{display:flex;align-items:center;gap:5px;font-size:11px;padding:3px 0;cursor:pointer;color:var(--color-text-secondary)}
+.fo:hover{color:var(--color-text-primary)}
+.fo input{accent-color:var(--color-text-primary)}
+.cat-main{padding:1.1rem}
+.sort-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.sort-lbl{font-size:11px;color:var(--color-text-secondary)}
+.sort-sel{font-size:11px;padding:4px 8px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:transparent;color:var(--color-text-primary);font-family:var(--font-sans)}
+
+.vh-wrap{padding:1.5rem 1.25rem;border-bottom:0.5px solid var(--color-border-tertiary);display:grid;grid-template-columns:auto 1fr auto;gap:1.25rem;align-items:start}
+.v-logo-lg{width:58px;height:58px;border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);font-size:1.4rem;font-weight:500}
+.v-name{font-family:var(--font-serif);font-size:1.2rem;font-weight:500;margin-bottom:3px}
+.v-meta{font-size:11px;color:var(--color-text-tertiary)}
+.v-tags{display:flex;gap:5px;margin-top:7px}
+.v-tag{font-size:10px;border:0.5px solid var(--color-border-tertiary);border-radius:100px;padding:2px 8px;color:var(--color-text-secondary)}
+.vst-w{display:flex;gap:1.5rem}
+.vst{text-align:right}
+.vst-v{font-size:1.1rem;font-weight:500}
+.vst-l{font-size:10px;color:var(--color-text-tertiary)}
+
+.bc{padding:9px 1.25rem;border-bottom:0.5px solid var(--color-border-tertiary);font-size:11px;color:var(--color-text-tertiary);display:flex;gap:5px;align-items:center}
+.bc span{color:var(--color-text-primary);cursor:pointer}
+.bc span:hover{text-decoration:underline}
+.bz-notice{padding:9px 1.25rem;background:var(--color-background-secondary);border-bottom:0.5px solid var(--color-border-tertiary);font-size:11px;color:var(--color-text-secondary);display:flex;align-items:center;gap:8px}
+.bz-notice strong{font-weight:500;color:var(--color-text-primary)}
+.bz-footer{padding:0.875rem 1.25rem;border-top:0.5px solid var(--color-border-tertiary);display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--color-text-tertiary)}
+
+.bz-search-b{display:flex;align-items:center;gap:7px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:7px 11px;margin:1rem 1.25rem;font-size:12px}
+.bz-search-b input{flex:1;border:none;outline:none;background:transparent;font-family:var(--font-sans);font-size:12px;color:var(--color-text-primary)}
+.bz-search-b-i{color:var(--color-text-tertiary)}
+
+.url-pill{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:9px 11px;font-size:11px;margin-top:0.875rem}
+.url-pill .u-l{color:var(--color-text-tertiary);font-size:10px;margin-bottom:2px}
+.url-pill .u-v{font-weight:500}
+</style>
+
+<h2 class="sr-only">Bazar — multi-tenant multi-vendor e-commerce platform for Nepal</h2>
+
+<nav class="bz-nav" id="bzNav">
+  <div class="bz-logo" onclick="bz('marketplace')">Bazar <span>by sajilo</span></div>
+  <div class="bz-nav-tabs">
+    <span class="bz-tab on" data-v="marketplace" onclick="bz('marketplace')">Marketplace</span>
+    <span class="bz-tab" data-v="category" onclick="bz('category')">Foods</span>
+    <span class="bz-tab" data-v="vendor" onclick="bz('vendor')">Vendor store</span>
+    <span class="bz-tab" data-v="dashboard" onclick="bz('dashboard')">Dashboard</span>
+  </div>
+  <div class="bz-acts">
+    <button class="btn" onclick="bz('dashboard')">Sell on Bazar</button>
+    <button class="btn btn-dk">Sign in</button>
+  </div>
+</nav>
+
+<!-- MARKETPLACE -->
+<div class="bz-view show" id="bz-marketplace">
+  <div class="bz-hero">
+    <div class="bz-hero-tag">Nepal's digital bazaar · every vendor, one platform</div>
+    <div class="bz-h1">Your market.<br><em>Your way.</em></div>
+    <p class="bz-hero-p">One platform, a thousand vendors. Browse food, fashion, furniture, electronics, and services — or open your own storefront in minutes with no domain, no server, no cost.</p>
+    <div class="bz-hero-row">
+      <button class="btn btn-dk" onclick="bz('category')">Browse products</button>
+      <button class="btn" onclick="bz('dashboard')">Open your store</button>
+      <button class="btn" onclick="bz('vendor')">See a vendor store</button>
+    </div>
+    <div class="bz-hero-nums">
+      <div><div class="bz-hn-v">1,240+</div><div class="bz-hn-l">Active vendors</div></div>
+      <div><div class="bz-hn-v">48,000+</div><div class="bz-hn-l">Products listed</div></div>
+      <div><div class="bz-hn-v">9</div><div class="bz-hn-l">Categories</div></div>
+      <div><div class="bz-hn-v">NPR 0</div><div class="bz-hn-l">Setup cost</div></div>
+    </div>
+  </div>
+  <div class="bz-sec">
+    <div class="bz-sh"><span class="bz-st">Shop by category</span><span class="bz-sm">All categories →</span></div>
+    <div class="cat-grid" id="bzCats"></div>
+  </div>
+  <div class="bz-sec">
+    <div class="bz-sh"><span class="bz-st">Active vendors</span><span class="bz-sm">All vendors →</span></div>
+    <div class="v-strip" id="bzVStrip"></div>
+  </div>
+  <div class="bz-sec">
+    <div class="bz-sh"><span class="bz-st">Trending now</span><span class="bz-sm">See all products →</span></div>
+    <div class="pg" id="bzPGrid"></div>
+  </div>
+  <div class="bz-sec">
+    <div class="bz-sh"><span class="bz-st">Book a service</span><span class="bz-sm">Explore services →</span></div>
+    <div class="svc-g" id="bzSvcG"></div>
+  </div>
+  <div class="bz-footer"><span>© 2025 Bazar — Sajilo Technologies Pvt. Ltd., Kathmandu</span><span>Built for every vendor in Nepal</span></div>
+</div>
+
+<!-- CATEGORY -->
+<div class="bz-view" id="bz-category">
+  <div class="bz-notice"><strong>Foods</strong> &nbsp;·&nbsp; 3,241 products from 187 vendors</div>
+  <div class="bc"><span onclick="bz('marketplace')">Bazar</span> / <span>Foods</span></div>
+  <div class="bz-search-b"><span class="bz-search-b-i">&#9906;</span><input placeholder="Search foods — e.g. Sel roti, Momo, Organic honey..." /><button class="btn" style="padding:4px 9px;font-size:11px">Search</button></div>
+  <div class="cat-view">
+    <div class="filt-col" id="bzFilts"></div>
+    <div class="cat-main">
+      <div class="sort-bar">
+        <span class="sort-lbl">Showing 24 of 3,241 results</span>
+        <select class="sort-sel"><option>Popularity</option><option>Price: low to high</option><option>Price: high to low</option><option>Newest first</option><option>Top rated</option></select>
+      </div>
+      <div class="pg" id="bzFoodG"></div>
+    </div>
+  </div>
+  <div class="bz-footer"><span>Foods · 3,241 products</span><div style="display:flex;gap:5px"><button class="btn" style="padding:4px 9px;font-size:11px">← Prev</button><button class="btn" style="padding:4px 9px;font-size:11px">Next →</button></div></div>
+</div>
+
+<!-- VENDOR STORE -->
+<div class="bz-view" id="bz-vendor">
+  <div class="bc"><span onclick="bz('marketplace')">Bazar</span> / <span>himalayan-kitchen</span></div>
+  <div class="vh-wrap">
+    <div class="v-logo-lg">HK</div>
+    <div>
+      <div class="v-name">Himalayan Kitchen</div>
+      <div class="v-meta">bazar.com/himalayan-kitchen &nbsp;·&nbsp; Foods &nbsp;·&nbsp; Est. 2021 &nbsp;·&nbsp; Kathmandu, Nepal</div>
+      <div class="v-tags">
+        <span class="v-tag">Verified vendor</span>
+        <span class="v-tag">Free delivery</span>
+        <span class="v-tag">4.8 stars</span>
+        <span class="v-tag">12k+ orders</span>
+      </div>
+    </div>
+    <div class="vst-w">
+      <div class="vst"><div class="vst-v">824</div><div class="vst-l">Products</div></div>
+      <div class="vst"><div class="vst-v">12.4k</div><div class="vst-l">Orders</div></div>
+      <div class="vst"><div class="vst-v">98%</div><div class="vst-l">Satisfaction</div></div>
+    </div>
+  </div>
+  <div class="bz-sec">
+    <div class="bz-sh"><span class="bz-st">All products</span><select class="sort-sel" style="font-size:10px;padding:3px 7px"><option>All categories</option><option>Snacks</option><option>Beverages</option><option>Grains</option><option>Dairy</option></select></div>
+    <div class="pg" id="bzVProds"></div>
+  </div>
+  <div class="bz-sec">
+    <div class="bz-sh"><span class="bz-st">About this vendor</span></div>
+    <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.7;max-width:540px">Himalayan Kitchen sources authentic Nepali food products directly from farmers across the Himalayan region. Every product is naturally grown, traditionally processed, and delivered fresh. From sel roti mixes to Himalayan honey, we bring the taste of Nepal to your doorstep.</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:1.1rem">
+      <div style="border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:0.875rem">
+        <div style="font-size:10px;color:var(--color-text-tertiary);letter-spacing:0.04em;margin-bottom:3px">Shipping</div>
+        <div style="font-size:11px;font-weight:500">Within valley: 1 day</div>
+        <div style="font-size:11px;color:var(--color-text-secondary)">Outside valley: 3–5 days</div>
+      </div>
+      <div style="border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:0.875rem">
+        <div style="font-size:10px;color:var(--color-text-tertiary);letter-spacing:0.04em;margin-bottom:3px">Returns</div>
+        <div style="font-size:11px;font-weight:500">7-day return policy</div>
+        <div style="font-size:11px;color:var(--color-text-secondary)">Damaged items replaced free</div>
+      </div>
+      <div style="border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:0.875rem">
+        <div style="font-size:10px;color:var(--color-text-tertiary);letter-spacing:0.04em;margin-bottom:3px">Payment</div>
+        <div style="font-size:11px;font-weight:500">eSewa, Khalti, COD</div>
+        <div style="font-size:11px;color:var(--color-text-secondary)">Bank transfer accepted</div>
+      </div>
+    </div>
+  </div>
+  <div class="bz-footer"><span>bazar.com/himalayan-kitchen</span><button class="btn btn-dk" style="font-size:11px;padding:5px 11px" onclick="bz('dashboard')">Manage this store</button></div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="bz-view" id="bz-dashboard">
+  <div class="bz-notice"><strong>Himalayan Kitchen</strong> &nbsp;·&nbsp; Vendor dashboard &nbsp;·&nbsp; Last sync: 2 min ago <span style="margin-left:auto;cursor:pointer;font-weight:500;color:var(--color-text-primary)">+ Add product</span></div>
+  <div class="stats-row">
+    <div class="st-c"><div class="st-l">Revenue (this month)</div><div class="st-v">NPR 4.2L</div><div class="st-d st-up">+18% vs last month</div></div>
+    <div class="st-c"><div class="st-l">Total orders</div><div class="st-v">318</div><div class="st-d st-up">+24 this week</div></div>
+    <div class="st-c"><div class="st-l">Products listed</div><div class="st-v">824</div><div class="st-d">12 out of stock</div></div>
+    <div class="st-c"><div class="st-l">Store visitors</div><div class="st-v">9,140</div><div class="st-d st-up">+6% this week</div></div>
+  </div>
+  <div class="dash-l">
+    <div class="dash-m">
+      <div class="qa-row">
+        <button class="qa-b">+ Add product</button>
+        <button class="qa-b">Edit store page</button>
+        <button class="qa-b">Promotions</button>
+        <button class="qa-b">Reports</button>
+      </div>
+      <div class="dash-h">Recent orders</div>
+      <div class="bz-table-w">
+        <table class="bz-t" id="bzOT"></table>
+      </div>
+      <div style="margin-top:1.25rem">
+        <div class="dash-h">Revenue by category</div>
+        <div id="bzChart"></div>
+      </div>
+    </div>
+    <div class="dash-s">
+      <div class="dash-h">Inventory alerts</div>
+      <div id="bzInv"></div>
+      <div style="margin-top:1.25rem">
+        <div class="dash-h">Store settings</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <button class="qa-b">Store details</button>
+          <button class="qa-b">Shipping zones</button>
+          <button class="qa-b">Payment methods</button>
+          <button class="qa-b">CMS theme</button>
+          <button class="qa-b">SEO settings</button>
+        </div>
+      </div>
+      <div class="url-pill" style="margin-top:1.25rem">
+        <div class="u-l">Your public storefront</div>
+        <div class="u-v">bazar.com/himalayan-kitchen</div>
+      </div>
+      <div class="url-pill">
+        <div class="u-l">Admin panel</div>
+        <div class="u-v">bazar.com/admin</div>
+      </div>
+    </div>
+  </div>
+  <div class="bz-footer"><span>Bazar vendor dashboard · v1.0</span><span onclick="bz('vendor')" style="cursor:pointer">View your store →</span></div>
+</div>
+
+<script>
+const cats=[
+  {n:'Foods',k:'foods',c:'3,241',i:'F'},
+  {n:'Wearables',k:'wear',c:'8,102',i:'W'},
+  {n:'Electronics',k:'elec',c:'5,640',i:'E'},
+  {n:'Furniture',k:'furn',c:'1,820',i:'Fn'},
+  {n:'Decors',k:'deco',c:'2,310',i:'D'},
+  {n:'Computer',k:'comp',c:'4,100',i:'C'},
+  {n:'Mobile',k:'mob',c:'3,890',i:'M'},
+  {n:'Services',k:'svc',c:'920',i:'S'},
+  {n:'Holidays',k:'hol',c:'240',i:'H'},
+];
+const vendors=[
+  {n:'Himalayan Kitchen',c:'Foods',i:'HK'},
+  {n:'Kathmandu Couture',c:'Wearables',i:'KC'},
+  {n:'TechNepal Store',c:'Electronics',i:'TN'},
+  {n:'Craft Wood Co.',c:'Furniture',i:'CW'},
+  {n:'Decor Darbar',c:'Decors',i:'DD'},
+  {n:'ComputeX Nepal',c:'Computer',i:'CX'},
+  {n:'MoMo Mobile',c:'Mobile',i:'MM'},
+  {n:'Pokhara Stays',c:'Holidays',i:'PS'},
+  {n:'The Spa Studio',c:'Services',i:'SS'},
+  {n:'Gorkha Organics',c:'Foods',i:'GO'},
+];
+const prods=[
+  {n:'Himalayan Wild Honey',v:'Himalayan Kitchen',p:'NPR 450',t:'Organic',i:'H'},
+  {n:'Sel Roti Mix 500g',v:'Himalayan Kitchen',p:'NPR 180',t:'Traditional',i:'S'},
+  {n:'Dhaka Kurta — men',v:'Kathmandu Couture',p:'NPR 1,200',t:'Handwoven',i:'D'},
+  {n:'Smartwatch Pro X',v:'TechNepal Store',p:'NPR 8,500',t:'In stock',i:'W'},
+  {n:'Sheesham wood desk',v:'Craft Wood Co.',p:'NPR 24,000',t:'Handcrafted',i:'Sh'},
+  {n:'Pashmina throw (grey)',v:'Kathmandu Couture',p:'NPR 2,800',t:'Pure wool',i:'P'},
+  {n:'USB-C hub 7-in-1',v:'ComputeX Nepal',p:'NPR 3,200',t:'Fast delivery',i:'U'},
+  {n:'Mandala wall art',v:'Decor Darbar',p:'NPR 1,650',t:'Handpainted',i:'M'},
+];
+const foods=[
+  {n:'Organic turmeric 250g',v:'Gorkha Organics',p:'NPR 220',t:'Certified organic',i:'T'},
+  {n:'Himalayan pink salt 1kg',v:'Himalayan Kitchen',p:'NPR 140',t:'Pink salt',i:'Sa'},
+  {n:'Cold-pressed mustard oil',v:'Gorkha Organics',p:'NPR 310',t:'Cold pressed',i:'O'},
+  {n:'Chhurpi hard 100g',v:'Valley Dairy',p:'NPR 280',t:'Yak milk',i:'Ch'},
+  {n:'Gundruk dried 200g',v:'Himalayan Kitchen',p:'NPR 190',t:'Fermented',i:'G'},
+  {n:'Buckwheat flour 500g',v:'Gorkha Organics',p:'NPR 260',t:'Gluten-free',i:'B'},
+  {n:'Timur pepper 50g',v:'Spice Bazaar',p:'NPR 380',t:'Rare spice',i:'Ti'},
+  {n:'Chiura beaten rice 1kg',v:'Himalayan Kitchen',p:'NPR 120',t:'Traditional',i:'C'},
+];
+const vprods=[
+  {n:'Wild honey 500g',v:'Himalayan Kitchen',p:'NPR 450',t:'Best seller',i:'H'},
+  {n:'Sel roti mix',v:'Himalayan Kitchen',p:'NPR 180',t:'Traditional',i:'S'},
+  {n:'Himalayan salt 1kg',v:'Himalayan Kitchen',p:'NPR 140',t:'',i:'Sa'},
+  {n:'Gundruk 200g',v:'Himalayan Kitchen',p:'NPR 190',t:'Fermented',i:'G'},
+  {n:'Yak butter 250g',v:'Himalayan Kitchen',p:'NPR 520',t:'',i:'Y'},
+  {n:'Timur pepper 50g',v:'Himalayan Kitchen',p:'NPR 380',t:'Rare',i:'Ti'},
+  {n:'Chiura 1kg',v:'Himalayan Kitchen',p:'NPR 120',t:'',i:'C'},
+  {n:'Chhurpi hard',v:'Himalayan Kitchen',p:'NPR 280',t:'',i:'Ch'},
+];
+const orders=[
+  {id:'#BZ-4401',cu:'Priya Sharma',pr:'Wild honey 500g',dt:'Today, 2:14pm',am:'NPR 1,350',st:'paid'},
+  {id:'#BZ-4400',cu:'Rohan Thapa',pr:'Sel roti mix x3',dt:'Today, 11:30am',am:'NPR 540',st:'shipped'},
+  {id:'#BZ-4398',cu:'Asha Gurung',pr:'Gundruk + Timur',dt:'Yesterday',am:'NPR 570',st:'paid'},
+  {id:'#BZ-4395',cu:'Bikram KC',pr:'Himalayan salt 2kg',dt:'Yesterday',am:'NPR 280',st:'pending'},
+  {id:'#BZ-4391',cu:'Sita Rai',pr:'Wild honey 1kg',dt:'Apr 30',am:'NPR 850',st:'shipped'},
+  {id:'#BZ-4387',cu:'Amrit Lama',pr:'Yak butter x2',dt:'Apr 30',am:'NPR 1,040',st:'paid'},
+];
+const inv=[
+  {n:'Wild honey 500g',s:14},
+  {n:'Yak butter 250g',s:3,low:1},
+  {n:'Timur pepper 50g',s:7},
+  {n:'Chhurpi hard',s:2,low:1},
+  {n:'Chiura 1kg',s:45},
+  {n:'Sel roti mix',s:28},
+];
+const svcs=[
+  {i:'Sv',n:'Service bookings',d:'Book skilled professionals for repairs, tutoring, photography, and more.',m:'920+ providers'},
+  {i:'Ho',n:'Holiday packages',d:'Curated Nepal trekking, wildlife, and heritage tour packages.',m:'240+ packages'},
+  {i:'Ap',n:'Appointments',d:'Schedule doctor visits, salon sessions, and wellness consultations.',m:'340+ providers'},
+];
+const bars=[
+  {l:'Honey',p:35,v:'NPR 1.5L'},
+  {l:'Grains',p:22,v:'NPR 0.9L'},
+  {l:'Spices',p:18,v:'NPR 0.8L'},
+  {l:'Dairy',p:15,v:'NPR 0.6L'},
+  {l:'Other',p:10,v:'NPR 0.4L'},
+];
+
+function pc(p){return`<div class="pc"><div class="pc-img">${p.i}</div><div class="pc-b"><div class="pc-v">${p.v}</div><div class="pc-n">${p.n}</div><div class="pc-p">${p.p}</div>${p.t?`<span class="pc-t">${p.t}</span>`:''}</div></div>`}
+
+document.getElementById('bzCats').innerHTML=cats.map(c=>`<div class="cat-c" onclick="bz('category')"><div class="cat-ico">${c.i}</div><div class="cat-nm">${c.n}</div><div class="cat-ct">${c.c} items</div></div>`).join('');
+document.getElementById('bzVStrip').innerHTML=vendors.map(v=>`<div class="v-chip" onclick="bz('vendor')"><div class="v-av">${v.i}</div><div><div class="v-nm">${v.n}</div><div class="v-ct">${v.c}</div></div></div>`).join('');
+document.getElementById('bzPGrid').innerHTML=prods.map(pc).join('');
+document.getElementById('bzFoodG').innerHTML=foods.map(pc).join('');
+document.getElementById('bzVProds').innerHTML=vprods.map(pc).join('');
+document.getElementById('bzSvcG').innerHTML=svcs.map(s=>`<div class="svc-c"><div class="svc-ico">${s.i}</div><div class="svc-n">${s.n}</div><div class="svc-d">${s.d}</div><div class="svc-m">${s.m}</div></div>`).join('');
+
+document.getElementById('bzFilts').innerHTML=`
+  <div class="fg"><div class="fg-t">Category</div>${['Snacks','Beverages','Grains & pulses','Dairy','Spices','Bakery'].map(f=>`<label class="fo"><input type="checkbox">${f}</label>`).join('')}</div>
+  <div class="fg"><div class="fg-t">Price (NPR)</div><div style="display:flex;gap:5px;margin-bottom:4px"><input class="sort-sel" style="width:65px;font-size:11px" placeholder="Min"><input class="sort-sel" style="width:65px;font-size:11px" placeholder="Max"></div></div>
+  <div class="fg"><div class="fg-t">Vendor</div>${['Himalayan Kitchen','Gorkha Organics','Spice Bazaar','Valley Dairy'].map(v=>`<label class="fo"><input type="checkbox">${v}</label>`).join('')}</div>
+  <div class="fg"><div class="fg-t">Delivery</div>${['Same day','Next day','3–5 days'].map(d=>`<label class="fo"><input type="checkbox">${d}</label>`).join('')}</div>
+  <div class="fg"><div class="fg-t">Rating</div>${['5 stars','4+ stars','3+ stars'].map(r=>`<label class="fo"><input type="radio" name="rt">${r}</label>`).join('')}</div>
+`;
+
+document.getElementById('bzOT').innerHTML=`<thead><tr><th>Order</th><th>Customer</th><th>Product</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead><tbody>${orders.map(o=>`<tr><td style="font-weight:500">${o.id}</td><td>${o.cu}</td><td>${o.pr}</td><td style="color:var(--color-text-secondary)">${o.dt}</td><td style="font-weight:500">${o.am}</td><td><span class="bdg bdg-${o.st==='paid'?'s':o.st==='pending'?'w':'i'}">${o.st}</span></td></tr>`).join('')}</tbody>`;
+
+document.getElementById('bzChart').innerHTML=bars.map(b=>`<div class="bar-row"><span class="bar-lbl">${b.l}</span><div class="bar-tr"><div class="bar-f" style="width:0%" data-w="${b.p}"></div></div><span class="bar-vl">${b.v}</span></div>`).join('');
+
+document.getElementById('bzInv').innerHTML=inv.map(i=>`<div class="inv-r"><span class="inv-n">${i.n}</span><span class="inv-s ${i.low?'inv-low':''}">${i.s} left${i.low?' (low)':''}</span></div>`).join('');
+
+function bz(view){
+  document.querySelectorAll('.bz-view').forEach(v=>v.classList.remove('show'));
+  document.querySelectorAll('.bz-tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('bz-'+view).classList.add('show');
+  const tab=document.querySelector(`[data-v="${view}"]`);
+  if(tab)tab.classList.add('on');
+  window.scrollTo(0,0);
+}
+
+setTimeout(()=>{
+  document.querySelectorAll('.bar-f').forEach(b=>b.style.width=b.dataset.w+'%');
+},300);
+</script>

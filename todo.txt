@@ -1,0 +1,15 @@
+ Page Type        │ URL                                    │ Logic                                              │
+  ├──────────────────┼────────────────────────────────────────┼────────────────────────────────────────────────────┤
+  │ Marketplace Home │ http://localhost:3000/                 │ Shows the main "Better way to trade" landing page. │
+  │ Category Hub     │ http://localhost:3000/foods            │ Renders the CategoryView for Foods.                │
+  │ Category Hub     │ http://localhost:3000/electronics      │ Renders the CategoryView for Electronics.          │
+  │ Vendor Store     │ http://localhost:3000/apple            │ Renders the Minimal Template for Apple NP.         │
+  │ Vendor Store     │ http://localhost:3000/himalayan-bakery │ Renders the Bold Template for Himalayan Bakery.    │
+  │ Product Detail   │ http://localhost:3000/p/iphone-15-pro  │ Direct Product Page (via the /p/ route).           │
+  │ Services Hub     │ http://localhost:3000/services         │ Shows the list of available services.  
+
+
+  Lets implement authentication flow of user in our application. We will have a static data user with username , email, password (plain for now)
+  , role [SuperAdmin, Vendor, User] , etc with any other major fields as required in enterprise ready multitenant application. We will have few users 
+  with multple roles in the static data folder. Now based on the role, we will route each routes abckend after successful login. 
+  

@@ -1,0 +1,13 @@
+Failed to compile.
+
+app\(admin)\page.tsx
+You cannot have two parallel pages that resolve to the same path. Please check /(admin)/page and /(dashboard)/page. Refer to the route group docs for more information: https://nextjs.org/docs/app/building-your-application/routing/route-groups
+
+app\(dashboard)\page.tsx
+You cannot have two parallel pages that resolve to the same path. Please check /(admin)/page and /(dashboard)/page. Refer to the route group docs for more information: https://nextjs.org/docs/app/building-your-application/routing/route-groups
+
+app\(public)\page.tsx
+You cannot have two parallel pages that resolve to the same path. Please check /(admin)/page and /(dashboard)/page. Refer to the route group docs for more information: https://nextjs.org/docs/app/building-your-application/routing/route-groups
+
+
+> Build failed because of webpack errors
