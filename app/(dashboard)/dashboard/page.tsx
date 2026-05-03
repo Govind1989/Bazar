@@ -123,6 +123,28 @@ export default function DashboardPage() {
             <Button variant="outline" className="w-full mt-6 text-[10px] h-8">Stock Report</Button>
           </Card>
 
+          <Card className="p-6 border-2 border-purple-500/20 bg-purple-500/[0.02]">
+            <div className="flex justify-between items-center mb-6">
+              <Typography variant="titleSm" className="uppercase tracking-widest text-xs font-black text-purple-600 dark:text-purple-400">Marketplace Listings</Typography>
+              <div className="px-2 py-0.5 rounded bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 text-[8px] font-black uppercase tracking-widest">Live</div>
+            </div>
+            <div className="space-y-4">
+               <div className="p-3 rounded-xl bg-white dark:bg-bazar-black border border-bazar-gray-100 dark:border-bazar-gray-900 flex gap-3 items-center">
+                  <div className="w-10 h-10 rounded-lg bg-bazar-gray-50 dark:bg-bazar-gray-950 border border-bazar-gray-100 dark:border-bazar-gray-900 flex items-center justify-center shrink-0">
+                    <Package className="w-4 h-4 opacity-20" />
+                  </div>
+                  <div className="flex-1">
+                    <Typography variant="bodySm" className="text-[10px] font-bold uppercase truncate">Vintage Nikon Camera</Typography>
+                    <Typography variant="bodySm" className="text-[9px] opacity-40">रु 12,000 • 24 Views</Typography>
+                  </div>
+                  <ArrowUpRight className="w-3 h-3 opacity-20" />
+               </div>
+            </div>
+            <Button variant="outline" className="w-full mt-6 text-[10px] h-8 border-purple-500/20 hover:bg-purple-500/10 hover:text-purple-600 transition-all font-black uppercase tracking-widest">
+              Create New Listing
+            </Button>
+          </Card>
+
           <Card variant="surface" className="p-6 border-none">
             <Typography variant="titleSm" className="uppercase tracking-widest text-xs opacity-60 mb-2">Platform Tip</Typography>
             <Typography variant="bodySm" className="text-xs leading-relaxed italic opacity-80">

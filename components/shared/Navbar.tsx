@@ -52,9 +52,9 @@ export function Navbar() {
   }, []);
 
   const NAV_ITEMS = [
-    { name: t('marketplace'), href: "/" },
-    { name: t('categories'), href: "#categories" },
-    { name: t('vendors'), href: "#vendors" },
+    { name: t('marketplace'), href: "/marketplace" },
+    { name: t('categories'), href: "/categories" },
+    { name: t('vendors'), href: "/vendors" },
     { name: t('pricing'), href: "#pricing" },
   ];
 
@@ -68,14 +68,14 @@ export function Navbar() {
           : "bg-transparent border-transparent"
       )}
     >
-      <div className="flex items-center gap-2 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+      <Link href="/" className="flex items-center gap-2 cursor-pointer">
         <div className="w-8 h-8 bg-bazar-black dark:bg-bazar-white rounded-full flex items-center justify-center">
           <div className="w-4 h-4 bg-white dark:bg-bazar-black rounded-full" />
         </div>
         <Typography variant="titleMd" as="span" className="font-mono tracking-tighter">
           BAZAR
         </Typography>
-      </div>
+      </Link>
 
       <div className="hidden md:flex items-center gap-8 ml-12">
         {NAV_ITEMS.map((item) => (

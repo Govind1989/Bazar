@@ -1,11 +1,9 @@
-./app/(public)/account/rewards/page.tsx:76:58
-Type error: Cannot find name 'cn'.
+  Creating an optimized production build ...
+ ⚠ Compiled with warnings in 9.6s
 
-  74 |                    <Typography variant="bodySm" className="text-[10px] opacity-40">{log.date}</Typography>
-  75 |                 </div>
-> 76 |                 <Typography variant="titleSm" className={cn(
-     |                                                          ^
-  77 |                   "font-black tracking-tighter",
-  78 |                   log.points.startsWith("+") ? "text-green-500" : "text-red-500"
-  79 |                 )}>{log.points}</Typography>
-Next.js build worker exited with code: 1 and signal: null
+./hooks/useAdminData.ts
+Attempted import error: 'ALL_VENDORS' is not exported from '@/data/mock' (imported as 'ALL_VENDORS').
+
+Import trace for requested module:
+./hooks/useAdminData.ts
+./app/(admin)/admin/page.tsx

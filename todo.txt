@@ -20,23 +20,9 @@ Static Credentials for Testing:
                                                                                                                                          ? for shortcuts
 ──────────────────────────────────────────────────────────
 
-  In Navbar.tsx when clicked on the categories, i want to open up a page elgantly showing up all the categories well structured and sub categories we
-  have and will have in future. and option to favorite categories as per user choice. Then in Same Vendors link, i want to show all the categories of
-  vendors listed with aesthetic image for each vendors with more detail like ratings, reviews of each vendors, Here also user must be 
-  able to Follow vendors of their choice and edit the favorite lists. This will first give priority to the vendor followed during cnotent creation in front 
-  end.
-  If user choose to explore each vendor page then a explore option would take to the vendor page website. Create two new pages in components/shared folder
-  You know all the static files goes to data/mock.ts
   
-  when user clicks on the icon or name Bazar we will redirect it to our current MarketplaceHome now in the link MarketPlace when user clicks,
-  I want to create a platform for user to sell their old goods like Hamrobazar.com. User will post from their dashboard only when allowed to post
-  and others can scan and make a deal. Impress me with this real marketplace design and implementation also. You know all the static files goes to data/mock.ts
 
 
-
-  I want now you to create a floating dock at the bottom right corner of the screen floating through out the application. We will have two options 
-  Messages and AI Assistant. Messages will be for vendor human messages. AI Assistant for instruction from user and our ai agent
-  will do all the tasks for the user. We will have two separate asistant both for vendor and for user, we will separate then as userAssistant, vendorAssistant. Each will 
-  have settings to setup n each dashboard the llm api key user provides to minimize the overhead cost. I am giving you reference image for the
-  design as in @imagemobileview.png. I want two icons to hide and when clicked shall slide up those two icons then user can chat or interact
-  with the modal of each of them. On close the two icons shall slide and close inside the apple like glass morphism styled icon. Impress me here with your design skills. 
+  Task: Excellent now i want similarly to create a new page Jobs where all the job listings provided multiple job searching vendors will post
+  and we will have multiple categories of jobs full time, part time, contractual, freelancing etc for multiple sectors to be easily
+  identified and applied by the user. Create a new file Jobs inthe Shared folder and adhere to our @Design.md Create me complete workflow of this section Jobs. 

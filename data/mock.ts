@@ -6,6 +6,7 @@ export interface Category {
   slug: string;
   icon: string;
   description: string;
+  subCategories?: { id: string; name: string; slug: string }[];
 }
 
 export interface Vendor {
@@ -14,9 +15,11 @@ export interface Vendor {
   slug: string;
   description: string;
   logo: string;
+  coverImage?: string;
   themeColor?: string;
-  categories: string[]; // Updated to multiple categories
+  categories: string[];
   rating: number;
+  reviewsCount?: number;
   cmsConfig?: VendorCMS;
 }
 
@@ -74,10 +77,55 @@ export interface Testimonial {
 }
 
 export const CATEGORIES: Category[] = [
-  { id: '1', name: 'Foods', slug: 'foods', icon: 'Utensils', description: 'Fresh and delicious local cuisines.' },
-  { id: '2', name: 'Wearables', slug: 'wearables', icon: 'Shirt', description: 'Fashionable clothes and accessories.' },
-  { id: '3', name: 'Electronics', slug: 'electronics', icon: 'Zap', description: 'Latest gadgets and hardware.' },
-  { id: '4', name: 'Woods', slug: 'woods', icon: 'TreePine', description: 'Premium furniture and woodcraft.' },
+  { 
+    id: '1', 
+    name: 'Foods', 
+    slug: 'foods', 
+    icon: 'Utensils', 
+    description: 'Fresh and delicious local cuisines.',
+    subCategories: [
+      { id: '1-1', name: 'Organic', slug: 'organic' },
+      { id: '1-2', name: 'Spices', slug: 'spices' },
+      { id: '1-3', name: 'Dairy', slug: 'dairy' },
+      { id: '1-4', name: 'Bakery', slug: 'bakery' }
+    ]
+  },
+  { 
+    id: '2', 
+    name: 'Wearables', 
+    slug: 'wearables', 
+    icon: 'Shirt', 
+    description: 'Fashionable clothes and accessories.',
+    subCategories: [
+      { id: '2-1', name: 'Handmade', slug: 'handmade' },
+      { id: '2-2', name: 'Traditional', slug: 'traditional' },
+      { id: '2-3', name: 'Modern', slug: 'modern' }
+    ]
+  },
+  { 
+    id: '3', 
+    name: 'Electronics', 
+    slug: 'electronics', 
+    icon: 'Zap', 
+    description: 'Latest gadgets and hardware.',
+    subCategories: [
+      { id: '3-1', name: 'Accessories', slug: 'accessories' },
+      { id: '3-2', name: 'Components', slug: 'components' },
+      { id: '3-3', name: 'Gaming', slug: 'gaming' }
+    ]
+  },
+  { 
+    id: '4', 
+    name: 'Woods', 
+    slug: 'woods', 
+    icon: 'TreePine', 
+    description: 'Premium furniture and woodcraft.',
+    subCategories: [
+      { id: '4-1', name: 'Carvings', slug: 'carvings' },
+      { id: '4-2', name: 'Timber', slug: 'timber' },
+      { id: '4-3', name: 'Raw Materials', slug: 'raw' }
+    ]
+  },
   { id: '5', name: 'Furnitures', slug: 'furnitures', icon: 'Armchair', description: 'Modern and traditional furniture for every space.' },
   { id: '6', name: 'Computers & Accessories', slug: 'computers', icon: 'Monitor', description: 'Laptops, desktops, and peripherals.' },
   { id: '7', name: 'Mobiles & Accessories', slug: 'mobiles', icon: 'Smartphone', description: 'Smartphones and mobile gear.' },
@@ -114,8 +162,10 @@ export const VENDORS: Vendor[] = [
     slug: 'apple',
     description: 'Authorized reseller of Apple products in Nepal.',
     logo: 'https://api.dicebear.com/7.x/initials/svg?seed=Apple',
+    coverImage: 'https://images.unsplash.com/photo-1611186871348-b1ec696e5237?q=80&w=1200&auto=format&fit=crop',
     categories: ['electronics', 'computers', 'mobiles'],
     rating: 4.9,
+    reviewsCount: 1240,
     cmsConfig: {
       templateId: 'minimal',
       heroTitle: 'Think Different.',
@@ -138,8 +188,10 @@ export const VENDORS: Vendor[] = [
     slug: 'himalayan-bakery',
     description: 'Handcrafted bread and pastries delivered fresh.',
     logo: 'https://api.dicebear.com/7.x/initials/svg?seed=Bakery',
+    coverImage: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1200&auto=format&fit=crop',
     categories: ['foods'],
     rating: 4.7,
+    reviewsCount: 856,
     cmsConfig: {
       templateId: 'bold',
       heroTitle: 'Freshly Baked. Daily.',
@@ -162,8 +214,10 @@ export const VENDORS: Vendor[] = [
     slug: 'local-artisan',
     description: 'Traditional woodcraft and home decors.',
     logo: 'https://api.dicebear.com/7.x/initials/svg?seed=Artisan',
+    coverImage: 'https://images.unsplash.com/photo-1590059300649-74e2d3df9765?q=80&w=1200&auto=format&fit=crop',
     categories: ['woods', 'furnitures'],
     rating: 4.8,
+    reviewsCount: 432,
     cmsConfig: {
       templateId: 'minimal',
       heroTitle: 'Handcrafted Elegance',
@@ -489,3 +543,47 @@ export const ALL_VENDORS: (Vendor & { status: 'active' | 'pending' | 'suspended'
     joinedDate: 'Dec 20, 2023'
   }
 ];
+
+export interface PreOwnedProduct {
+  id: string;
+  userId: string;
+  name: string;
+  slug: string;
+  price: number;
+  condition: 'new' | 'like-new' | 'good' | 'fair';
+  image: string;
+  description: string;
+  category: string;
+  location: string;
+  isSold: boolean;
+}
+
+export const PRE_OWNED_PRODUCTS: PreOwnedProduct[] = [
+  {
+    id: 'po1',
+    userId: 'u1',
+    name: 'Vintage Nikon Camera',
+    slug: 'vintage-nikon',
+    price: 12000,
+    condition: 'good',
+    image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=800&auto=format&fit=crop',
+    description: 'Perfectly working vintage camera for enthusiasts.',
+    category: 'electronics',
+    location: 'Kathmandu',
+    isSold: false
+  },
+  {
+    id: 'po2',
+    userId: 'u2',
+    name: 'Ergonomic Office Chair',
+    slug: 'office-chair',
+    price: 8500,
+    condition: 'like-new',
+    image: 'https://images.unsplash.com/photo-1505797149-35ebcb05a6fd?q=80&w=800&auto=format&fit=crop',
+    description: 'Used for only 2 months, selling due to relocation.',
+    category: 'furnitures',
+    location: 'Lalitpur',
+    isSold: false
+  }
+];
+

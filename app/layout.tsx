@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { CommandSearch } from "@/components/shared/CommandSearch";
+import { FloatingDock } from "@/components/shared/FloatingDock";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
@@ -25,6 +26,7 @@ export default function RootLayout({
         <Providers>
           {children}
           <CommandSearch />
+          <FloatingDock />
         </Providers>
       </body>
     </html>
