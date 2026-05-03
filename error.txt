@@ -1,13 +1,53 @@
-Failed to compile.
-
-app\(admin)\page.tsx
-You cannot have two parallel pages that resolve to the same path. Please check /(admin)/page and /(dashboard)/page. Refer to the route group docs for more information: https://nextjs.org/docs/app/building-your-application/routing/route-groups
-
-app\(dashboard)\page.tsx
-You cannot have two parallel pages that resolve to the same path. Please check /(admin)/page and /(dashboard)/page. Refer to the route group docs for more information: https://nextjs.org/docs/app/building-your-application/routing/route-groups
-
-app\(public)\page.tsx
-You cannot have two parallel pages that resolve to the same path. Please check /(admin)/page and /(dashboard)/page. Refer to the route group docs for more information: https://nextjs.org/docs/app/building-your-application/routing/route-groups
-
-
-> Build failed because of webpack errors
+[{
+	"resource": "/e:/Nextjs/Bazar/components/shared/MarketplaceHome.tsx",
+	"owner": "typescript",
+	"code": "2304",
+	"severity": 8,
+	"message": "Cannot find name 'featuredServices'.",
+	"source": "ts",
+	"startLineNumber": 545,
+	"startColumn": 18,
+	"endLineNumber": 545,
+	"endColumn": 34,
+	"modelVersionId": 92,
+	"origin": "extHost1"
+},{
+	"resource": "/e:/Nextjs/Bazar/components/shared/MarketplaceHome.tsx",
+	"owner": "typescript",
+	"code": "2304",
+	"severity": 8,
+	"message": "Cannot find name 'featuredServices'.",
+	"source": "ts",
+	"startLineNumber": 547,
+	"startColumn": 22,
+	"endLineNumber": 547,
+	"endColumn": 38,
+	"modelVersionId": 92,
+	"origin": "extHost1"
+},{
+	"resource": "/e:/Nextjs/Bazar/components/shared/MarketplaceHome.tsx",
+	"owner": "typescript",
+	"code": "7006",
+	"severity": 8,
+	"message": "Parameter 'service' implicitly has an 'any' type.",
+	"source": "ts",
+	"startLineNumber": 547,
+	"startColumn": 44,
+	"endLineNumber": 547,
+	"endColumn": 51,
+	"modelVersionId": 92,
+	"origin": "extHost1"
+},{
+	"resource": "/e:/Nextjs/Bazar/components/shared/MarketplaceHome.tsx",
+	"owner": "typescript",
+	"code": "7006",
+	"severity": 8,
+	"message": "Parameter 'idx' implicitly has an 'any' type.",
+	"source": "ts",
+	"startLineNumber": 547,
+	"startColumn": 53,
+	"endLineNumber": 547,
+	"endColumn": 56,
+	"modelVersionId": 92,
+	"origin": "extHost1"
+}]

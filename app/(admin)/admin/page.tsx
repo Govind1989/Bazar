@@ -86,7 +86,7 @@ export default function AdminOverviewPage() {
                            <div>
                               <Typography variant="titleSm">{vendor.name}</Typography>
                               <Typography variant="bodySm" className="text-xs opacity-60 uppercase tracking-wider font-mono">
-                                 {vendor.category} · Applied {vendor.joinedDate}
+                                 {vendor.categories.join(', ')} · Applied {vendor.joinedDate}
                               </Typography>
                            </div>
                         </div>

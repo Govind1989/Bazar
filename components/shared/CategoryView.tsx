@@ -87,7 +87,7 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
            <div>
               <Typography variant="titleSm" className="uppercase tracking-[0.2em] text-[10px] opacity-40 mb-6">Vendors</Typography>
               <div className="space-y-3">
-                {VENDORS.filter(v => v.category === categorySlug).map(vendor => (
+                {VENDORS.filter(v => v.categories.includes(categorySlug)).map(vendor => (
                   <label key={vendor.id} className="flex items-center gap-3 group cursor-pointer">
                     <input 
                       type="checkbox" 

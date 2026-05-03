@@ -15,10 +15,41 @@ export interface Vendor {
   description: string;
   logo: string;
   themeColor?: string;
-  category: string;
+  categories: string[]; // Updated to multiple categories
   rating: number;
   cmsConfig?: VendorCMS;
 }
+
+export interface Event {
+  id: string;
+  name: string;
+  slug: string;
+  category: string;
+  date: string;
+  image: string;
+  location: string;
+}
+
+export const EVENTS: Event[] = [
+  {
+    id: 'e1',
+    name: 'Food Festival 2026',
+    slug: 'food-fest-2026',
+    category: 'foods',
+    date: 'May 15, 2026',
+    image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=800&auto=format&fit=crop',
+    location: 'Kathmandu'
+  },
+  {
+    id: 'e2',
+    name: 'Tech Expo 2026',
+    slug: 'tech-expo-2026',
+    category: 'electronics',
+    date: 'June 01, 2026',
+    image: 'https://images.unsplash.com/photo-1540575467063-176a7e0c3f5d?q=80&w=800&auto=format&fit=crop',
+    location: 'Lalitpur'
+  }
+];
 
 export interface Product {
   id: string;
@@ -59,7 +90,7 @@ export const VENDORS: Vendor[] = [
     slug: 'apple',
     description: 'Authorized reseller of Apple products in Nepal.',
     logo: 'https://api.dicebear.com/7.x/initials/svg?seed=Apple',
-    category: 'electronics',
+    categories: ['electronics', 'computers', 'mobiles'],
     rating: 4.9,
     cmsConfig: {
       templateId: 'minimal',
@@ -83,7 +114,7 @@ export const VENDORS: Vendor[] = [
     slug: 'himalayan-bakery',
     description: 'Handcrafted bread and pastries delivered fresh.',
     logo: 'https://api.dicebear.com/7.x/initials/svg?seed=Bakery',
-    category: 'foods',
+    categories: ['foods'],
     rating: 4.7,
     cmsConfig: {
       templateId: 'bold',
@@ -107,7 +138,7 @@ export const VENDORS: Vendor[] = [
     slug: 'local-artisan',
     description: 'Traditional woodcraft and home decors.',
     logo: 'https://api.dicebear.com/7.x/initials/svg?seed=Artisan',
-    category: 'woods',
+    categories: ['woods', 'furnitures'],
     rating: 4.8,
     cmsConfig: {
       templateId: 'minimal',
@@ -128,6 +159,7 @@ export const VENDORS: Vendor[] = [
 ];
 
 export const PRODUCTS: Product[] = [
+  // ... existing products ...
   {
     id: 'p1',
     vendorId: 'v1',
@@ -146,13 +178,51 @@ export const PRODUCTS: Product[] = [
     name: 'Artisan Sourdough',
     slug: 'artisan-sourdough',
     price: 450,
+    compareAtPrice: 600,
     image: 'https://images.unsplash.com/photo-1585478259715-876a6a81fc08?q=80&w=800&auto=format&fit=crop',
     description: 'Naturally leavened bread with a crispy crust.',
     category: 'foods',
     stock: 50
   },
   {
-    id: 'p3',
+    id: 'p8',
+    vendorId: 'v2',
+    name: 'Himalayan Momo Mix',
+    slug: 'momo-mix',
+    price: 350,
+    compareAtPrice: 400,
+    image: 'https://images.unsplash.com/photo-1534422298391-e4f8c172d67b?q=80&w=800&auto=format&fit=crop',
+    description: 'Authentic momo masala mix.',
+    category: 'foods',
+    stock: 100
+  },
+  {
+    id: 'p9',
+    vendorId: 'v8',
+    name: 'Pashmina Shawl',
+    slug: 'pashmina-shawl',
+    price: 5500,
+    compareAtPrice: 7000,
+    image: 'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?q=80&w=800&auto=format&fit=crop',
+    description: 'Soft cashmere pashmina shawl.',
+    category: 'wearables',
+    stock: 20
+  },
+  {
+    id: 'p10',
+    vendorId: 'v8',
+    name: 'Cotton Kurta',
+    slug: 'cotton-kurta',
+    price: 1800,
+    compareAtPrice: 2200,
+    image: 'https://images.unsplash.com/photo-1603252109303-2751441dd157?q=80&w=800&auto=format&fit=crop',
+    description: 'Handwoven cotton kurta.',
+    category: 'wearables',
+    stock: 35
+  },
+  // ... existing products ...
+{
+    id:"p11",
     vendorId: 'v3',
     name: 'Hand-carved Mandala Mask',
     slug: 'mandala-mask',
@@ -356,7 +426,7 @@ export const ALL_VENDORS: (Vendor & { status: 'active' | 'pending' | 'suspended'
     slug: 'apple',
     description: 'Authorized reseller of Apple products in Nepal.',
     logo: 'https://api.dicebear.com/7.x/initials/svg?seed=Apple',
-    category: 'electronics',
+    categories: ['electronics', 'computers', 'mobiles'],
     rating: 4.9,
     status: 'active',
     joinedDate: 'Jan 12, 2024'
@@ -367,7 +437,7 @@ export const ALL_VENDORS: (Vendor & { status: 'active' | 'pending' | 'suspended'
     slug: 'himalayan-bakery',
     description: 'Handcrafted bread and pastries delivered fresh.',
     logo: 'https://api.dicebear.com/7.x/initials/svg?seed=Bakery',
-    category: 'foods',
+    categories: ['foods'],
     rating: 4.7,
     status: 'active',
     joinedDate: 'Feb 05, 2024'
@@ -378,9 +448,9 @@ export const ALL_VENDORS: (Vendor & { status: 'active' | 'pending' | 'suspended'
     slug: 'new-nepal',
     description: 'Local electronics and accessories shop.',
     logo: 'https://api.dicebear.com/7.x/initials/svg?seed=New',
-    category: 'electronics',
+    categories: ['electronics'],
     rating: 0,
-    status: 'pending',
+    status: 'active',
     joinedDate: 'Today'
   },
   {
@@ -389,7 +459,7 @@ export const ALL_VENDORS: (Vendor & { status: 'active' | 'pending' | 'suspended'
     slug: 'ktm-textiles',
     description: 'Traditional fabrics and modern garments.',
     logo: 'https://api.dicebear.com/7.x/initials/svg?seed=Textiles',
-    category: 'wearables',
+    categories: ['wearables'],
     rating: 4.2,
     status: 'suspended',
     joinedDate: 'Dec 20, 2023'
