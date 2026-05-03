@@ -558,6 +558,82 @@ export interface PreOwnedProduct {
   isSold: boolean;
 }
 
+export interface Job {
+  id: string;
+  vendorId: string;
+  title: string;
+  description: string;
+  type: 'full-time' | 'part-time' | 'contract' | 'freelance';
+  sector: string;
+  location: string;
+  salary: string;
+  postedAt: string;
+  requirements: string[];
+}
+
+export const JOBS: Job[] = [
+  {
+    id: 'j1',
+    vendorId: 'v1',
+    title: 'Senior Software Engineer',
+    description: 'We are looking for a Senior Software Engineer to join our growing team.',
+    type: 'full-time',
+    sector: 'Technology',
+    location: 'Remote / Kathmandu',
+    salary: 'Rs. 150,000 - 250,000',
+    postedAt: '2 days ago',
+    requirements: ['5+ years of experience', 'Proficiency in React and Node.js', 'Experience with cloud platforms']
+  },
+  {
+    id: 'j2',
+    vendorId: 'v3',
+    title: 'UI/UX Designer',
+    description: 'Join our design team to create beautiful and functional user experiences.',
+    type: 'contract',
+    sector: 'Design',
+    location: 'Lalitpur',
+    salary: 'Negotiable',
+    postedAt: '1 week ago',
+    requirements: ['3+ years of experience', 'Strong portfolio', 'Expertise in Figma']
+  },
+  {
+    id: 'j3',
+    vendorId: 'v2',
+    title: 'Marketing Specialist',
+    description: 'Drive our brand forward with creative marketing strategies.',
+    type: 'part-time',
+    sector: 'Marketing',
+    location: 'Kathmandu',
+    salary: 'Rs. 40,000 - 60,000',
+    postedAt: '3 days ago',
+    requirements: ['Experience in digital marketing', 'Strong communication skills']
+  },
+  {
+    id: 'j4',
+    vendorId: 'v1',
+    title: 'Frontend Intern',
+    description: 'Learn and grow with our experienced frontend development team.',
+    type: 'full-time',
+    sector: 'Technology',
+    location: 'Kathmandu',
+    salary: 'Rs. 15,000',
+    postedAt: 'Just now',
+    requirements: ['Basic knowledge of HTML, CSS, and JS', 'Eagerness to learn']
+  },
+  {
+    id: 'j5',
+    vendorId: 'v3',
+    title: 'Freelance Illustrator',
+    description: 'Looking for a creative illustrator for a series of brand assets.',
+    type: 'freelance',
+    sector: 'Design',
+    location: 'Remote',
+    salary: 'Project-based',
+    postedAt: '5 days ago',
+    requirements: ['Proven track record in illustration', 'Ability to meet deadlines']
+  }
+];
+
 export const PRE_OWNED_PRODUCTS: PreOwnedProduct[] = [
   {
     id: 'po1',

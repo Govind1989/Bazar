@@ -208,7 +208,7 @@ export default function CategoriesPage() {
 
           <div className="relative max-w-full mx-auto group">
             <div className="absolute inset-0 bg-bazar-black/[0.02] dark:bg-white/[0.02] rounded-[2rem] -m-4 blur-xl group-focus-within:bg-purple-500/[0.05] transition-all duration-500" />
-            <div className="relative flex items-center bg-white dark:bg-bazar-black border-2 border-bazar-black dark:border-bazar-white rounded-[2rem] overflow-hidden shadow-lg">
+            <div className="relative flex items-center bg-white dark:bg-bazar-black border-2 border-bazar-black dark:border-bazar-white rounded-[2rem] overflow-hidden ">
               <div className="pl-8 pr-4">
                 <Search className="w-6 h-6 opacity-20" />
               </div>
@@ -219,11 +219,11 @@ export default function CategoriesPage() {
                 placeholder="Search collections, organic foods, luxury electronics..."
                 className="flex-1 h-20 bg-transparent outline-none font-medium text-lg placeholder:opacity-20"
               />
-              <div className="pr-4">
+              {/* <div className="pr-4">
                 <Button className="h-12 px-8 rounded-2xl bg-bazar-black dark:bg-bazar-white text-white dark:text-bazar-black font-black uppercase tracking-widest">
                   Find
                 </Button>
-              </div>
+              </div> */}
             </div>
           </div>
         </section>

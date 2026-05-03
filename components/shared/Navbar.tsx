@@ -55,6 +55,7 @@ export function Navbar() {
     { name: t('marketplace'), href: "/marketplace" },
     { name: t('categories'), href: "/categories" },
     { name: t('vendors'), href: "/vendors" },
+    { name: 'Jobs', href: "/jobs" },
     { name: t('pricing'), href: "#pricing" },
   ];
 

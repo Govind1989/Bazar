@@ -182,7 +182,7 @@ export default function VendorsPage() {
 
         {/* Search and Filters */}
         <section className="mb-16 space-y-10">
-           <div className="relative max-w-2xl group">
+           <div className="relative max-w-full group">
               <div className="absolute inset-0 bg-bazar-black/[0.02] dark:bg-white/[0.02] rounded-3xl -m-2 blur-lg group-focus-within:bg-purple-500/[0.05] transition-all" />
               <div className="relative flex items-center bg-white dark:bg-bazar-black border-2 border-bazar-black dark:border-bazar-white rounded-2xl overflow-hidden shadow-sm">
                 <div className="pl-6 pr-4">

@@ -79,6 +79,14 @@ This document serves as the foundational truth for all agentic AI entities inter
 #### `components/shared/AuthModal.tsx`
 - **Logic**: Unified authentication gateway. Automatically triggered by protected action guards (e.g., "Message Vendor") for non-authenticated sessions.
 
+#### `components/shared/Jobs.tsx` (NEW)
+- **Purpose**: Career discovery interface.
+- **Logic**: Implements multi-dimensional filtering (Job Type, Sector) and real-time search across job titles and vendor names.
+
+#### `app/(public)/jobs/page.tsx` (NEW)
+- **Purpose**: SEO-ready Jobs landing page.
+- **Logic**: Integrates the `Jobs` component with a high-fidelity editorial header following the **Cal Sans** aesthetic.
+
 ---
 
 ## 4. IMPLEMENTATION STATUS
@@ -106,6 +114,7 @@ This document serves as the foundational truth for all agentic AI entities inter
 - **Advanced Partner Filtering**: Vendor discovery hub with category-based radio filtering and real-time craft search.
 - **Agentic Messaging Bridge**: Direct-to-Vendor communication infrastructure. Integrated "Message" triggers that bridge the gap between discovery and transaction.
 - **Search Architecture**: Multi-level search implementation that traverses both primary and nested data structures (Categories + Sub-categories).
+- **Career Ecosystem**: Full end-to-end Jobs module with multi-vendor listings and sector-specific discovery.
 
 ---
 
