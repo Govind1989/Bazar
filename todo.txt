@@ -9,13 +9,34 @@
   │ Services Hub     │ http://localhost:3000/services         │ Shows the list of available services.  
 
 
-  Lets implement authentication flow of user in our application. We will have a static data user with username , email, password (plain for now)
-  , role [SuperAdmin, Vendor, User] , etc with any other major fields as required in enterprise ready multitenant application. We will have few users 
-  with multple roles in the static data folder. Now based on the role, we will route each routes abckend after successful login.
+Static Credentials for Testing:
+   * Admin: admin@bazar.com / admin
+   * Vendor: vendor@himalaya.com / vendor
+   * User: user@example.com / user
+   * MultiUser: multi@example.com / multi
+   
 
-  Make the new MarketplaceHome color responsive light and dark and screen responsive of the added components, category menus.
-  Also add a new section named flashsale with timer on the right corner of the label. and in mobile view just below the label.
+
+                                                                                                                                         ? for shortcuts
+──────────────────────────────────────────────────────────
+
+  In Navbar.tsx when clicked on the categories, i want to open up a page elgantly showing up all the categories well structured and sub categories we
+  have and will have in future. and option to favorite categories as per user choice. Then in Same Vendors link, i want to show all the categories of
+  vendors listed with aesthetic image for each vendors with more detail like ratings, reviews of each vendors, Here also user must be 
+  able to Follow vendors of their choice and edit the favorite lists. This will first give priority to the vendor followed during cnotent creation in front 
+  end.
+  If user choose to explore each vendor page then a explore option would take to the vendor page website. Create two new pages in components/shared folder
+  You know all the static files goes to data/mock.ts
   
-  I have placed a new icon just right of the cart, as we have CartToggle in the Navbar.tsx. I have create CalendarToggle.tsx and created
-  useCalendarStore.ts. Here, i want to be able to show services booked by the users nstead of products. in cart we wil have products.
-  Verify if my changes are aligned with the services requirement and if not update the newly created files. Impress me
+  when user clicks on the icon or name Bazar we will redirect it to our current MarketplaceHome now in the link MarketPlace when user clicks,
+  I want to create a platform for user to sell their old goods like Hamrobazar.com. User will post from their dashboard only when allowed to post
+  and others can scan and make a deal. Impress me with this real marketplace design and implementation also. You know all the static files goes to data/mock.ts
+
+
+
+  I want now you to create a floating dock at the bottom right corner of the screen floating through out the application. We will have two options 
+  Messages and AI Assistant. Messages will be for vendor human messages. AI Assistant for instruction from user and our ai agent
+  will do all the tasks for the user. We will have two separate asistant both for vendor and for user, we will separate then as userAssistant, vendorAssistant. Each will 
+  have settings to setup n each dashboard the llm api key user provides to minimize the overhead cost. I am giving you reference image for the
+  design as in @imagemobileview.png. I want two icons to hide and when clicked shall slide up those two icons then user can chat or interact
+  with the modal of each of them. On close the two icons shall slide and close inside the apple like glass morphism styled icon. Impress me here with your design skills. 

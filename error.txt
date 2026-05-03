@@ -1,79 +1,11 @@
-[{
-	"resource": "/e:/Nextjs/Bazar/components/shared/CalendarToggle.tsx",
-	"owner": "typescript",
-	"code": "2339",
-	"severity": 8,
-	"message": "Property 'items' does not exist on type 'CalendarState'.",
-	"source": "ts",
-	"startLineNumber": 14,
-	"startColumn": 11,
-	"endLineNumber": 14,
-	"endColumn": 16,
-	"modelVersionId": 105,
-	"origin": "extHost1"
-},{
-	"resource": "/e:/Nextjs/Bazar/components/shared/CalendarToggle.tsx",
-	"owner": "typescript",
-	"code": "2339",
-	"severity": 8,
-	"message": "Property 'totalItems' does not exist on type 'CalendarState'.",
-	"source": "ts",
-	"startLineNumber": 14,
-	"startColumn": 18,
-	"endLineNumber": 14,
-	"endColumn": 28,
-	"modelVersionId": 105,
-	"origin": "extHost1"
-},{
-	"resource": "/e:/Nextjs/Bazar/components/shared/CalendarToggle.tsx",
-	"owner": "typescript",
-	"code": "2339",
-	"severity": 8,
-	"message": "Property 'totalPrice' does not exist on type 'CalendarState'.",
-	"source": "ts",
-	"startLineNumber": 14,
-	"startColumn": 30,
-	"endLineNumber": 14,
-	"endColumn": 40,
-	"modelVersionId": 105,
-	"origin": "extHost1"
-},{
-	"resource": "/e:/Nextjs/Bazar/components/shared/CalendarToggle.tsx",
-	"owner": "typescript",
-	"code": "2339",
-	"severity": 8,
-	"message": "Property 'removeItem' does not exist on type 'CalendarState'.",
-	"source": "ts",
-	"startLineNumber": 14,
-	"startColumn": 42,
-	"endLineNumber": 14,
-	"endColumn": 52,
-	"modelVersionId": 105,
-	"origin": "extHost1"
-},{
-	"resource": "/e:/Nextjs/Bazar/components/shared/CalendarToggle.tsx",
-	"owner": "typescript",
-	"code": "2339",
-	"severity": 8,
-	"message": "Property 'updateQuantity' does not exist on type 'CalendarState'.",
-	"source": "ts",
-	"startLineNumber": 14,
-	"startColumn": 54,
-	"endLineNumber": 14,
-	"endColumn": 68,
-	"modelVersionId": 105,
-	"origin": "extHost1"
-},{
-	"resource": "/e:/Nextjs/Bazar/components/shared/CalendarToggle.tsx",
-	"owner": "typescript",
-	"code": "7006",
-	"severity": 8,
-	"message": "Parameter 'item' implicitly has an 'any' type.",
-	"source": "ts",
-	"startLineNumber": 72,
-	"startColumn": 29,
-	"endLineNumber": 72,
-	"endColumn": 33,
-	"modelVersionId": 105,
-	"origin": "extHost1"
-}]
+./app/(public)/account/rewards/page.tsx:76:58
+Type error: Cannot find name 'cn'.
+
+  74 |                    <Typography variant="bodySm" className="text-[10px] opacity-40">{log.date}</Typography>
+  75 |                 </div>
+> 76 |                 <Typography variant="titleSm" className={cn(
+     |                                                          ^
+  77 |                   "font-black tracking-tighter",
+  78 |                   log.points.startsWith("+") ? "text-green-500" : "text-red-500"
+  79 |                 )}>{log.points}</Typography>
+Next.js build worker exited with code: 1 and signal: null

@@ -1,6 +1,10 @@
+"use client";
+
 import { Typography } from "@/components/ui/typography";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useAuthStore } from "@/store/useAuthStore";
+import { useRouter } from "next/navigation";
 import { 
   ShieldCheck, 
   Users2, 
@@ -10,7 +14,8 @@ import {
   Bell,
   Search,
   LogOut,
-  Globe
+  Globe,
+  User
 } from "lucide-react";
 
 const ADMIN_SIDEBAR_ITEMS = [
@@ -26,6 +31,24 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const { logout, user } = useAuthStore();
+  const router = useRouter();
+
+  // Helper to get initials
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
+  const handleLogout = () => {
+    logout();
+    router.push("/");
+  };
+
   return (
     <div className="flex min-h-screen bg-bazar-white dark:bg-bazar-black">
       {/* Super Admin Sidebar */}
@@ -66,7 +89,10 @@ export default function AdminLayout({
             LIVE MARKETPLACE
             <Globe className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
           </Link>
-          <button className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-md transition-all">
+          <button 
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-md transition-all"
+          >
             <LogOut className="w-4 h-4" />
             System Logout
           </button>
@@ -91,11 +117,16 @@ export default function AdminLayout({
                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-black" />
             </button>
             <div className="flex items-center gap-3 border-l border-bazar-gray-200 dark:border-bazar-gray-800 pl-6">
-               <div className="w-8 h-8 rounded-full bg-bazar-black dark:bg-bazar-white flex items-center justify-center text-[10px] font-black text-white dark:text-black">
-                  SA
+               <div className="relative flex items-center justify-center w-8 h-8 rounded-full">
+                  <div className="absolute inset-0 rounded-full border border-bazar-black/10 dark:border-bazar-white/10" />
+                  <div className="w-7 h-7 rounded-full bg-bazar-black dark:bg-bazar-white flex items-center justify-center overflow-hidden">
+                    <Typography variant="bodySm" className="text-[14px] font-black tracking-tighter text-bazar-white dark:text-bazar-black">
+                       {getInitials(user?.name || 'Admin')}
+                    </Typography>
+                  </div>
                </div>
                <div>
-                  <Typography variant="titleSm" className="text-xs leading-none">Super Admin</Typography>
+                  <Typography variant="titleSm" className="text-xs leading-none">{user?.name || 'Super Admin'}</Typography>
                   <Typography variant="bodySm" className="text-[10px] opacity-40">System Root</Typography>
                </div>
             </div>

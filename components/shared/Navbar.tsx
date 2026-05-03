@@ -10,18 +10,37 @@ import { AuthModal } from "./AuthModal";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useSystemStore } from "@/store/useSystemStore";
 import { useTranslation } from "@/hooks/useTranslation";
-import { User, Globe, Sun, Moon } from "lucide-react";
+import { User, Globe, Sun, Moon, LayoutDashboard } from "lucide-react";
 import { useTheme } from "next-themes";
 import { CalendarToggle } from "./CalendarToggle";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const { user, isAuthenticated } = useAuthStore();
+  const { user, isAuthenticated, activeRole, logout } = useAuthStore();
   const { language, setLanguage } = useSystemStore();
   const { theme, setTheme } = useTheme();
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
+
+  // Helper to get initials
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
+  const handleUserClick = () => {
+    if (isAuthenticated) {
+      logout();
+      window.location.reload();
+    } else {
+      setIsAuthModalOpen(true);
+    }
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -97,23 +116,42 @@ export function Navbar() {
         <CartToggle />
         <CalendarToggle />
         {isAuthenticated ? (
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="gap-2 border-bazar-black dark:border-bazar-white"
-            onClick={() => setIsAuthModalOpen(true)}
-          >
-            <User className="w-4 h-4" />
-            <span className="max-w-[100px] truncate">{user?.name}</span>
-          </Button>
+          <div className="flex items-center gap-3">
+            <Link href={activeRole === 'SuperAdmin' ? '/admin' : activeRole === 'Vendor' ? '/dashboard' : '/account'}>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="w-8 h-8  border border-bazar-gray-100 dark:border-bazar-gray-900 hover:border-bazar-black dark:hover:border-bazar-white transition-all"
+              >
+                <LayoutDashboard className="w-4 h-4" />
+              </Button>
+            </Link>
+            
+            <button 
+              onClick={handleUserClick}
+              className="group relative flex items-center justify-center w-8 h-8 rounded-full transition-transform active:scale-95"
+            >
+              {/* Thin Ring */}
+              <div className="absolute inset-0 rounded-full border border-bazar-black/10 dark:border-bazar-white/10 group-hover:border-bazar-black dark:group-hover:border-bazar-white transition-colors" />
+              
+              {/* Initials Container */}
+              <div className="w-7 h-7 rounded-full bg-bazar-gray-50 dark:bg-bazar-gray-950 flex items-center justify-center overflow-hidden">
+                <Typography variant="bodySm" className="text-[14px] font-black tracking-tighter">
+                  {getInitials(user?.name || 'User')}
+                </Typography>
+              </div>
+            </button>
+          </div>
         ) : (
-          <Button variant="ghost" size="sm" onClick={() => setIsAuthModalOpen(true)}>
-            {t('signIn')}
-          </Button>
+          <>
+            <Button variant="ghost" size="sm" onClick={() => setIsAuthModalOpen(true)}>
+              {t('signIn')}
+            </Button>
+            <Button size="sm" onClick={() => setIsAuthModalOpen(true)}>
+              {t('joinBazar')}
+            </Button>
+          </>
         )}
-        <Button size="sm" onClick={() => setIsAuthModalOpen(true)}>
-          {t('joinBazar')}
-        </Button>
       </div>
     </nav>
     
