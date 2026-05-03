@@ -99,7 +99,7 @@ export const SERVICE_CATEGORIES: Category[] = [
     description: "Guided tours & treks",
   },
   {
-    id: "booking",
+    id: "service",
     name: "Services",
     slug: "service",
     icon: "Clock",
@@ -370,7 +370,7 @@ export interface Service {
   description: string;
   price: number;
   duration: number; // in minutes
-  category: 'booking' | 'holiday' | 'appointment';
+  category: 'service' | 'holiday' | 'appointment';
   image: string;
   rating: number;
   providerName: string;
@@ -411,7 +411,7 @@ export const SERVICES: Service[] = [
     description: 'Outdoor or studio portrait sessions.',
     price: 5000,
     duration: 120,
-    category: 'booking',
+    category: 'service',
     image: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=800&auto=format&fit=crop',
     rating: 4.7,
     providerName: 'Focus Studio'
