@@ -12,6 +12,7 @@ import { useSystemStore } from "@/store/useSystemStore";
 import { useTranslation } from "@/hooks/useTranslation";
 import { User, Globe, Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
+import { CalendarToggle } from "./CalendarToggle";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -94,6 +95,7 @@ export function Navbar() {
           {language.toUpperCase()}
         </Button>
         <CartToggle />
+        <CalendarToggle />
         {isAuthenticated ? (
           <Button 
             variant="outline" 

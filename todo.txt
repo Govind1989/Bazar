@@ -16,3 +16,6 @@
   Make the new MarketplaceHome color responsive light and dark and screen responsive of the added components, category menus.
   Also add a new section named flashsale with timer on the right corner of the label. and in mobile view just below the label.
   
+  I have placed a new icon just right of the cart, as we have CartToggle in the Navbar.tsx. I have create CalendarToggle.tsx and created
+  useCalendarStore.ts. Here, i want to be able to show services booked by the users nstead of products. in cart we wil have products.
+  Verify if my changes are aligned with the services requirement and if not update the newly created files. Impress me
