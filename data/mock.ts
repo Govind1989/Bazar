@@ -83,6 +83,30 @@ export const CATEGORIES: Category[] = [
   { id: '7', name: 'Mobiles & Accessories', slug: 'mobiles', icon: 'Smartphone', description: 'Smartphones and mobile gear.' },
 ];
 
+export const SERVICE_CATEGORIES: Category[] = [
+  {
+    id: "appointment",
+    name: "Appointments",
+    slug: "appointment",
+    icon: "Calendar",
+    description: "Book expert consultations",
+  },
+  {
+    id: "holiday",
+    name: "Holidays",
+    slug: "holiday",
+    icon: "MapPin",
+    description: "Guided tours & treks",
+  },
+  {
+    id: "booking",
+    name: "Services",
+    slug: "service",
+    icon: "Clock",
+    description: "Home & professional services",
+  },
+];
+
 export const VENDORS: Vendor[] = [
   {
     id: 'v1',

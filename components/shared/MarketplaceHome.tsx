@@ -10,6 +10,7 @@ import {
   PRODUCTS,
   VENDORS,
   CATEGORIES,
+  SERVICE_CATEGORIES,
   SERVICES,
   EVENTS,
   TESTIMONIALS,
@@ -120,29 +121,21 @@ const PRODUCT_CATEGORIES: CategoryMeta[] = CATEGORIES.map((c) => ({
     ),
 }));
 
-const SERVICE_CATEGORIES: CategoryMeta[] = [
-  {
-    id: "appointment",
-    name: "Appointments",
-    slug: "appointment",
-    icon: <Calendar className="w-4 h-4" />,
-    description: "Book expert consultations",
-  },
-  {
-    id: "holiday",
-    name: "Holidays",
-    slug: "holiday",
-    icon: <MapPin className="w-4 h-4" />,
-    description: "Guided tours & treks",
-  },
-  {
-    id: "booking",
-    name: "Services",
-    slug: "service",
-    icon: <Clock className="w-4 h-4" />,
-    description: "Home & professional services",
-  },
-];
+const SERVICES_CATEGORIES: CategoryMeta[] = SERVICE_CATEGORIES.map((c) => ({
+  ...c,
+  icon:
+    c.icon === "Calendar" ? (
+      <Calendar className="w-4 h-4" />
+    ) : c.icon === "MapPin" ? (
+      <MapPin className="w-4 h-4" />
+    ) : c.icon === "Clock" ? (
+      <Clock className="w-4 h-4" />
+    ) : (
+      <Calendar className="w-4 h-4" />
+    ),
+}));
+
+
 
 /* ------------------------------------------------------------------ */
 /*  Animation variants                                                 */
@@ -173,7 +166,7 @@ export default function MarketplaceHome() {
   );
 
   const currentCategories =
-    activeTab === "products" ? PRODUCT_CATEGORIES : SERVICE_CATEGORIES;
+    activeTab === "products" ? PRODUCT_CATEGORIES : SERVICES_CATEGORIES;
 
   const featuredProducts = useMemo(
     () => {
