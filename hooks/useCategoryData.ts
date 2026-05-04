@@ -1,22 +1,28 @@
 import { useQuery } from "@tanstack/react-query";
 import { PRODUCTS, VENDORS, Product, Vendor } from "@/data/mock";
 
-interface CategoryFilters {
-  category: string;
+interface ProductFilters {
+  category?: string;
   subCategories?: string[];
   priceRange?: [number, number];
   vendors?: string[];
   rating?: number;
   sortBy?: string;
+  isDeal?: boolean;
+  isFlashSale?: boolean;
 }
 
-const fetchCategoryProducts = async (filters: CategoryFilters): Promise<Product[]> => {
+const fetchProducts = async (filters: ProductFilters): Promise<Product[]> => {
   await new Promise((resolve) => setTimeout(resolve, 800));
   
-  let filtered = PRODUCTS.filter(p => p.category === filters.category);
+  let filtered = [...PRODUCTS];
 
-  if (filters.subCategories && filters.subCategories.length > 0) {
-    // In a real app, products would have sub-categories
+  if (filters.category) {
+    filtered = filtered.filter(p => p.category === filters.category);
+  }
+
+  if (filters.isDeal || filters.isFlashSale) {
+    filtered = filtered.filter(p => p.compareAtPrice && p.compareAtPrice > p.price);
   }
 
   if (filters.priceRange) {
@@ -34,9 +40,16 @@ const fetchCategoryProducts = async (filters: CategoryFilters): Promise<Product[
   return filtered;
 };
 
-export function useCategoryProducts(filters: CategoryFilters) {
+export function useCategoryProducts(filters: ProductFilters) {
   return useQuery({
     queryKey: ["category", filters.category, filters],
-    queryFn: () => fetchCategoryProducts(filters),
+    queryFn: () => fetchProducts(filters),
+  });
+}
+
+export function useProducts(filters: ProductFilters) {
+  return useQuery({
+    queryKey: ["products", filters],
+    queryFn: () => fetchProducts(filters),
   });
 }

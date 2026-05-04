@@ -626,6 +626,18 @@ export default function MarketplaceHome() {
                 );
               })}
             </div>
+
+            <div className="mt-12 flex justify-end">
+              <Link href="/flash-sales">
+                <Button
+                  variant="outline"
+                  className="rounded-lg border-neutral-200 dark:border-neutral-800 text-neutral-900 dark:text-white font-semibold text-sm hover:bg-neutral-100 dark:hover:bg-neutral-900 group"
+                >
+                  View all flash sales
+                  <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-0.5 transition-transform" />
+                </Button>
+              </Link>
+            </div>
           </div>
         </section>
       )}
@@ -653,12 +665,14 @@ export default function MarketplaceHome() {
                   </p>
                 </div>
               </div>
-              <Button
-                variant="outline"
-                className="hidden md:flex rounded-lg border-neutral-200 dark:border-neutral-800 text-neutral-900 dark:text-white font-semibold text-sm hover:bg-neutral-100 dark:hover:bg-neutral-900"
-              >
-                View all deals
-              </Button>
+              <Link href="/deals">
+                <Button
+                  variant="outline"
+                  className="hidden md:flex rounded-lg border-neutral-200 dark:border-neutral-800 text-neutral-900 dark:text-white font-semibold text-sm hover:bg-neutral-100 dark:hover:bg-neutral-900"
+                >
+                  View all deals
+                </Button>
+              </Link>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -702,6 +716,18 @@ export default function MarketplaceHome() {
                   </Card>
                 );
               })}
+            </div>
+
+            <div className="mt-12 flex justify-end">
+              <Link href="/deals">
+                <Button
+                  variant="outline"
+                  className="rounded-lg border-neutral-200 dark:border-neutral-800 text-neutral-900 dark:text-white font-semibold text-sm hover:bg-neutral-100 dark:hover:bg-neutral-900 group"
+                >
+                  View all deals
+                  <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-0.5 transition-transform" />
+                </Button>
+              </Link>
             </div>
           </div>
         </section>
