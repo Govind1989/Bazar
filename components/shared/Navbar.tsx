@@ -10,15 +10,16 @@ import { AuthModal } from "./AuthModal";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useSystemStore } from "@/store/useSystemStore";
 import { useTranslation } from "@/hooks/useTranslation";
-import { User, Globe, Sun, Moon, LayoutDashboard } from "lucide-react";
+import { User, Globe, Sun, Moon, LayoutDashboard, LayoutGrid, Sparkles } from "lucide-react";
 import { useTheme } from "next-themes";
 import { CalendarToggle } from "./CalendarToggle";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const { user, isAuthenticated, activeRole, logout } = useAuthStore();
-  const { language, setLanguage } = useSystemStore();
+  const { language, setLanguage, marketplaceView, setMarketplaceView } = useSystemStore();
   const { theme, setTheme } = useTheme();
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
@@ -92,18 +93,54 @@ export function Navbar() {
 
       <div className="ml-auto flex items-center gap-4">
         {mounted && (
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="w-8 h-8"
-          >
-            {theme === "dark" ? (
-              <Sun className="w-4 h-4 text-bazar-white" />
-            ) : (
-              <Moon className="w-4 h-4 text-bazar-black" />
-            )}
-          </Button>
+          <div className="flex items-center gap-1 mr-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setMarketplaceView(marketplaceView === 'classic' ? 'social' : 'classic')}
+              className={cn(
+                "h-9 px-4 rounded-full transition-all gap-2 border-2",
+                marketplaceView === 'social' 
+                  ? "bg-fuchsia-50 dark:bg-fuchsia-950/30 border-fuchsia-200 dark:border-fuchsia-800 text-fuchsia-600 shadow-sm" 
+                  : "bg-bazar-gray-50 dark:bg-bazar-gray-950 border-bazar-gray-100 dark:border-bazar-gray-900 hover:border-bazar-black dark:hover:border-bazar-white"
+              )}
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={marketplaceView}
+                  initial={{ opacity: 0, scale: 0.8, rotate: -20 }}
+                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                  exit={{ opacity: 0, scale: 0.8, rotate: 20 }}
+                  className="flex items-center gap-2"
+                >
+                  {marketplaceView === 'classic' ? (
+                    <>
+                      <LayoutGrid className="w-4 h-4" />
+                      <span className="text-[10px] font-black uppercase tracking-widest">Classic</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-4 h-4" />
+                      <span className="text-[10px] font-black uppercase tracking-widest">Social</span>
+                    </>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </Button>
+            
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="w-8 h-8"
+            >
+              {theme === "dark" ? (
+                <Sun className="w-4 h-4 text-bazar-white" />
+              ) : (
+                <Moon className="w-4 h-4 text-bazar-black" />
+              )}
+            </Button>
+          </div>
         )}
         <Button 
           variant="ghost" 
