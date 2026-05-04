@@ -36,6 +36,7 @@ import {
   Monitor,
   Smartphone,
 } from "lucide-react";
+import { ProductCard } from "./ProductCard";
 
 /* ------------------------------------------------------------------ */
 /*  Countdown Timer (client-only to avoid hydration mismatch)          */
@@ -491,52 +492,10 @@ export default function MarketplaceHome() {
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: idx * 0.06 }}
                         >
-                          <Card className="group cursor-pointer border-0 bg-neutral-100 dark:bg-neutral-900 rounded-xl overflow-hidden hover:shadow-md transition-shadow duration-300">
-                            <div className="relative aspect-[4/5] overflow-hidden bg-white dark:bg-black">
-                              <Image
-                                src={product.image}
-                                alt={product.name}
-                                fill
-                                className="object-cover group-hover:scale-105 transition-transform duration-700"
-                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                              />
-                              {product.compareAtPrice &&
-                                product.compareAtPrice > product.price && (
-                                  <div className="absolute top-4 left-4">
-                                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-[11px] font-bold uppercase tracking-wider">
-                                      <TrendingDown className="w-3 h-3" />
-                                      {discount(
-                                        product.price,
-                                        product.compareAtPrice
-                                      )}
-                                      % Off
-                                    </span>
-                                  </div>
-                                )}
-                            </div>
-                            <div className="p-5">
-                              <div className="flex items-start justify-between gap-4 mb-2">
-                                <div className="min-w-0">
-                                  <h3 className="font-semibold text-neutral-900 dark:text-white text-base leading-snug mb-1 truncate">
-                                    {product.name}
-                                  </h3>
-                                  <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wider font-medium truncate">
-                                    {vendor?.name}
-                                  </p>
-                                </div>
-                                <div className="text-right shrink-0">
-                                  <p className="font-semibold text-neutral-900 dark:text-white">
-                                    NPR {product.price.toLocaleString()}
-                                  </p>
-                                  {product.compareAtPrice && (
-                                    <p className="text-xs text-neutral-500 dark:text-neutral-400 line-through">
-                                      NPR {product.compareAtPrice.toLocaleString()}
-                                    </p>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                          </Card>
+                          <ProductCard 
+                            product={product} 
+                            vendorName={vendor?.name} 
+                          />
                         </motion.div>
                       );
                     })}
@@ -659,41 +618,11 @@ export default function MarketplaceHome() {
               {flashSaleProducts.map((product: any) => {
                 const vendor = VENDORS.find((v) => v.id === product.vendorId);
                 return (
-                  <Card
-                    key={product.id}
-                    className="group cursor-pointer bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800 rounded-xl overflow-hidden hover:border-neutral-900 dark:hover:border-white transition-colors duration-300"
-                  >
-                    <div className="relative aspect-square overflow-hidden bg-neutral-100 dark:bg-neutral-900">
-                      <Image
-                        src={product.image}
-                        alt={product.name}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                      />
-                      <div className="absolute top-3 left-3">
-                        <span className="px-2.5 py-1 rounded-md bg-red-500 text-white text-[11px] font-bold uppercase tracking-wider">
-                          {discount(product.price, product.compareAtPrice)}% OFF
-                        </span>
-                      </div>
-                    </div>
-                    <div className="p-4">
-                      <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wider font-medium mb-1 truncate">
-                        {vendor?.name}
-                      </p>
-                      <h3 className="font-semibold text-neutral-900 dark:text-white text-sm mb-3 line-clamp-1">
-                        {product.name}
-                      </h3>
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-neutral-900 dark:text-white">
-                          NPR {product.price.toLocaleString()}
-                        </span>
-                        <span className="text-xs text-neutral-400 dark:text-neutral-600 line-through">
-                          NPR {product.compareAtPrice?.toLocaleString()}
-                        </span>
-                      </div>
-                    </div>
-                  </Card>
+                  <ProductCard 
+                    key={product.id} 
+                    product={product} 
+                    vendorName={vendor?.name} 
+                  />
                 );
               })}
             </div>

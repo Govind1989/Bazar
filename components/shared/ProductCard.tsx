@@ -15,10 +15,11 @@ interface ProductCardProps {
 
 export function ProductCard({ product, vendorName }: ProductCardProps) {
   const addItem = useCartStore((state) => state.addItem);
+  const vendorSlug = vendorName?.toLowerCase().replace(/\s+/g, '-');
 
   return (
-    <div className="group">
-      <Link href={`/${vendorName?.toLowerCase().replace(/\s+/g, '-')}/p/${product.slug}`}>
+    <div className="group relative">
+      <Link href={`/${vendorSlug}/p/${product.slug}`}>
         <div className="relative aspect-square mb-4 overflow-hidden rounded-xl bg-bazar-gray-100 dark:bg-bazar-gray-900">
           <Image
             src={product.image}
@@ -30,32 +31,36 @@ export function ProductCard({ product, vendorName }: ProductCardProps) {
         </div>
       </Link>
       
+      {/* Add to Bag overlay */}
+      <Button 
+        variant="secondary" 
+        size="icon" 
+        className="absolute top-3 right-3 h-9 w-9 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
+        onClick={(e) => {
+          e.preventDefault();
+          addItem(product);
+        }}
+      >
+        <ShoppingBag className="w-4 h-4" />
+      </Button>
+      
       <div className="flex justify-between items-start gap-4">
         <div className="flex-1">
-          <Link href={`/${vendorName?.toLowerCase().replace(/\s+/g, '-')}/p/${product.slug}`}>
+          <Link href={`/${vendorSlug}/p/${product.slug}`}>
             <Typography variant="titleSm" className="mb-1 group-hover:underline">
               {product.name}
             </Typography>
           </Link>
           {vendorName && (
-            <Typography variant="bodySm" className="uppercase font-mono tracking-wider opacity-60 text-[10px]">
-              {vendorName}
-            </Typography>
+            <Link href={`/${vendorSlug}`}>
+              <Typography variant="bodySm" className="uppercase font-mono tracking-wider opacity-60 text-[10px] hover:underline">
+                {vendorName}
+              </Typography>
+            </Link>
           )}
         </div>
         <div className="text-right">
           <Typography variant="titleSm">NPR {product.price.toLocaleString()}</Typography>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="mt-2 h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-            onClick={(e) => {
-              e.preventDefault();
-              addItem(product);
-            }}
-          >
-            <ShoppingBag className="w-4 h-4" />
-          </Button>
         </div>
       </div>
     </div>
