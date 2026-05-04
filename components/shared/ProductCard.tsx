@@ -19,7 +19,7 @@ export function ProductCard({ product, vendorName }: ProductCardProps) {
 
   return (
     <div className="group relative">
-      <Link href={`/${vendorSlug}/p/${product.slug}`}>
+      <Link href={`/p/${product.slug}`}>
         <div className="relative aspect-square mb-4 overflow-hidden rounded-xl bg-bazar-gray-100 dark:bg-bazar-gray-900">
           <Image
             src={product.image}
@@ -46,7 +46,7 @@ export function ProductCard({ product, vendorName }: ProductCardProps) {
       
       <div className="flex justify-between items-start gap-4">
         <div className="flex-1">
-          <Link href={`/${vendorSlug}/p/${product.slug}`}>
+          <Link href={`/p/${product.slug}`}>
             <Typography variant="titleSm" className="mb-1 group-hover:underline">
               {product.name}
             </Typography>

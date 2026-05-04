@@ -17,7 +17,7 @@ Static Credentials for Testing:
    
 
 
-                                                                                                                                         ? for shortcuts
+  $env:ANALYZE="true"; npm run build                                                                                                                                       ? for shortcuts
 ──────────────────────────────────────────────────────────
 
   

@@ -1,9 +1,14 @@
-  Creating an optimized production build ...
- ⚠ Compiled with warnings in 9.6s
+ANALYZE=true : The term 'ANALYZE=true' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the 
+name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:1
++ ANALYZE=true npm run build
++ ~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (ANALYZE=true:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+PS E:\Nextjs\Bazar> npm run build ANALYZE=true
 
-./hooks/useAdminData.ts
-Attempted import error: 'ALL_VENDORS' is not exported from '@/data/mock' (imported as 'ALL_VENDORS').
+> bazar-unified@0.1.0 build
+> next build ANALYZE=true
 
-Import trace for requested module:
-./hooks/useAdminData.ts
-./app/(admin)/admin/page.tsx
+Invalid project directory provided, no such directory: E:\Nextjs\Bazar\ANALYZE=true
