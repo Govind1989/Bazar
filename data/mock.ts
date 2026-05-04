@@ -168,6 +168,8 @@ export const VENDORS: Vendor[] = [
     reviewsCount: 1240,
     cmsConfig: {
       templateId: 'minimal',
+      category: 'electronics',
+      tier: 'platinum',
       heroTitle: 'Think Different.',
       heroSubtitle: 'The most powerful personal devices in the world.',
       heroImage: 'https://images.unsplash.com/photo-1696446701796-da61225697cc?q=80&w=1200&auto=format&fit=crop',
@@ -193,7 +195,9 @@ export const VENDORS: Vendor[] = [
     rating: 4.7,
     reviewsCount: 856,
     cmsConfig: {
-      templateId: 'bold',
+      templateId: 'food-gold',
+      category: 'foods',
+      tier: 'gold',
       heroTitle: 'Freshly Baked. Daily.',
       heroSubtitle: 'Traditional Himalayan recipes meets modern baking.',
       heroImage: 'https://images.unsplash.com/photo-1585478259715-876a6a81fc08?q=80&w=1200&auto=format&fit=crop',
@@ -220,6 +224,8 @@ export const VENDORS: Vendor[] = [
     reviewsCount: 432,
     cmsConfig: {
       templateId: 'minimal',
+      category: 'woods',
+      tier: 'silver',
       heroTitle: 'Handcrafted Elegance',
       heroSubtitle: 'Timeless Nepalese woodcraft for your home.',
       heroImage: 'https://images.unsplash.com/photo-1590059300649-74e2d3df9765?q=80&w=1200&auto=format&fit=crop',
@@ -661,5 +667,23 @@ export const PRE_OWNED_PRODUCTS: PreOwnedProduct[] = [
     location: 'Lalitpur',
     isSold: false
   }
+];
+
+export const SALES_ANALYTICS = [
+  { month: 'Jan', sales: 45000, orders: 120 },
+  { month: 'Feb', sales: 52000, orders: 145 },
+  { month: 'Mar', sales: 48000, orders: 130 },
+  { month: 'Apr', sales: 61000, orders: 168 },
+  { month: 'May', sales: 55000, orders: 152 },
+  { month: 'Jun', sales: 67000, orders: 185 },
+];
+
+export const MONTHLY_PROJECTIONS = [
+  { month: 'Jul', projected: 72000 },
+  { month: 'Aug', projected: 75000 },
+  { month: 'Sep', projected: 80000 },
+  { month: 'Oct', projected: 95000 },
+  { month: 'Nov', projected: 88000 },
+  { month: 'Dec', projected: 92000 },
 ];
 

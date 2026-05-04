@@ -23,8 +23,8 @@ import {
 export default function CMSCustomizerPage() {
   const { previewConfig, init, updateConfig, updateTheme, isDirty, save } = useCMSStore();
   
-  // Using Apple Store NP for this demo
-  const vendor = VENDORS[0];
+  // Using Himalayan Bakery for this demo as it's a food vendor
+  const vendor = VENDORS[1];
   const vendorProducts = PRODUCTS.filter(p => p.vendorId === vendor.id);
 
   useEffect(() => {
@@ -32,6 +32,10 @@ export default function CMSCustomizerPage() {
   }, []);
 
   if (!previewConfig) return null;
+
+  const filteredTemplates = TEMPLATES.filter(t => 
+    t.category === 'all' || t.category === previewConfig.category
+  );
 
   return (
     <div className="flex h-[calc(100vh-64px)] overflow-hidden bg-bazar-gray-50 dark:bg-bazar-black">
@@ -49,7 +53,7 @@ export default function CMSCustomizerPage() {
             <Typography variant="titleSm" className="uppercase tracking-widest text-[10px] font-bold">Template</Typography>
           </div>
           <div className="grid grid-cols-2 gap-4">
-             {TEMPLATES.map(t => (
+             {filteredTemplates.map(t => (
                <button 
                  key={t.id}
                  onClick={() => updateConfig({ templateId: t.id })}

@@ -1,9 +1,8 @@
 "use client";
 
-import { MinimalTemplate } from "./MinimalTemplate";
-import { BoldTemplate } from "./BoldTemplate";
 import { VendorCMS } from "@/types/cms";
 import { Product, Vendor } from "@/data/mock";
+import { TEMPLATE_REGISTRY } from "./TemplateRegistry";
 
 interface TemplateEngineProps {
   vendor: Vendor;
@@ -12,11 +11,9 @@ interface TemplateEngineProps {
 }
 
 export function TemplateEngine({ vendor, cms, products }: TemplateEngineProps) {
-  switch (cms.templateId) {
-    case 'bold':
-      return <BoldTemplate vendor={vendor} cms={cms} products={products} />;
-    case 'minimal':
-    default:
-      return <MinimalTemplate vendor={vendor} cms={cms} products={products} />;
-  }
+  const Template = TEMPLATE_REGISTRY[cms.templateId] || TEMPLATE_REGISTRY['minimal'];
+  
+  return <Template vendor={vendor} cms={cms} products={products} />;
 }
+
+
