@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useCMSStore } from "@/store/useCMSStore";
 import { TEMPLATES } from "@/types/cms";
 import { Typography } from "@/components/ui/typography";
@@ -17,11 +17,14 @@ import {
   Save, 
   RotateCcw,
   Smartphone,
-  Monitor
+  Monitor,
+  Check
 } from "lucide-react";
 
 export default function CMSCustomizerPage() {
-  const { previewConfig, init, updateConfig, updateTheme, isDirty, save } = useCMSStore();
+  const { previewConfig, init, updateConfig, updateTheme, isDirty, save, reset } = useCMSStore();
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   
   // Using Himalayan Bakery for this demo as it's a food vendor
   const vendor = VENDORS[1];
@@ -30,6 +33,16 @@ export default function CMSCustomizerPage() {
   useEffect(() => {
     init(vendor.id);
   }, []);
+
+  const handlePublish = async () => {
+    setIsPublishing(true);
+    save(vendor.id);
+    // Simulate API delay for a more realistic feedback
+    await new Promise(r => setTimeout(r, 600));
+    setIsPublishing(false);
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 3000);
+  };
 
   if (!previewConfig) return null;
 
@@ -145,11 +158,21 @@ export default function CMSCustomizerPage() {
           "sticky bottom-0 left-0 right-0 py-4 bg-white dark:bg-bazar-gray-950 border-t border-bazar-gray-100 dark:border-bazar-gray-900 flex gap-3 transition-all duration-500 transform",
           isDirty ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0 pointer-events-none"
         )}>
-           <Button variant="outline" className="flex-1 gap-2" size="sm">
+           <Button variant="outline" className="flex-1 gap-2" size="sm" onClick={() => reset(vendor.id)}>
               <RotateCcw className="w-3 h-3" /> Reset
            </Button>
-           <Button className="flex-1 gap-2" size="sm" onClick={save}>
-              <Save className="w-3 h-3" /> Publish
+           <Button className="flex-1 gap-2" size="sm" onClick={handlePublish} disabled={isPublishing}>
+              {showSuccess ? (
+                <>
+                  <Check className="w-3 h-3 text-green-500" />
+                  Published!
+                </>
+              ) : (
+                <>
+                  <Save className={cn("w-3 h-3", isPublishing && "animate-spin")} /> 
+                  {isPublishing ? 'Publishing...' : 'Publish'}
+                </>
+              )}
            </Button>
         </div>
       </aside>

@@ -22,7 +22,8 @@ Static Credentials for Testing:
 
   
 
-
-  Task: Excellent now i want similarly to create a new page Jobs where all the job listings provided multiple job searching vendors will post
-  and we will have multiple categories of jobs full time, part time, contractual, freelancing etc for multiple sectors to be easily
-  identified and applied by the user. Create a new file Jobs inthe Shared folder and adhere to our @Design.md Create me complete workflow of this section Jobs. 
+If you are to redesign our this home page, to be a social media version of multicategory ecommerce, where images, videos , media files
+could be uploaded and user could enjoy ecommerce with instagram reels like feature. If we are to create a socio-ecommerce then how would
+you redesign,this current @MarketplaceHome.tsx data transformed into impressive user experience of social media for businesses and ecommerce
+adhering to our color theme with creative social media feels where multiple categories can media can be interacted, booked or bought. Impress me.
+  
