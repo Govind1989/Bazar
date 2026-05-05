@@ -26,4 +26,9 @@ component CategorySelectionMenu.tsx and use it in both the pages. Also in our Ca
 search input just below the menu selection as we have in our applicaiton as in MarketplaceHome.tsx page. Place type holder 
 "Use @bazar_shop for vendor search or #bazar_products/services for product/service search". When user uses @<vendorName> then 
 we will use the trusted vendor UI to show the searched vendor and when user uses #<productName> then we will use the product
-card ui to show the searched product/service for single or multiple searched result. Impress me
+card ui to show the searched product/service for single or multiple searched result. I want same search implementation in our 
+both pages. Impress me.
+
+
+Study @AgenticTruth and study the current implementation added in our repo and then add the detail of the implementation of our
+development process and update the missing module or detail in our @AgenticTruth. Impress me.

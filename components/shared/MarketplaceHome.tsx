@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -17,26 +17,16 @@ import {
 } from "@/data/mock";
 import {
   ArrowRight,
-  ChevronLeft,
   ChevronRight,
   ShoppingBag,
   Calendar,
   Star,
-  TrendingDown,
-  Clock,
-  MapPin,
-  Utensils,
-  Shirt,
-  Zap,
-  TreePine,
   BadgePercent,
   Sparkles,
   CheckCircle2,
-  Armchair,
-  Monitor,
-  Smartphone,
 } from "lucide-react";
 import { ProductCard } from "./ProductCard";
+import { CategorySelectionMenu } from "./CategorySelectionMenu";
 
 /* ------------------------------------------------------------------ */
 /*  Countdown Timer (client-only to avoid hydration mismatch)          */
@@ -89,55 +79,6 @@ function CountdownTimer({ targetDate }: { targetDate: Date }) {
 /* ------------------------------------------------------------------ */
 type TabType = "products" | "services";
 
-interface CategoryMeta {
-  id: string;
-  name: string;
-  slug: string;
-  icon: React.ReactNode;
-  description: string;
-}
-
-/* ------------------------------------------------------------------ */
-/*  Icon mapping                                                       */
-/* ------------------------------------------------------------------ */
-const PRODUCT_CATEGORIES: CategoryMeta[] = CATEGORIES.map((c) => ({
-  ...c,
-  icon:
-    c.icon === "Utensils" ? (
-      <Utensils className="w-4 h-4" />
-    ) : c.icon === "Shirt" ? (
-      <Shirt className="w-4 h-4" />
-    ) : c.icon === "Zap" ? (
-      <Zap className="w-4 h-4" />
-    ) : c.icon === "TreePine" ? (
-      <TreePine className="w-4 h-4" />
-    ) : c.icon === "Armchair" ? (
-      <Armchair className="w-4 h-4" />
-    ) : c.icon === "Monitor" ? (
-      <Monitor className="w-4 h-4" />
-    ) : c.icon === "Smartphone" ? (
-      <Smartphone className="w-4 h-4" />
-    ) : (
-      <ShoppingBag className="w-4 h-4" />
-    ),
-}));
-
-const SERVICES_CATEGORIES: CategoryMeta[] = SERVICE_CATEGORIES.map((c) => ({
-  ...c,
-  icon:
-    c.icon === "Calendar" ? (
-      <Calendar className="w-4 h-4" />
-    ) : c.icon === "MapPin" ? (
-      <MapPin className="w-4 h-4" />
-    ) : c.icon === "Clock" ? (
-      <Clock className="w-4 h-4" />
-    ) : (
-      <Calendar className="w-4 h-4" />
-    ),
-}));
-
-
-
 /* ------------------------------------------------------------------ */
 /*  Animation variants                                                 */
 /* ------------------------------------------------------------------ */
@@ -157,7 +98,6 @@ const staggerContainer = {
 export default function MarketplaceHome() {
   const [activeTab, setActiveTab] = useState<TabType>("products");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const scrollRef = useRef<HTMLDivElement>(null);
 
   const isAll = selectedCategories.length === 0;
 
@@ -166,8 +106,7 @@ export default function MarketplaceHome() {
     []
   );
 
-  const currentCategories =
-    activeTab === "products" ? PRODUCT_CATEGORIES : SERVICES_CATEGORIES;
+  const currentCategories = activeTab === "products" ? CATEGORIES : SERVICE_CATEGORIES;
 
   const featuredProducts = useMemo(
     () => {
@@ -223,30 +162,6 @@ export default function MarketplaceHome() {
     [selectedCategories, isAll, currentCategories, activeTab]
   );
 
-  const toggleCategory = (id: string) => {
-    if (id === 'all') {
-        setSelectedCategories([]);
-        return;
-    }
-    setSelectedCategories(prev => 
-        prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id]
-    );
-  };
-
-  const scroll = (dir: "left" | "right") => {
-    if (!scrollRef.current) return;
-    const amount = 280;
-    scrollRef.current.scrollBy({
-      left: dir === "left" ? -amount : amount,
-      behavior: "smooth",
-    });
-  };
-
-  const handleTabChange = (tab: TabType) => {
-    setActiveTab(tab);
-    setSelectedCategories([]);
-  };
-
   const discount = (price: number, compare?: number) =>
     compare ? Math.round(((compare - price) / compare) * 100) : 0;
 
@@ -255,9 +170,7 @@ export default function MarketplaceHome() {
 
   return (
     <div className="pt-20">
-      {/* ============================================================= */}
-      {/*  HERO                                                         */}
-      {/* ============================================================= */}
+      {/* Hero section stays the same ... */}
       <section className="px-6 md:px-12 pt-12 sm:pt-16 pb-16 sm:pb-24 max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
           <motion.div
@@ -360,87 +273,16 @@ export default function MarketplaceHome() {
       </section>
 
       {/* ============================================================= */}
-      {/*  STICKY CATEGORY SELECTOR                                     */}
+      {/*  STICKY CATEGORY SELECTOR & SEARCH                            */}
       
-      <section className="sticky top-16 z-40 bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-neutral-200/80 dark:border-neutral-800/80">
+      <section className="sticky top-16 z-40 bg-white/80 dark:bg-black/80 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
-          <div className="flex items-center gap-3 sm:gap-6 py-3 sm:py-4">
-            {/* Products / Services pill */}
-            <div className="flex items-center gap-2 sm:gap-3 bg-neutral-100 dark:bg-neutral-900 rounded-full p-1 shrink-0">
-              <button
-                onClick={() => handleTabChange("products")}
-                className={`px-3 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${activeTab === "products"
-                  ? "bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white shadow-sm"
-                  : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white"
-                  }`}
-              >
-                Products
-              </button>
-              <button
-                onClick={() => handleTabChange("services")}
-                className={`px-3 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${activeTab === "services"
-                  ? "bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white shadow-sm"
-                  : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white"
-                  }`}
-              >
-                Services
-              </button>
-            </div>
-
-            <div className="h-6 w-px bg-neutral-200 dark:bg-neutral-800 hidden sm:block" />
-
-            {/* Scrollable category pills */}
-            <div className="relative flex-1 overflow-hidden">
-              <div
-                ref={scrollRef}
-                className="flex items-center gap-2 overflow-x-auto py-1 touch-pan-x"
-                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-              >
-                <button
-                    onClick={() => toggleCategory("all")}
-                    className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition-all border ${isAll
-                      ? "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 border-neutral-900 dark:border-white"
-                      : "bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 border-neutral-200 dark:border-neutral-800 hover:border-neutral-900 dark:hover:border-white"
-                      }`}
-                  >
-                    <span>All</span>
-                </button>
-                {currentCategories.map((cat) => {
-                  const isSelected = selectedCategories.includes(cat.id);
-                  return (
-                    <button
-                      key={cat.id}
-                      onClick={() => toggleCategory(cat.id)}
-                      className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition-all border ${isSelected
-                        ? "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 border-neutral-900 dark:border-white"
-                        : "bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 border-neutral-200 dark:border-neutral-800 hover:border-neutral-900 dark:hover:border-white"
-                        }`}
-                    >
-                      {cat.icon}
-                      <span className="hidden sm:inline">{cat.name}</span>
-                      <span className="sm:hidden">{cat.name.split(" ")[0]}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Scroll arrows (desktop only) */}
-            <div className="hidden md:flex items-center gap-1 shrink-0">
-              <button
-                onClick={() => scroll("left")}
-                className="p-1.5 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 text-neutral-500 dark:text-neutral-400 transition-colors"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => scroll("right")}
-                className="p-1.5 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 text-neutral-500 dark:text-neutral-400 transition-colors"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
+          <CategorySelectionMenu 
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            selectedCategories={selectedCategories}
+            setSelectedCategories={setSelectedCategories}
+          />
         </div>
       </section>
 
