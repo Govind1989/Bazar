@@ -21,9 +21,20 @@ Static Credentials for Testing:
 ──────────────────────────────────────────────────────────
 
   
+IN socio version, copy and paste the categories menu selection as from classic version along with products and services toogle and 
+categories radio button. better use the exact component in both version with same functionality.its not about replacing 
+discory| watch| booking tab, replace the  category selection menu All Activity, Foods,Wearables tag with our prebuilt category
+ menu sticky as in MarketplaceHome.tsx . Impress me
 
-If you are to redesign our this home page, to be a social media version of multicategory ecommerce, where images, videos , media files
-could be uploaded and user could enjoy ecommerce with instagram reels like feature. If we are to create a socio-ecommerce then how would
-you redesign,this current @MarketplaceHome.tsx data transformed into impressive user experience of social media for businesses and ecommerce
-adhering to our color theme with creative social media feels where multiple categories can media can be interacted, booked or bought. Impress me.
-  
+
+
+
+- In place of bookings tab, replace it with Events as we have in @MarketPlaceSocio.tsx 
+- Create me a simple drop down icon in place of the pricing menu here we will show products category tags and services category 
+tags with a full width big menu like element well compact in layout adhering to our current theme,categorized all the available
+ tags for easy navigation. 
+
+
+Now lets create same socio version for the @CategoryView.tsx sa social version with easy navigation buttons and function as 
+available in CategoryView.tsx, Use the prebuild masonry component to render the product cards. IMpress me create a full
+functional immersive social media version for each category views. 

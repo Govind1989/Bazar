@@ -10,6 +10,7 @@ import {
   PRODUCTS,
   VENDORS,
   CATEGORIES,
+  SERVICE_CATEGORIES,
   SERVICES,
   EVENTS,
   TESTIMONIALS,
@@ -45,6 +46,15 @@ import {
   MessageSquare,
   BadgePercent,
   TrendingDown,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  Utensils,
+  Shirt,
+  TreePine,
+  Armchair,
+  Monitor,
+  Smartphone,
 } from "lucide-react";
 import { Masonry } from "./Masonry";
 import { cn } from "@/lib/utils";
@@ -53,6 +63,16 @@ import { Typography } from "@/components/ui/typography";
 /* ------------------------------------------------------------------ */
 /*  Types & Interfaces                                               */
 /* ------------------------------------------------------------------ */
+
+type TabType = "products" | "services";
+
+interface CategoryMeta {
+  id: string;
+  name: string;
+  slug: string;
+  icon: React.ReactNode;
+  description: string;
+}
 
 interface SocialPost {
   id: string;
@@ -75,6 +95,45 @@ interface SocialPost {
   isLive?: boolean;
   viewers?: number;
 }
+
+/* ------------------------------------------------------------------ */
+/*  Icon mapping (from MarketplaceHome.tsx)                          */
+/* ------------------------------------------------------------------ */
+const PRODUCT_CATEGORIES: CategoryMeta[] = CATEGORIES.map((c) => ({
+  ...c,
+  icon:
+      c.icon === "Utensils" ? (
+          <Utensils className="w-4 h-4" />
+      ) : c.icon === "Shirt" ? (
+          <Shirt className="w-4 h-4" />
+      ) : c.icon === "Zap" ? (
+          <Zap className="w-4 h-4" />
+      ) : c.icon === "TreePine" ? (
+          <TreePine className="w-4 h-4" />
+      ) : c.icon === "Armchair" ? (
+          <Armchair className="w-4 h-4" />
+      ) : c.icon === "Monitor" ? (
+          <Monitor className="w-4 h-4" />
+      ) : c.icon === "Smartphone" ? (
+          <Smartphone className="w-4 h-4" />
+      ) : (
+          <ShoppingBag className="w-4 h-4" />
+      ),
+}));
+
+const SERVICES_CATEGORIES: CategoryMeta[] = SERVICE_CATEGORIES.map((c) => ({
+  ...c,
+  icon:
+      c.icon === "Calendar" ? (
+          <Calendar className="w-4 h-4" />
+      ) : c.icon === "MapPin" ? (
+          <MapPin className="w-4 h-4" />
+      ) : c.icon === "Clock" ? (
+          <Clock className="w-4 h-4" />
+      ) : (
+          <Calendar className="w-4 h-4" />
+      ),
+}));
 
 /* ------------------------------------------------------------------ */
 /*  Utilities                                                        */
@@ -246,8 +305,41 @@ function FeedCard({
 /* ------------------------------------------------------------------ */
 
 export default function MarketPlaceSocio() {
-  const [activeTab, setActiveTab] = useState<"discovery" | "watch" | "booking">("discovery");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  /* ---- Category Menu State (exactly like MarketplaceHome.tsx) ---- */
+  const [activeTab, setActiveTab] = useState<TabType>("products");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const isAll = selectedCategories.length === 0;
+
+  const currentCategories =
+    activeTab === "products" ? PRODUCT_CATEGORIES : SERVICES_CATEGORIES;
+
+  const handleTabChange = (tab: TabType) => {
+    setActiveTab(tab);
+    setSelectedCategories([]);
+  };
+
+  const toggleCategory = (id: string) => {
+    if (id === 'all') {
+        setSelectedCategories([]);
+        return;
+    }
+    setSelectedCategories(prev =>
+        prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id]
+    );
+  };
+
+  const scroll = (dir: "left" | "right") => {
+    if (!scrollRef.current) return;
+    const amount = 280;
+    scrollRef.current.scrollBy({
+        left: dir === "left" ? -amount : amount,
+        behavior: "smooth",
+    });
+  };
+
+  /* ---- Discovery / Watch / Booking Tabs (preserved) ---- */
+  const [viewTab, setViewTab] = useState<"discovery" | "watch" | "booking">("discovery");
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeStory, setActiveStory] = useState<string | null>(null);
   const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
@@ -302,10 +394,52 @@ export default function MarketPlaceSocio() {
     return items;
   }, []);
 
+  /* ---- Filtered Feed based on Products/Services toggle + Categories ---- */
   const filteredFeed = useMemo(() => {
-    if (selectedCategory === "all") return feedItems;
-    return feedItems.filter(item => item.category === selectedCategory);
-  }, [selectedCategory, feedItems]);
+    let filtered = feedItems;
+
+    // First filter by Products vs Services tab
+    if (activeTab === 'products') {
+        filtered = filtered.filter(item => item.type === 'product' || item.type === 'flash_sale' || item.type === 'event');
+    } else {
+        filtered = filtered.filter(item => item.type === 'service');
+    }
+
+    // Then filter by selected categories
+    if (selectedCategories.length > 0) {
+        const selectedSlugs = currentCategories
+            .filter(c => selectedCategories.includes(c.id))
+            .map(c => c.slug);
+        filtered = filtered.filter(item => selectedSlugs.includes(item.category));
+    }
+
+    return filtered;
+  }, [activeTab, selectedCategories, feedItems, currentCategories]);
+
+  const filteredVendors = useMemo(() => {
+    // 1. Filter vendors by tab (Product vs Services)
+    const vendorsByTab = activeTab === 'products' 
+      ? VENDORS 
+      : VENDORS.filter(v => SERVICES.some(s => s.vendorId === v.id));
+
+    // 2. Filter by selected categories
+    if (isAll) return vendorsByTab;
+
+    const selectedSlugs = currentCategories
+      .filter(c => selectedCategories.includes(c.id))
+      .map(c => c.slug);
+
+    return vendorsByTab.filter(v => 
+      v.categories.some(catSlug => selectedSlugs.includes(catSlug))
+    );
+  }, [activeTab, selectedCategories, isAll, currentCategories]);
+
+  const activeCategoryNames = isAll
+    ? (activeTab === 'products' ? "All Products" : "All Services")
+    : currentCategories.filter(c => selectedCategories.includes(c.id)).map(c => c.name).join(", ");
+  const activeCategoryDesc = isAll
+    ? (activeTab === 'products' ? "Explore products from our marketplace" : "Explore services from our marketplace")
+    : "Browsing: " + activeCategoryNames;
 
   const toggleLike = (id: string) => {
     setLikedPosts(prev => {
@@ -334,7 +468,9 @@ export default function MarketPlaceSocio() {
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-black transition-colors duration-700 pb-32 pt-16">
       
-      {/* Sub-Nav */}
+      {/* ============================================================= */}
+      {/*  SUB-NAV: Discovery / Watch / Booking (PRESERVED)             */}
+      {/* ============================================================= */}
       <div className="sticky top-16 z-40 bg-white/80 dark:bg-black/80 backdrop-blur-2xl border-b border-neutral-100 dark:border-neutral-900 px-6 h-16">
         <div className="max-w-7xl mx-auto h-full flex items-center justify-between">
            <nav className="flex items-center gap-10">
@@ -345,26 +481,120 @@ export default function MarketPlaceSocio() {
             ].map(tab => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => setViewTab(tab.id as any)}
                 className={cn(
                   "flex items-center gap-2.5 text-[10px] font-black uppercase tracking-[0.25em] transition-all relative py-1",
-                  activeTab === tab.id ? "text-fuchsia-600 opacity-100" : "opacity-30 hover:opacity-100"
+                  viewTab === tab.id ? "text-fuchsia-600 opacity-100" : "opacity-30 hover:opacity-100"
                 )}
               >
                 {tab.icon}
                 <span className="hidden sm:inline">{tab.label}</span>
-                {activeTab === tab.id && (
+                {viewTab === tab.id && (
                   <motion.div layoutId="tabUnderlineSocio" className="absolute -bottom-2 left-0 right-0 h-1 bg-fuchsia-600 rounded-full" />
                 )}
               </button>
             ))}
           </nav>
+          <div className="flex space-x-4">
           <button className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-neutral-900 rounded-full border border-neutral-200 dark:border-neutral-800 hover:border-fuchsia-500 transition-all group">
              <BadgePercent className="w-4 h-4 text-orange-400 group-hover:text-fuchsia-600" />
              <span className="text-[10px] text-orange-500 uppercase tracking-widest hidden md:inline">Sales and Offers</span>
           </button>
+          <button className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-neutral-900 rounded-full border border-neutral-200 dark:border-neutral-800 hover:border-fuchsia-500 transition-all group">
+              <span className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500" />
+              </span>
+            <span className="text-[10px] text-orange-500 uppercase tracking-widest hidden md:inline">Flash Sale</span>
+          </button>
+          </div>
         </div>
       </div>
+
+      {/* ============================================================= */}
+      {/*  STICKY CATEGORY SELECTOR (from MarketplaceHome.tsx)           */}
+      {/* ============================================================= */}
+      <section className="sticky top-32 z-40 bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-neutral-200/80 dark:border-neutral-800/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
+            <div className="flex items-center gap-3 sm:gap-6 py-3 sm:py-4">
+                {/* Products / Services pill */}
+                <div className="flex items-center gap-2 sm:gap-3 bg-neutral-100 dark:bg-neutral-900 rounded-full p-1 shrink-0">
+                    <button
+                        onClick={() => handleTabChange("products")}
+                        className={`px-3 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${activeTab === "products"
+                            ? "bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white shadow-sm"
+                            : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white"
+                            }`}
+                    >
+                        Products
+                    </button>
+                    <button
+                        onClick={() => handleTabChange("services")}
+                        className={`px-3 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${activeTab === "services"
+                            ? "bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white shadow-sm"
+                            : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white"
+                            }`}
+                    >
+                        Services
+                    </button>
+                </div>
+
+                <div className="h-6 w-px bg-neutral-200 dark:bg-neutral-800 hidden sm:block" />
+
+                {/* Scrollable category pills */}
+                <div className="relative flex-1 overflow-hidden">
+                    <div
+                        ref={scrollRef}
+                        className="flex items-center gap-2 overflow-x-auto py-1 touch-pan-x no-scrollbar"
+                        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                    >
+                        <button
+                            onClick={() => toggleCategory("all")}
+                            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition-all border ${isAll
+                                ? "bg-neutral-900 dark:bg-white text-white dark:text-black border-neutral-900 dark:border-white"
+                                : "bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 border-neutral-200 dark:border-neutral-800 hover:border-neutral-900 dark:hover:border-white"
+                                }`}
+                        >
+                            <span>All Activity</span>
+                        </button>
+                        {currentCategories.map((cat) => {
+                            const isSelected = selectedCategories.includes(cat.id);
+                            return (
+                                <button
+                                    key={cat.id}
+                                    onClick={() => toggleCategory(cat.id)}
+                                    className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition-all border ${isSelected
+                                        ? "bg-neutral-900 dark:bg-white text-white dark:text-black border-neutral-900 dark:border-white shadow-lg shadow-black/5 dark:shadow-white/5"
+                                        : "bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 border-neutral-200 dark:border-neutral-800 hover:border-neutral-900 dark:hover:border-white"
+                                        }`}
+                                >
+                                    {cat.icon}
+                                    <span className="hidden sm:inline">{cat.name}</span>
+                                    <span className="sm:hidden">{cat.name.split(" ")[0]}</span>
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                {/* Scroll arrows (desktop only) */}
+                <div className="hidden md:flex items-center gap-1 shrink-0">
+                    <button
+                        onClick={() => scroll("left")}
+                        className="p-1.5 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 text-neutral-500 dark:text-neutral-400 transition-colors"
+                    >
+                        <ChevronLeft className="w-4 h-4" />
+                    </button>
+                    <button
+                        onClick={() => scroll("right")}
+                        className="p-1.5 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 text-neutral-500 dark:text-neutral-400 transition-colors"
+                    >
+                        <ChevronRight className="w-4 h-4" />
+                    </button>
+                </div>
+            </div>
+        </div>
+      </section>
 
       {/* Stories Rail */}
       <section className="py-10 px-6 overflow-x-auto no-scrollbar bg-white dark:bg-black border-b border-neutral-100 dark:border-neutral-900">
@@ -395,14 +625,34 @@ export default function MarketPlaceSocio() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-16">
         <AnimatePresence mode="wait">
-          {activeTab === 'discovery' && (
-            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -30 }} className="space-y-16">
-              {/* Pills */}
-              <div className="flex gap-4 overflow-x-auto no-scrollbar py-2">
-                <button onClick={() => setSelectedCategory('all')} className={cn("px-8 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] border-2", selectedCategory === 'all' ? "bg-black dark:bg-white text-white dark:text-black border-transparent shadow-xl" : "bg-transparent border-neutral-200 dark:border-neutral-800 hover:border-black")}>All Activity</button>
-                {CATEGORIES.map(cat => (
-                  <button key={cat.id} onClick={() => setSelectedCategory(cat.slug)} className={cn("px-8 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] border-2", selectedCategory === cat.slug ? "bg-black dark:bg-white text-white dark:text-black border-transparent shadow-xl" : "bg-transparent border-neutral-200 dark:border-neutral-800 hover:border-black")}>{cat.name}</button>
-                ))}
+          {viewTab === 'discovery' && (
+            <motion.div 
+              key={`${activeTab}-${selectedCategories.join('-')}`}
+              initial={{ opacity: 0, y: 30 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              exit={{ opacity: 0, y: -30 }} 
+              className="space-y-16"
+            >
+              {/* Category Header */}
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+                  <div>
+                      <h2
+                          className="text-2xl sm:text-3xl md:text-4xl font-black uppercase text-neutral-900 dark:text-white tracking-tighter mb-2"
+                      >
+                          {activeCategoryNames}
+                      </h2>
+                      <p className="text-neutral-500 dark:text-neutral-400 text-xs sm:text-sm font-bold uppercase tracking-[0.3em]">
+                          {activeCategoryDesc}
+                      </p>
+                  </div>
+                  {!isAll && selectedCategories.length === 1 && (
+                      <Link
+                          href={`/${currentCategories.find(c => c.id === selectedCategories[0])?.slug || '#'}`}
+                          className="hidden md:flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-fuchsia-600 hover:underline underline-offset-8"
+                      >
+                          Explore All <ArrowRight className="w-4 h-4" />
+                      </Link>
+                  )}
               </div>
 
               {/* Feed */}
@@ -412,69 +662,115 @@ export default function MarketPlaceSocio() {
                    <h3 className="text-2xl font-black uppercase tracking-tighter">Recommended For You</h3>
                 </div>
 
-                <Masonry
-                  items={filteredFeed.slice(0, 4)}
-                  gap={32}
-                  columnWidth={360}
-                  predictHeight={(item) => (360 * item.media[0].aspectRatio) + 180}
-                  renderItem={(item, index) => (
-                    <FeedCard 
-                      item={item} 
-                      index={index} 
-                      onLike={toggleLike} 
-                      onSave={toggleSave} 
-                      isLiked={likedPosts.has(item.id)} 
-                      isSaved={savedPosts.has(item.id)} 
+                {filteredFeed.length > 0 ? (
+                  <>
+                    <Masonry
+                      items={filteredFeed.slice(0, 4)}
+                      gap={32}
+                      columnWidth={360}
+                      predictHeight={(item) => (360 * item.media[0].aspectRatio) + 180}
+                      renderItem={(item, index) => (
+                        <FeedCard 
+                          item={item} 
+                          index={index} 
+                          onLike={toggleLike} 
+                          onSave={toggleSave} 
+                          isLiked={likedPosts.has(item.id)} 
+                          isSaved={savedPosts.has(item.id)} 
+                        />
+                      )}
                     />
-                  )}
-                />
 
-                {/* Suggested Vendors Strip */}
-                <section className="py-12 bg-white dark:bg-neutral-900 rounded-[3rem] px-10 border border-neutral-100 dark:border-neutral-800">
-                   <div className="flex items-center justify-between mb-8">
-                      <h4 className="text-sm font-black uppercase tracking-widest">Trusted Vendors</h4>
-                      <Link href="/vendors" className="text-[9px] font-black uppercase tracking-widest text-fuchsia-600">See all</Link>
-                   </div>
-                   <div className="flex gap-10 overflow-x-auto no-scrollbar">
-                      {VENDORS.map(vendor => (
-                        <div key={vendor.id} className="flex flex-col items-center gap-4 shrink-0 group">
-                           <div className="w-20 h-20 rounded-[2.5rem] overflow-hidden border-2 border-neutral-100 dark:border-neutral-800 p-1 group-hover:border-fuchsia-500 transition-all">
-                              <img src={vendor.logo} alt="" className="w-full h-full object-cover rounded-[2.2rem]" />
-                           </div>
-                           <div className="text-center">
-                              <span className="text-[10px] font-black uppercase tracking-tighter block">{vendor.name}</span>
-                              <div className="flex items-center justify-center gap-1">
-                                 <Star className="w-2 h-2 fill-orange-400 text-orange-400" />
-                                 <span className="text-[8px] font-bold">{vendor.rating}</span>
-                              </div>
-                           </div>
-                           <Button size="sm" className="h-7 px-4 bg-black dark:bg-white text-white dark:text-black rounded-full text-[8px] font-black uppercase">Follow</Button>
+                    {/* Suggested Vendors Strip */}
+                    {filteredVendors.length > 0 && (
+                      <section className="py-12 bg-white dark:bg-neutral-900 rounded-[3rem] px-10 border border-neutral-100 dark:border-neutral-800 shadow-[0_40px_80px_rgba(0,0,0,0.05)] dark:shadow-[0_40px_80px_rgba(0,0,0,0.3)]">
+                        <div className="flex items-center justify-between mb-8">
+                            <h4 className="text-sm font-black uppercase tracking-widest">Trusted Vendors</h4>
+                            <Link href="/vendors" className="text-[9px] font-black uppercase tracking-widest text-fuchsia-600">See all</Link>
                         </div>
-                      ))}
-                   </div>
-                </section>
+                        <div className="flex gap-10 overflow-x-auto no-scrollbar">
+                            {filteredVendors.map(vendor => (
+                              <div key={vendor.id} className="flex flex-col items-center gap-4 shrink-0 group">
+                                <Link href={`/${vendor.slug}`}>
+                                 <div className="w-20 h-20 rounded-[2.5rem] overflow-hidden border-2 border-neutral-100 dark:border-neutral-800 p-1 group-hover:border-fuchsia-500 transition-all">
+                                    <img src={vendor.logo} alt="" className="w-full h-full object-cover rounded-[2.2rem]" />
+                                 </div>
+                                </Link>
+                                 <div className="text-center">
+                                    <span className="text-[10px] font-black uppercase tracking-tighter block">{vendor.name}</span>
+                                    <div className="flex items-center justify-center gap-1">
+                                       <Star className="w-2 h-2 fill-orange-400 text-orange-400" />
+                                       <span className="text-[8px] font-bold">{vendor.rating}</span>
+                                    </div>
+                                 </div>
+                                 <Button size="sm" className="h-7 px-4 bg-black dark:bg-white text-white dark:text-black rounded-full text-[8px] font-black uppercase">Follow</Button>
+                              </div>
+                            ))}
+                        </div>
+                      </section>
+                    )}
 
-                <Masonry
-                  items={filteredFeed.slice(4)}
-                  gap={32}
-                  columnWidth={360}
-                  predictHeight={(item) => (360 * item.media[0].aspectRatio) + 180}
-                  renderItem={(item, index) => (
-                    <FeedCard 
-                      item={item} 
-                      index={index + 4} 
-                      onLike={toggleLike} 
-                      onSave={toggleSave} 
-                      isLiked={likedPosts.has(item.id)} 
-                      isSaved={savedPosts.has(item.id)} 
+                    <Masonry
+                      items={filteredFeed.slice(4)}
+                      gap={32}
+                      columnWidth={360}
+                      predictHeight={(item) => (360 * item.media[0].aspectRatio) + 180}
+                      renderItem={(item, index) => (
+                        <FeedCard 
+                          item={item} 
+                          index={index + 4} 
+                          onLike={toggleLike} 
+                          onSave={toggleSave} 
+                          isLiked={likedPosts.has(item.id)} 
+                          isSaved={savedPosts.has(item.id)} 
+                        />
+                      )}
                     />
-                  )}
-                />
+                  </>
+                ) : (
+                  <div className="space-y-16">
+                    <div className="py-32 text-center bg-white dark:bg-neutral-950 rounded-[4rem] border-2 border-dashed border-neutral-100 dark:border-neutral-900">
+                      <ShoppingBag className="w-16 h-16 text-neutral-200 dark:text-neutral-800 mx-auto mb-6" />
+                      <p className="text-sm font-black uppercase tracking-[0.4em] opacity-30">
+                          No items found in this category
+                      </p>
+                    </div>
+
+                    {/* Show vendors even if feed is empty */}
+                    {filteredVendors.length > 0 && (
+                      <section className="py-12 bg-white dark:bg-neutral-900 rounded-[3rem] px-10 border border-neutral-100 dark:border-neutral-800 shadow-[0_40px_80px_rgba(0,0,0,0.05)] dark:shadow-[0_40px_80px_rgba(0,0,0,0.3)]">
+                        <div className="flex items-center justify-between mb-8">
+                            <h4 className="text-sm font-black uppercase tracking-widest">Trusted Vendors</h4>
+                            <Link href="/vendors" className="text-[9px] font-black uppercase tracking-widest text-fuchsia-600">See all</Link>
+                        </div>
+                        <div className="flex gap-10 overflow-x-auto no-scrollbar">
+                            {filteredVendors.map(vendor => (
+                              <div key={vendor.id} className="flex flex-col items-center gap-4 shrink-0 group">
+                                <Link href={`/${vendor.slug}`}>
+                                 <div className="w-20 h-20 rounded-[2.5rem] overflow-hidden border-2 border-neutral-100 dark:border-neutral-800 p-1 group-hover:border-fuchsia-500 transition-all">
+                                    <img src={vendor.logo} alt="" className="w-full h-full object-cover rounded-[2.2rem]" />
+                                 </div>
+                                </Link>
+                                 <div className="text-center">
+                                    <span className="text-[10px] font-black uppercase tracking-tighter block">{vendor.name}</span>
+                                    <div className="flex items-center justify-center gap-1">
+                                       <Star className="w-2 h-2 fill-orange-400 text-orange-400" />
+                                       <span className="text-[8px] font-bold">{vendor.rating}</span>
+                                    </div>
+                                 </div>
+                                 <Button size="sm" className="h-7 px-4 bg-black dark:bg-white text-white dark:text-black rounded-full text-[8px] font-black uppercase">Follow</Button>
+                              </div>
+                            ))}
+                        </div>
+                      </section>
+                    )}
+                  </div>
+                )}
               </div>
             </motion.div>
           )}
 
-          {activeTab === 'watch' && (
+          {viewTab === 'watch' && (
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.1 }} className="flex flex-col gap-24 py-12 max-w-lg mx-auto">
                <div className="text-center space-y-4 mb-8">
                   <h2 className="text-7xl font-black italic tracking-tighter uppercase text-transparent bg-clip-text bg-gradient-to-br from-black to-neutral-400 dark:from-white dark:to-neutral-600">Reels.</h2>
@@ -518,7 +814,7 @@ export default function MarketPlaceSocio() {
             </motion.div>
           )}
 
-          {activeTab === 'booking' && (
+          {viewTab === 'booking' && (
              <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -50 }} className="space-y-20">
                 <div className="flex flex-col md:flex-row items-end justify-between gap-12">
                    <div className="space-y-6">

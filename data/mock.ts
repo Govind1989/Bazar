@@ -239,6 +239,64 @@ export const VENDORS: Vendor[] = [
         cardVariant: 'outline'
       }
     }
+  },
+  {
+    id: 'v4',
+    name: 'Elite Decors',
+    slug: 'elite-decors',
+    description: 'Premium interior design and home renovation services.',
+    logo: 'https://api.dicebear.com/7.x/initials/svg?seed=Elite',
+    categories: ['appointment'],
+    rating: 4.9,
+    reviewsCount: 230
+  },
+  {
+    id: 'v5',
+    name: 'Himalayan Expeditions',
+    slug: 'himalayan-expeditions',
+    description: 'Expert-led treks and adventure tours across Nepal.',
+    logo: 'https://api.dicebear.com/7.x/initials/svg?seed=Expeditions',
+    categories: ['holiday'],
+    rating: 5.0,
+    reviewsCount: 1540
+  },
+  {
+    id: 'v6',
+    name: 'Focus Studio',
+    slug: 'focus-studio',
+    description: 'Professional photography and videography services.',
+    logo: 'https://api.dicebear.com/7.x/initials/svg?seed=Focus',
+    categories: ['service'],
+    rating: 4.7,
+    reviewsCount: 312
+  },
+  {
+    id: 'v8',
+    name: 'Kathmandu Textiles',
+    slug: 'ktm-textiles',
+    description: 'Traditional fabrics and modern garments.',
+    logo: 'https://api.dicebear.com/7.x/initials/svg?seed=Textiles',
+    coverImage: 'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?q=80&w=1200&auto=format&fit=crop',
+    categories: ['wearables'],
+    rating: 4.2,
+    reviewsCount: 150,
+    cmsConfig: {
+      templateId: 'minimal',
+      category: 'wearables',
+      tier: 'silver',
+      heroTitle: 'Handwoven Heritage',
+      heroSubtitle: 'Sustainable fashion from the heart of Kathmandu.',
+      heroImage: 'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?q=80&w=1200&auto=format&fit=crop',
+      aboutTitle: 'Our Craft',
+      aboutContent: 'We work with local weavers to bring you the finest handwoven fabrics.',
+      theme: {
+        primaryColor: '#4c1d95',
+        fontFamily: 'sans',
+        borderRadius: 'lg',
+        headerStyle: 'solid',
+        cardVariant: 'surface'
+      }
+    }
   }
 ];
 

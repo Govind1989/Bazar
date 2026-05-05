@@ -204,19 +204,21 @@ export default function MarketplaceHome() {
 
   const trustedVendors = useMemo(
     () => {
+      // 1. Filter vendors by current tab context
+      const vendorsByTab = activeTab === 'products' 
+        ? VENDORS 
+        : VENDORS.filter(v => SERVICES.some(s => s.vendorId === v.id) || v.categories.some(c => ["service", "holiday", "appointment"].includes(c)));
+        
+      // 2. Filter by selected categories
+      if (isAll) return vendorsByTab;
+
       const selectedSlugs = currentCategories
         .filter(c => selectedCategories.includes(c.id))
         .map(c => c.slug);
-      
-      // Filter logic: if tab is 'services', consider vendors that provide services.
-      // Assuming a simplistic check; in a production app this would query by service provider.
-      const vendorsByTab = activeTab === 'products' 
-        ? VENDORS 
-        : VENDORS.filter(v => SERVICES.some(s => s.vendorId === v.id));
         
-      return isAll 
-        ? vendorsByTab 
-        : vendorsByTab.filter(v => v.categories.some(catSlug => selectedSlugs.includes(catSlug)));
+      return vendorsByTab.filter(v => 
+        v.categories.some(catSlug => selectedSlugs.includes(catSlug))
+      );
     },
     [selectedCategories, isAll, currentCategories, activeTab]
   );
