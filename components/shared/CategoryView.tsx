@@ -11,11 +11,22 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Masonry } from "@/components/shared/Masonry";
 import { motion, AnimatePresence } from "framer-motion";
 
+import { useSystemStore } from "@/store/useSystemStore";
+import CategoryViewSocio from "./CategoryViewSocio";
+import { useEffect } from "react";
+
 interface CategoryViewProps {
   categorySlug: string;
 }
 
 export default function CategoryView({ categorySlug }: CategoryViewProps) {
+  const marketplaceView = useSystemStore((state) => state.marketplaceView);
+  const [isHydrated, setIsHydrated] = useState(false);
+  
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
   const category = CATEGORIES.find((c) => c.slug === categorySlug);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   
@@ -37,7 +48,12 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
 
   const masonryItems = useMemo(() => products || [], [products]);
 
+  if (!isHydrated) return null;
   if (!category) return null;
+
+  if (marketplaceView === 'social') {
+    return <CategoryViewSocio categorySlug={categorySlug} />;
+  }
 
   const FiltersContent = () => (
     <div className="space-y-10">

@@ -21,20 +21,9 @@ Static Credentials for Testing:
 ──────────────────────────────────────────────────────────
 
   
-IN socio version, copy and paste the categories menu selection as from classic version along with products and services toogle and 
-categories radio button. better use the exact component in both version with same functionality.its not about replacing 
-discory| watch| booking tab, replace the  category selection menu All Activity, Foods,Wearables tag with our prebuilt category
- menu sticky as in MarketplaceHome.tsx . Impress me
-
-
-
-
-
-- Create me a simple aaesthetic drop down icon in place of the pricing menu in @Navbar.tsx here we will show products category tags and services category 
-tags with a full width big menu like element well compact in layout adhering to our current theme,categorized all the available
- tags for easy navigation. When clicked on any tags, open the categoryview of the page. 
-
-
-I want the Social and classic value to be stored globally for each user iusing zustand.Now lets create same socio version for the @CategoryView.tsx for all categories social version with easy navigation buttons and function as 
-available in CategoryView.tsx, Use the prebuild masonry component to render the product cards. IMpress me create a full
-functional immersive social media version for each category views. And when the global store is social we will show this product categoryview. Impress me
+Now in our @MarketplaceHome.tsx and @MarketPlaceSocio.tsx we are using same caetgory selection menu, i want to create a common
+component CategorySelectionMenu.tsx and use it in both the pages. Also in our CategorySelectionMenu.tsx create a full width 
+search input just below the menu selection as we have in our applicaiton as in MarketplaceHome.tsx page. Place type holder 
+"Use @bazar_shop for vendor search or #bazar_products/services for product/service search". When user uses @<vendorName> then 
+we will use the trusted vendor UI to show the searched vendor and when user uses #<productName> then we will use the product
+card ui to show the searched product/service for single or multiple searched result. Impress me
