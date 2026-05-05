@@ -10,6 +10,7 @@ interface ProductFilters {
   sortBy?: string;
   isDeal?: boolean;
   isFlashSale?: boolean;
+  search?: string;
 }
 
 const fetchProducts = async (filters: ProductFilters): Promise<Product[]> => {
@@ -19,6 +20,14 @@ const fetchProducts = async (filters: ProductFilters): Promise<Product[]> => {
 
   if (filters.category) {
     filtered = filtered.filter(p => p.category === filters.category);
+  }
+
+  if (filters.search) {
+    const q = filters.search.toLowerCase();
+    filtered = filtered.filter(p => 
+      p.name.toLowerCase().includes(q) || 
+      p.description.toLowerCase().includes(q)
+    );
   }
 
   if (filters.isDeal || filters.isFlashSale) {
@@ -36,6 +45,7 @@ const fetchProducts = async (filters: ProductFilters): Promise<Product[]> => {
   // Sorting logic
   if (filters.sortBy === 'price-low') filtered.sort((a, b) => a.price - b.price);
   if (filters.sortBy === 'price-high') filtered.sort((a, b) => b.price - a.price);
+  if (filters.sortBy === 'newest') filtered.reverse(); // Simplified newest logic for mock
 
   return filtered;
 };

@@ -27,7 +27,8 @@ import {
   Smartphone,
   Calendar,
   Clock,
-  MapPin
+  MapPin,
+  X
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -43,14 +44,23 @@ interface CategoryViewSocioProps {
 export default function CategoryViewSocio({ categorySlug }: CategoryViewSocioProps) {
   const category = CATEGORIES.find((c) => c.slug === categorySlug);
   const [likedProducts, setLikedProducts] = useState<Set<string>>(new Set());
+  const [showFilters, setShowFilters] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   
   const [filters, setFilters] = useState({
     category: categorySlug,
     sortBy: "popularity",
     vendors: [] as string[],
+    subCategories: [] as string[],
+    minPrice: undefined as number | undefined,
+    maxPrice: undefined as number | undefined,
   });
 
-  const { data: products, isLoading } = useCategoryProducts(filters);
+  const { data: products, isLoading } = useCategoryProducts({
+      ...filters,
+      search: searchQuery,
+      priceRange: (filters.minPrice || filters.maxPrice) ? [filters.minPrice || 0, filters.maxPrice || 9999999] : undefined
+  });
 
   const masonryItems = useMemo(() => products || [], [products]);
 
@@ -80,6 +90,113 @@ export default function CategoryViewSocio({ categorySlug }: CategoryViewSocioPro
       default: return <ShoppingBag className={className} />;
     }
   };
+
+  const FiltersPanel = () => (
+    <motion.div 
+      initial={{ height: 0, opacity: 0 }}
+      animate={{ height: "auto", opacity: 1 }}
+      exit={{ height: 0, opacity: 0 }}
+      className="overflow-hidden bg-white dark:bg-neutral-900 border-b border-neutral-100 dark:border-neutral-800"
+    >
+      <div className="max-w-7xl mx-auto px-6 md:px-12 py-12 grid grid-cols-1 md:grid-cols-3 gap-12">
+        {/* Sub Categories */}
+        <div className="space-y-2">
+           <Typography variant="titleSm" className="uppercase tracking-[0.2em] text-[10px] font-black opacity-40">Sub Categories</Typography>
+           <div className="flex flex-wrap gap-2">
+             {category.subCategories?.map(sub => (
+               <button 
+                 key={sub.id}
+                 onClick={() => {
+                   const next = filters.subCategories.includes(sub.slug)
+                     ? filters.subCategories.filter(s => s !== sub.slug)
+                     : [...filters.subCategories, sub.slug];
+                   setFilters({...filters, subCategories: next});
+                 }}
+                 className={cn(
+                   "px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all border",
+                   filters.subCategories.includes(sub.slug)
+                     ? "bg-fuchsia-600 border-fuchsia-600 text-white shadow-lg shadow-fuchsia-600/20"
+                     : "bg-neutral-50 dark:bg-neutral-800 border-neutral-100 dark:border-neutral-700 hover:border-fuchsia-600"
+                 )}
+               >
+                 {sub.name}
+               </button>
+             ))}
+             {!category.subCategories && <span className="text-[10px] font-bold opacity-30 italic">Generic Collection</span>}
+           </div>
+        </div>
+
+        {/* Vendors */}
+        <div className="space-y-6">
+           <Typography variant="titleSm" className="uppercase tracking-[0.2em] text-[10px] font-black opacity-40">Trusted Vendors</Typography>
+           <div className="space-y-3 max-h-40 overflow-y-auto no-scrollbar">
+             {VENDORS.filter(v => v.categories.includes(categorySlug)).map(vendor => (
+               <label key={vendor.id} className="flex items-center gap-3 group cursor-pointer">
+                 <input 
+                   type="checkbox" 
+                   className="hidden"
+                   checked={filters.vendors.includes(vendor.id)}
+                   onChange={(e) => {
+                     const next = e.target.checked 
+                       ? [...filters.vendors, vendor.id]
+                       : filters.vendors.filter(id => id !== vendor.id);
+                     setFilters({ ...filters, vendors: next });
+                   }}
+                 />
+                 <div className={cn(
+                   "w-4 h-4 rounded-full border-2 transition-all",
+                   filters.vendors.includes(vendor.id) 
+                     ? "bg-fuchsia-600 border-fuchsia-600 shadow-lg shadow-fuchsia-600/30" 
+                     : "border-neutral-200 dark:border-neutral-700 group-hover:border-fuchsia-600"
+                 )} />
+                 <Typography variant="bodySm" className="text-xs font-bold uppercase tracking-tight group-hover:text-fuchsia-600 transition-colors">{vendor.name}</Typography>
+               </label>
+             ))}
+           </div>
+        </div>
+
+        {/* Price Range */}
+        <div className="space-y-2">
+          <div className="flex  justify-between items-end ">
+           <Typography variant="titleSm" className="uppercase tracking-[0.2em] text-[10px] font-black opacity-40">Price Spectrum (NPR)</Typography>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setFilters({
+                category: categorySlug,
+                sortBy: "popularity",
+                vendors: [],
+                subCategories: [],
+                minPrice: undefined,
+                maxPrice: undefined,
+              })}
+              className="text-[9px] font-black uppercase tracking-widest text-red-500 hover:text-red-600 p-0 h-auto"
+            >
+              Reset All Filters
+            </Button>
+          </div>
+           <div className="flex items-center gap-4">
+              <input 
+                type="number" 
+                placeholder="Min" 
+                className="w-full h-12 bg-neutral-50 dark:bg-neutral-800 border border-neutral-100 dark:border-neutral-700 rounded-2xl px-4 text-xs font-bold outline-none focus:border-fuchsia-600 transition-all"
+                value={filters.minPrice || ''}
+                onChange={(e) => setFilters({...filters, minPrice: e.target.value ? Number(e.target.value) : undefined})}
+              />
+              <div className="w-4 h-0.5 bg-neutral-200" />
+              <input 
+                type="number" 
+                placeholder="Max" 
+                className="w-full h-12 bg-neutral-50 dark:bg-neutral-800 border border-neutral-100 dark:border-neutral-700 rounded-2xl px-4 text-xs font-bold outline-none focus:border-fuchsia-600 transition-all"
+                value={filters.maxPrice || ''}
+                onChange={(e) => setFilters({...filters, maxPrice: e.target.value ? Number(e.target.value) : undefined})}
+              />
+           </div>
+           
+        </div>
+      </div>
+    </motion.div>
+  );
 
   const SocialProductCard = ({ product, vendor }: { product: Product, vendor?: any }) => (
     <motion.div 
@@ -148,15 +265,15 @@ export default function CategoryViewSocio({ categorySlug }: CategoryViewSocioPro
                </div>
                <div className="h-px w-12 bg-fuchsia-600/30" />
                <span className="text-xs font-black uppercase tracking-[0.4em] text-fuchsia-600">Premium Curation</span>
-            </div>
-            <h1 className="text-6xl md:text-8xl font-black uppercase tracking-tighter mb-6 text-neutral-900 dark:text-white leading-[0.9]">
-               {category.name}.
-            </h1>
-            <p className="text-lg md:text-xl font-bold uppercase tracking-widest opacity-40 dark:text-white/60 leading-relaxed">
-               {category.description}
-            </p>
-         </div>
-      </div>
+              </div>
+              <h1 className="text-6xl md:text-8xl font-black uppercase tracking-tighter mb-6 text-neutral-900 dark:text-white leading-[0.9]">
+                 {category.name}.
+              </h1>
+              <p className="text-lg md:text-xl font-bold uppercase tracking-widest opacity-40 dark:text-white/60 leading-relaxed">
+                 {category.description}
+              </p>
+           </div>
+        </div>
 
       {/* Categories / Vendor Rail */}
       <section className="px-6 md:px-12 -translate-y-10">
@@ -181,18 +298,69 @@ export default function CategoryViewSocio({ categorySlug }: CategoryViewSocioPro
          </div>
       </section>
 
+      {/* Utility Bar (Search & Sort) */}
+      <div className="sticky top-16 z-30 bg-white/80 dark:bg-black/80 backdrop-blur-md border-y border-neutral-100 dark:border-neutral-800">
+         <div className="max-w-7xl mx-auto px-6 md:px-12 h-16 flex items-center justify-between gap-8">
+            <div className="flex-1 max-w-full relative group">
+               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 opacity-20 group-focus-within:text-fuchsia-600 group-focus-within:opacity-100 transition-all" />
+               <input 
+                 type="text" 
+                 placeholder={`Explore in ${category.name}...`}
+                 value={searchQuery}
+                 onChange={(e) => setSearchQuery(e.target.value)}
+                 className="w-full h-10 pl-12 pr-4 bg-neutral-50 dark:bg-neutral-900 rounded-full text-xs font-bold uppercase tracking-tight outline-none border border-transparent focus:border-fuchsia-600 transition-all"
+               />
+               {searchQuery && (
+                 <button onClick={() => setSearchQuery("")} className="absolute right-4 top-1/2 -translate-y-1/2 opacity-40 hover:opacity-100">
+                   <X className="w-3 h-3" />
+                 </button>
+               )}
+            </div>
+
+            <div className="flex items-center gap-6">
+               <button 
+                 onClick={() => setShowFilters(!showFilters)}
+                 className={cn(
+                   "flex items-center gap-2 px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] transition-all",
+                   showFilters ? "bg-fuchsia-600 text-white shadow-xl shadow-fuchsia-600/30" : "bg-neutral-50 dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                 )}
+               >
+                 <SlidersHorizontal className="w-3.5 h-3.5" />
+                 Filters
+                 <ChevronDown className={cn("w-3 h-3 transition-transform duration-300", showFilters && "rotate-180")} />
+               </button>
+
+               <div className="h-4 w-px bg-neutral-200 hidden md:block" />
+
+               <div className="flex items-center gap-3">
+                  <span className="text-[10px] font-black uppercase tracking-widest opacity-30 hidden lg:block">Sort:</span>
+                  <select 
+                    className="bg-transparent border-none text-[10px] font-black uppercase tracking-widest outline-none cursor-pointer text-fuchsia-600"
+                    value={filters.sortBy}
+                    onChange={(e) => setFilters({ ...filters, sortBy: e.target.value })}
+                  >
+                    <option value="popularity">Popularity</option>
+                    <option value="price-low">Price Low</option>
+                    <option value="price-high">Price High</option>
+                    <option value="newest">Newest</option>
+                  </select>
+               </div>
+            </div>
+         </div>
+         
+         <AnimatePresence>
+           {showFilters && <FiltersPanel />}
+         </AnimatePresence>
+      </div>
+
       {/* Social Feed Masonry */}
       <main className="px-6 md:px-12 py-20 max-w-7xl mx-auto">
-         <div className="flex items-center justify-between mb-16">
-            <div className="flex items-center gap-4">
-               <div className="w-2 h-10 bg-fuchsia-600 rounded-full" />
-               <h2 className="text-3xl font-black uppercase tracking-tighter">Live Collection</h2>
-            </div>
-            <div className="flex items-center gap-4">
-               <Button variant="outline" className="rounded-full h-10 px-6 border-neutral-200 dark:border-neutral-800 text-[10px] font-black uppercase tracking-widest">
-                  <SlidersHorizontal className="w-3.5 h-3.5 mr-2" /> Filters
-               </Button>
-            </div>
+         <div className="flex items-center gap-4 mb-16">
+            <div className="w-2 h-10 bg-fuchsia-600 rounded-full" />
+            <h2 className="text-3xl font-black uppercase tracking-tighter">Live Collection</h2>
+            <span className="text-xs font-bold opacity-30 uppercase tracking-[0.3em] ml-4">
+              {masonryItems.length} curated posts
+            </span>
          </div>
 
          {isLoading ? (
