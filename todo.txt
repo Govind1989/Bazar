@@ -35,6 +35,6 @@ tags with a full width big menu like element well compact in layout adhering to 
  tags for easy navigation. When clicked on any tags, open the categoryview of the page. 
 
 
-Now lets create same socio version for the @CategoryView.tsx sa social version with easy navigation buttons and function as 
+I want the Social and classic value to be stored globally for each user iusing zustand.Now lets create same socio version for the @CategoryView.tsx for all categories social version with easy navigation buttons and function as 
 available in CategoryView.tsx, Use the prebuild masonry component to render the product cards. IMpress me create a full
-functional immersive social media version for each category views. 
+functional immersive social media version for each category views. And when the global store is social we will show this product categoryview. Impress me
