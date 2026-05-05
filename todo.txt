@@ -29,10 +29,10 @@ discory| watch| booking tab, replace the  category selection menu All Activity, 
 
 
 
-- In place of bookings tab, replace it with Events as we have in @MarketPlaceSocio.tsx 
-- Create me a simple drop down icon in place of the pricing menu here we will show products category tags and services category 
+
+- Create me a simple aaesthetic drop down icon in place of the pricing menu in @Navbar.tsx here we will show products category tags and services category 
 tags with a full width big menu like element well compact in layout adhering to our current theme,categorized all the available
- tags for easy navigation. 
+ tags for easy navigation. When clicked on any tags, open the categoryview of the page. 
 
 
 Now lets create same socio version for the @CategoryView.tsx sa social version with easy navigation buttons and function as 

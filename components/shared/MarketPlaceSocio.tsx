@@ -14,6 +14,7 @@ import {
   SERVICES,
   EVENTS,
   TESTIMONIALS,
+  BazarEvent,
 } from "@/data/mock";
 import {
   ShoppingBag,
@@ -338,8 +339,9 @@ export default function MarketPlaceSocio() {
     });
   };
 
-  /* ---- Discovery / Watch / Booking Tabs (preserved) ---- */
-  const [viewTab, setViewTab] = useState<"discovery" | "watch" | "booking">("discovery");
+  /* ---- Discovery / Watch / Events Tabs (preserved) ---- */
+  const [viewTab, setViewTab] = useState<"discovery" | "watch" | "events">("discovery");
+  const [activeQuickFilter, setActiveQuickFilter] = useState<'flash_sale' | 'offers' | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeStory, setActiveStory] = useState<string | null>(null);
   const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
@@ -394,18 +396,18 @@ export default function MarketPlaceSocio() {
     return items;
   }, []);
 
-  /* ---- Filtered Feed based on Products/Services toggle + Categories ---- */
+  /* ---- Filtered Feed based on Products/Services toggle + Categories + Quick Filters ---- */
   const filteredFeed = useMemo(() => {
     let filtered = feedItems;
 
-    // First filter by Products vs Services tab
+    // 1. Filter by Products vs Services tab
     if (activeTab === 'products') {
         filtered = filtered.filter(item => item.type === 'product' || item.type === 'flash_sale' || item.type === 'event');
     } else {
         filtered = filtered.filter(item => item.type === 'service');
     }
 
-    // Then filter by selected categories
+    // 2. Filter by selected categories
     if (selectedCategories.length > 0) {
         const selectedSlugs = currentCategories
             .filter(c => selectedCategories.includes(c.id))
@@ -413,8 +415,18 @@ export default function MarketPlaceSocio() {
         filtered = filtered.filter(item => selectedSlugs.includes(item.category));
     }
 
+    // 3. Filter by Quick Filters (Flash Sale / Offers)
+    if (activeQuickFilter === 'flash_sale') {
+        filtered = filtered.filter(item => item.type === 'flash_sale');
+    } else if (activeQuickFilter === 'offers') {
+        filtered = filtered.filter(item => {
+            const product = PRODUCTS.find(p => p.id === item.relatedId);
+            return product && product.compareAtPrice && product.compareAtPrice > product.price;
+        });
+    }
+
     return filtered;
-  }, [activeTab, selectedCategories, feedItems, currentCategories]);
+  }, [activeTab, selectedCategories, activeQuickFilter, feedItems, currentCategories]);
 
   const filteredVendors = useMemo(() => {
     // 1. Filter vendors by tab (Product vs Services)
@@ -477,7 +489,7 @@ export default function MarketPlaceSocio() {
             {[
               { id: 'discovery', label: 'Discovery', icon: <Layers className="w-4 h-4" /> },
               { id: 'watch', label: 'Reels', icon: <Video className="w-4 h-4" /> },
-              { id: 'booking', label: 'Bookings', icon: <Calendar className="w-4 h-4" /> },
+              { id: 'events', label: 'Events', icon: <Calendar className="w-4 h-4" /> },
             ].map(tab => (
               <button
                 key={tab.id}
@@ -496,17 +508,33 @@ export default function MarketPlaceSocio() {
             ))}
           </nav>
           <div className="flex space-x-4">
-          <button className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-neutral-900 rounded-full border border-neutral-200 dark:border-neutral-800 hover:border-fuchsia-500 transition-all group">
-             <BadgePercent className="w-4 h-4 text-orange-400 group-hover:text-fuchsia-600" />
-             <span className="text-[10px] text-orange-500 uppercase tracking-widest hidden md:inline">Sales and Offers</span>
-          </button>
-          <button className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-neutral-900 rounded-full border border-neutral-200 dark:border-neutral-800 hover:border-fuchsia-500 transition-all group">
-              <span className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500" />
-              </span>
-            <span className="text-[10px] text-orange-500 uppercase tracking-widest hidden md:inline">Flash Sale</span>
-          </button>
+            <button 
+              onClick={() => setActiveQuickFilter(activeQuickFilter === 'offers' ? null : 'offers')}
+              className={cn(
+                "flex items-center gap-2 px-4 py-2 rounded-full border transition-all group",
+                activeQuickFilter === 'offers' 
+                  ? "bg-fuchsia-600 border-fuchsia-600 text-white" 
+                  : "bg-neutral-100 dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 hover:border-fuchsia-500"
+              )}
+            >
+              <BadgePercent className={cn("w-4 h-4", activeQuickFilter === 'offers' ? "text-white" : "text-orange-400 group-hover:text-fuchsia-600")} />
+              <span className={cn("text-[10px] uppercase tracking-widest hidden md:inline", activeQuickFilter === 'offers' ? "text-white" : "text-orange-500")}>Sales and Offers</span>
+            </button>
+            <button 
+              onClick={() => setActiveQuickFilter(activeQuickFilter === 'flash_sale' ? null : 'flash_sale')}
+              className={cn(
+                "flex items-center gap-2 px-4 py-2 rounded-full border transition-all group",
+                activeQuickFilter === 'flash_sale' 
+                  ? "bg-red-600 border-red-600 text-white" 
+                  : "bg-neutral-100 dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 hover:border-fuchsia-500"
+              )}
+            >
+                <span className="relative flex h-3 w-3">
+                  <span className={cn("animate-ping absolute inline-flex h-full w-full rounded-full opacity-75", activeQuickFilter === 'flash_sale' ? "bg-white" : "bg-red-400")} />
+                  <span className={cn("relative inline-flex rounded-full h-3 w-3", activeQuickFilter === 'flash_sale' ? "bg-white" : "bg-red-500")} />
+                </span>
+              <span className={cn("text-[10px] uppercase tracking-widest hidden md:inline", activeQuickFilter === 'flash_sale' ? "text-white" : "text-orange-500")}>Flash Sale</span>
+            </button>
           </div>
         </div>
       </div>
@@ -814,38 +842,36 @@ export default function MarketPlaceSocio() {
             </motion.div>
           )}
 
-          {viewTab === 'booking' && (
+          {viewTab === 'events' && (
              <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -50 }} className="space-y-20">
                 <div className="flex flex-col md:flex-row items-end justify-between gap-12">
                    <div className="space-y-6">
-                      <h2 className="text-6xl font-black italic tracking-tighter uppercase leading-none text-fuchsia-600">Experience.</h2>
-                      <p className="text-lg opacity-40 font-bold uppercase tracking-[0.5em] max-w-md">Premium services bookable instantly.</p>
+                      <h2 className="text-6xl font-black italic tracking-tighter uppercase leading-none text-fuchsia-600">Events.</h2>
+                      <p className="text-lg opacity-40 font-bold uppercase tracking-[0.5em] max-w-md">Community gatherings and exclusive launches.</p>
                    </div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                   {SERVICES.map((service, idx) => (
-                     <div key={service.id} className="group bg-white dark:bg-neutral-950 rounded-[4rem] overflow-hidden border border-neutral-100 dark:border-neutral-900 hover:shadow-2xl transition-all duration-700">
-                        <div className="aspect-[4/5] relative overflow-hidden">
-                           <Image src={service.image} alt={service.name} fill className="object-cover group-hover:scale-105 transition-transform duration-[3s]" />
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                   {(EVENTS as BazarEvent[]).map((evt, idx) => (
+                     <div key={evt.id} className="group bg-white dark:bg-neutral-950 rounded-[4rem] overflow-hidden border border-neutral-100 dark:border-neutral-900 hover:shadow-2xl transition-all duration-700">
+                        <div className="aspect-video relative overflow-hidden">
+                           <Image src={evt.image} alt={evt.name} fill className="object-cover group-hover:scale-105 transition-transform duration-[3s]" />
                            <div className="absolute top-10 left-10 flex flex-col gap-3">
-                              <span className="px-6 py-2 bg-white/95 backdrop-blur rounded-2xl text-[10px] font-black uppercase text-black">{service.category}</span>
-                              <span className="px-6 py-2 bg-fuchsia-600 text-white rounded-2xl text-[10px] font-black uppercase">{service.duration} MINS</span>
+                              <span className="px-6 py-2 bg-white/95 backdrop-blur rounded-2xl text-[10px] font-black uppercase text-black">{evt.category}</span>
+                              <span className="px-6 py-2 bg-fuchsia-600 text-white rounded-2xl text-[10px] font-black uppercase">{evt.date}</span>
                            </div>
                         </div>
                         <div className="p-12">
                            <div className="flex justify-between items-start mb-10">
                               <div>
-                                 <h3 className="text-3xl font-black uppercase tracking-tight mb-2 group-hover:text-fuchsia-600 transition-colors">{service.name}</h3>
-                                 <p className="text-xs font-bold opacity-40 uppercase tracking-[0.2em]">{service.providerName}</p>
-                              </div>
-                              <div className="flex items-center gap-2 bg-neutral-50 dark:bg-neutral-900 px-4 py-2 rounded-2xl">
-                                 <Star className="w-4 h-4 fill-orange-400 text-orange-400" />
-                                 <span className="text-sm font-black">{service.rating}</span>
+                                 <h3 className="text-3xl font-black uppercase tracking-tight mb-2 group-hover:text-fuchsia-600 transition-colors">{evt.name}</h3>
+                                 <p className="text-xs font-bold opacity-40 uppercase tracking-[0.2em]">{evt.location}</p>
                               </div>
                            </div>
+                           <p className="text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed mb-10 line-clamp-3">
+                              {evt.description || "Join us for an unforgettable experience featuring local artisans and exclusive community networking."}
+                           </p>
                            <div className="flex items-center justify-between pt-10 border-t border-neutral-50 dark:border-neutral-900">
-                              <span className="text-3xl font-black italic">रु {service.price.toLocaleString()}</span>
-                              <Button className="h-16 px-10 bg-black dark:bg-white text-white dark:text-black rounded-[2rem] text-[11px] font-black uppercase hover:bg-fuchsia-600 hover:text-white transition-all">Reserve Slot</Button>
+                              <Button className="w-full h-16 bg-black dark:bg-white text-white dark:text-black rounded-[2rem] text-[11px] font-black uppercase hover:bg-fuchsia-600 hover:text-white transition-all">Get Tickets</Button>
                            </div>
                         </div>
                      </div>

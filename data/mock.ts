@@ -23,7 +23,7 @@ export interface Vendor {
   cmsConfig?: VendorCMS;
 }
 
-export interface Event {
+export interface BazarEvent {
   id: string;
   name: string;
   slug: string;
@@ -31,9 +31,10 @@ export interface Event {
   date: string;
   image: string;
   location: string;
+  description?: string;
 }
 
-export const EVENTS: Event[] = [
+export const EVENTS: BazarEvent[] = [
   {
     id: 'e1',
     name: 'Food Festival 2026',
@@ -41,7 +42,8 @@ export const EVENTS: Event[] = [
     category: 'foods',
     date: 'May 15, 2026',
     image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=800&auto=format&fit=crop',
-    location: 'Kathmandu'
+    location: 'Kathmandu',
+    description: 'Experience the largest culinary gathering in Nepal with 50+ local vendors and live music.'
   },
   {
     id: 'e2',
@@ -50,7 +52,8 @@ export const EVENTS: Event[] = [
     category: 'electronics',
     date: 'June 01, 2026',
     image: 'https://images.unsplash.com/photo-1540575467063-176a7e0c3f5d?q=80&w=800&auto=format&fit=crop',
-    location: 'Lalitpur'
+    location: 'Lalitpur',
+    description: 'Discover the latest innovations in software, hardware, and sustainable technology from across the region.'
   }
 ];
 
