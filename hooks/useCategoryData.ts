@@ -22,6 +22,10 @@ const fetchProducts = async (filters: ProductFilters): Promise<Product[]> => {
     filtered = filtered.filter(p => p.category === filters.category);
   }
 
+  if (filters.subCategories && filters.subCategories.length > 0) {
+    filtered = filtered.filter(p => p.subCategory && filters.subCategories!.includes(p.subCategory));
+  }
+
   if (filters.search) {
     const q = filters.search.toLowerCase();
     filtered = filtered.filter(p => 

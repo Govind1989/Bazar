@@ -34,6 +34,7 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
     category: categorySlug,
     sortBy: "popularity",
     vendors: [] as string[],
+    subCategories: [] as string[],
   });
 
   const { data: products, isLoading } = useCategoryProducts(filters);
@@ -60,12 +61,31 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
        <div>
           <Typography variant="titleSm" className="uppercase tracking-[0.2em] text-[10px] opacity-40 mb-6">Sub Categories</Typography>
           <div className="space-y-3">
-            {["Fresh Produce", "Dairy & Eggs", "Beverages", "Snacks & Sweets", "Grains & Pulses"].map(sub => (
-              <label key={sub} className="flex items-center gap-3 group cursor-pointer">
-                <div className="w-4 h-4 border border-bazar-gray-300 dark:border-bazar-gray-700 rounded transition-colors group-hover:border-bazar-black dark:group-hover:border-bazar-white" />
-                <Typography variant="bodySm" className="text-sm group-hover:text-bazar-black dark:group-hover:text-bazar-white transition-colors">{sub}</Typography>
+            {category.subCategories?.map(sub => (
+              <label key={sub.id} className="flex items-center gap-3 group cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  className="hidden"
+                  checked={filters.subCategories.includes(sub.slug)}
+                  onChange={(e) => {
+                    const next = e.target.checked 
+                      ? [...filters.subCategories, sub.slug]
+                      : filters.subCategories.filter(s => s !== sub.slug);
+                    setFilters({ ...filters, subCategories: next });
+                  }}
+                />
+                <div className={cn(
+                  "w-4 h-4 border rounded transition-all",
+                  filters.subCategories.includes(sub.slug) 
+                    ? "bg-bazar-black border-bazar-black dark:bg-bazar-white dark:border-bazar-white" 
+                    : "border-bazar-gray-300 dark:border-bazar-gray-700 group-hover:border-bazar-black dark:group-hover:border-bazar-white"
+                )} />
+                <Typography variant="bodySm" className="text-sm group-hover:text-bazar-black dark:group-hover:text-bazar-white transition-colors">{sub.name}</Typography>
               </label>
             ))}
+            {(!category.subCategories || category.subCategories.length === 0) && (
+              <Typography variant="bodySm" className="text-xs opacity-40 italic">No subcategories available</Typography>
+            )}
           </div>
        </div>
 

@@ -7,6 +7,7 @@ export interface User {
   password: string; // Plain text for prototype
   name: string;
   roles: UserRole[];
+  vendorId?: string; // ID of the vendor managed by this user
   avatar?: string;
   phone?: string;
   address?: string;
@@ -40,6 +41,7 @@ export const USERS: User[] = [
     password: 'vendor',
     name: 'Himalayan Vendor',
     roles: ['Vendor'],
+    vendorId: 'v2',
     joinedDate: '2024-02-15',
     loyaltyPoints: 450,
     followedVendors: [],
@@ -69,6 +71,7 @@ export const USERS: User[] = [
     password: 'multi',
     name: 'Adarsh Jha',
     roles: ['Vendor', 'User'],
+    vendorId: 'v3',
     joinedDate: '2024-04-05',
     loyaltyPoints: 200,
     followedVendors: ['v3'],

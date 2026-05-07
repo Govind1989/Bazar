@@ -12,11 +12,13 @@ interface CMSState {
   updateTheme: (updates: Partial<VendorCMS['theme']>) => void
   addCategory: (category: Omit<VendorCategory, 'id' | 'subCategories' | 'status'>) => void
   updateCategory: (categoryId: string, updates: Partial<VendorCategory>) => void
-  archiveCategory: (categoryId: string) => void
-  addSubCategory: (categoryId: string, subCategory: Omit<VendorSubCategory, 'id' | 'status'>) => void
-  updateSubCategory: (categoryId: string, subCategoryId: string, updates: Partial<VendorSubCategory>) => void
-  archiveSubCategory: (categoryId: string, subCategoryId: string) => void
-  save: (vendorId: string) => void
+  archiveCategory: (categoryId: string) => void;
+  deleteCategory: (categoryId: string) => void;
+  addSubCategory: (categoryId: string, subCategory: Omit<VendorSubCategory, 'id' | 'status'>) => void;
+  updateSubCategory: (categoryId: string, subCategoryId: string, updates: Partial<VendorSubCategory>) => void;
+  archiveSubCategory: (categoryId: string, subCategoryId: string) => void;
+  deleteSubCategory: (categoryId: string, subCategoryId: string) => void;
+  save: (vendorId: string) => void;
   reset: (vendorId: string) => void
   getVendorConfig: (vendorId: string) => VendorCMS | undefined
 }
@@ -100,6 +102,16 @@ export const useCMSStore = create<CMSState>()(
         }));
       },
 
+      deleteCategory: (categoryId) => {
+        set((state) => ({
+          previewConfig: state.previewConfig ? {
+            ...state.previewConfig,
+            categories: state.previewConfig.categories?.filter(c => c.id !== categoryId)
+          } : null,
+          isDirty: true
+        }));
+      },
+
       addSubCategory: (categoryId, subCategory) => {
         const newSub: VendorSubCategory = {
           ...subCategory,
@@ -140,6 +152,21 @@ export const useCMSStore = create<CMSState>()(
               c.id === categoryId ? {
                 ...c,
                 subCategories: c.subCategories.map(s => s.id === subCategoryId ? { ...s, status: 'archived' } : s)
+              } : c
+            )
+          } : null,
+          isDirty: true
+        }));
+      },
+
+      deleteSubCategory: (categoryId, subCategoryId) => {
+        set((state) => ({
+          previewConfig: state.previewConfig ? {
+            ...state.previewConfig,
+            categories: state.previewConfig.categories?.map(c => 
+              c.id === categoryId ? {
+                ...c,
+                subCategories: c.subCategories.filter(s => s.id !== subCategoryId)
               } : c
             )
           } : null,

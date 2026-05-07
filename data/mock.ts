@@ -67,6 +67,7 @@ export interface Product {
   image: string;
   description: string;
   category: string;
+  subCategory?: string;
   stock: number;
 }
 
@@ -338,7 +339,6 @@ export const VENDORS: Vendor[] = [
 ];
 
 export const PRODUCTS: Product[] = [
-  // ... existing products ...
   {
     id: 'p1',
     vendorId: 'v1',
@@ -349,6 +349,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://images.unsplash.com/photo-1696446701796-da61225697cc?q=80&w=800&auto=format&fit=crop',
     description: 'The latest iPhone with Titanium design.',
     category: 'electronics',
+    subCategory: 'accessories',
     stock: 12
   },
   {
@@ -361,6 +362,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://images.unsplash.com/photo-1585478259715-876a6a81fc08?q=80&w=800&auto=format&fit=crop',
     description: 'Naturally leavened bread with a crispy crust.',
     category: 'foods',
+    subCategory: 'bakery',
     stock: 50
   },
   {
@@ -373,6 +375,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://images.unsplash.com/photo-1534422298391-e4f8c172d67b?q=80&w=800&auto=format&fit=crop',
     description: 'Authentic momo masala mix.',
     category: 'foods',
+    subCategory: 'spices',
     stock: 100
   },
   {
@@ -385,6 +388,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?q=80&w=800&auto=format&fit=crop',
     description: 'Soft cashmere pashmina shawl.',
     category: 'wearables',
+    subCategory: 'handmade',
     stock: 20
   },
   {
@@ -397,10 +401,10 @@ export const PRODUCTS: Product[] = [
     image: 'https://images.unsplash.com/photo-1603252109303-2751441dd157?q=80&w=800&auto=format&fit=crop',
     description: 'Handwoven cotton kurta.',
     category: 'wearables',
+    subCategory: 'traditional',
     stock: 35
   },
-  // ... existing products ...
-{
+  {
     id:"p11",
     vendorId: 'v3',
     name: 'Hand-carved Mandala Mask',
@@ -409,19 +413,20 @@ export const PRODUCTS: Product[] = [
     image: 'https://images.unsplash.com/photo-1590059300649-74e2d3df9765?q=80&w=800&auto=format&fit=crop',
     description: 'Traditional Nepalese wood carving.',
     category: 'woods',
+    subCategory: 'carvings',
     stock: 5
   },
   {
-  id: 'p4',
-  vendorId: 'v1',
-  name: 'MacBook Air M3',
-  slug: 'macbook-air-m3',
-  price: 185000,
-  compareAtPrice: 210000,
-  image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca4?q=80&w=800&auto=format&fit=crop',
-  description: 'Lightning-fast M3 chip in a thin aluminum enclosure.',
-  category: 'computers',
-  stock: 8
+    id: 'p4',
+    vendorId: 'v1',
+    name: 'MacBook Air M3',
+    slug: 'macbook-air-m3',
+    price: 185000,
+    compareAtPrice: 210000,
+    image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca4?q=80&w=800&auto=format&fit=crop',
+    description: 'Lightning-fast M3 chip in a thin aluminum enclosure.',
+    category: 'computers',
+    stock: 8
   },
   {
     id: 'p5',
@@ -457,6 +462,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?q=80&w=800&auto=format&fit=crop',
     description: 'Single-origin Himalayan arabica.',
     category: 'foods',
+    subCategory: 'organic',
     stock: 40
   }
 ];

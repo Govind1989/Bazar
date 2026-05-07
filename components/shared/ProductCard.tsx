@@ -52,11 +52,21 @@ export function ProductCard({ product, vendorName }: ProductCardProps) {
             </Typography>
           </Link>
           {vendorName && (
-            <Link href={`/${vendorSlug}`}>
-              <Typography variant="bodySm" className="uppercase font-mono tracking-wider opacity-60 text-[10px] hover:underline">
-                {vendorName}
-              </Typography>
-            </Link>
+            <div className="flex items-center gap-2">
+              <Link href={`/${vendorSlug}`}>
+                <Typography variant="bodySm" className="uppercase font-mono tracking-wider opacity-60 text-[10px] hover:underline">
+                  {vendorName}
+                </Typography>
+              </Link>
+              {product.subCategory && (
+                <>
+                  <span className="w-1 h-1 rounded-full bg-bazar-gray-300 dark:bg-bazar-gray-700" />
+                  <Typography variant="bodySm" className="uppercase font-mono tracking-wider opacity-40 text-[9px]">
+                    {product.subCategory}
+                  </Typography>
+                </>
+              )}
+            </div>
           )}
         </div>
         <div className="text-right">

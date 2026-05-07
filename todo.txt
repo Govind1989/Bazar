@@ -20,17 +20,19 @@ Static Credentials for Testing:
   $env:ANALYZE="true"; npm run build                                                                                                                                       ? for shortcuts
 ──────────────────────────────────────────────────────────
 
-  
-Hide the current navbar when on vendor's slug page, and replace with categories provided by each vendors from the backend. 
-If required to be saved for consistent subcategories for each vendor's create a new static file in data folder and integrate
- the functionality to create update archive sub categories by vendor. The hidden navbar will only show the explore drop down
-  minimalistic for user to jump any specific category or to our home page or other page than vendors page.
+Excellent now replace the taxonomy placement from the cms settings to a new menu in vendor dashboard side bar. before Products. As i created a new    
+   subcategory for a vendor , "MOMO" and published the cms but still i am not seeing the category in the vendor page. Resolve what is wrong. Each vendor 
+   will have their own categories and we will show categories for each vendor in vendor navbar as menu. Impress me                                       
 
-  We need to add subcategory in our products mock data in @data folder to complete our integration of subacategories.
-  With this changes, also in the @CategoryView.tsx and n @CategoryViewSocio.tsx, i want to integrate the subcategories in the pages
-  and filter the products based on the selection of the subcategories in our current layout for each files. 
-  Also Now in vendor dashboard, user must be able to create or manage their subcaetgories shown with easy tree view structre ability
-  to add a new node or delete a node or a leaves. Impress me
+In vendor dashboard, in taxonomy management use flow of taxonomy management. i am able to create category for each vendor but unable
+to create/manage sub category for each category created., use same layout and UI we have for the category management for sub category
+management in the vendor dashboard. Also in the vendor's page, in vendor's navbar, i want the menu to be placed inside the hamrburger 
+menu after click on the hamburger menu. Impress me.
+
+In our explore mega menu for each category tags, when clicked on any category, we are redirecting the link to the categories page with category
+clicked , but i want to open up the @CategoryView.tsx , category page (localhost:3000/foods, /wearables etc etc)pages based on the
+users global classic or socio version selected. Impress me .   
+
 
 Loyalty program
 Vendor must be able to create loyalty campaigns for users through their dashboard. A minimalistic view of all campaigns in 

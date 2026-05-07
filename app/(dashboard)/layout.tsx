@@ -14,12 +14,14 @@ import {
   Plus, 
   ExternalLink,
   LogOut,
-  User
+  User,
+  Tags
 } from "lucide-react";
 
 const SIDEBAR_ITEMS = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Orders", href: "/dashboard/orders", icon: ShoppingBag },
+  { name: "Taxonomy", href: "/dashboard/categories", icon: Tags },
   { name: "Products", href: "/dashboard/inventory", icon: Package },
   { name: "Reports", href: "/dashboard/reports", icon: BarChart3 },
   { name: "Settings", href: "/dashboard/settings", icon: Settings },

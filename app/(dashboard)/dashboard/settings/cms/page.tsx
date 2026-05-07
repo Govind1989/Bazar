@@ -18,21 +18,24 @@ import {
   RotateCcw,
   Smartphone,
   Monitor,
-  Check
+  Check,
+  Tags
 } from "lucide-react";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export default function CMSCustomizerPage() {
   const { previewConfig, init, updateConfig, updateTheme, isDirty, save, reset } = useCMSStore();
+  const { user } = useAuthStore();
   const [isPublishing, setIsPublishing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   
-  // Using Himalayan Bakery for this demo as it's a food vendor
-  const vendor = VENDORS[1];
+  const targetVendorId = user?.vendorId || 'v1'; // Default to v1 if no vendorId
+  const vendor = VENDORS.find(v => v.id === targetVendorId) || VENDORS[0];
   const vendorProducts = PRODUCTS.filter(p => p.vendorId === vendor.id);
 
   useEffect(() => {
     init(vendor.id);
-  }, []);
+  }, [vendor.id]);
 
   const handlePublish = async () => {
     setIsPublishing(true);
