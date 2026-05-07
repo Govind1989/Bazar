@@ -46,7 +46,7 @@ This document serves as the foundational truth for all agentic AI entities inter
 ### 3.1 Core Application Shell
 #### `app/layout.tsx`
 - **Purpose**: Root shell with hydration-safe theme management.
-- **Logic**: Injects fonts, handles `suppressHydrationWarning` for `next-themes`, and sets base semantic colors (`bg-white dark:bg-black`).
+- **Logic**: Injects fonts, handles `suppressHydrationWarning` for `next-themes`, and sets base semantic colors (`bg-white dark:bg-black`). Integrates `CommandSearch` (Global CMD+K) and `FloatingDock` (Agentic Hub) at the root level.
 
 #### `app/providers.tsx`
 - **Purpose**: Client-side context orchestration.
@@ -56,36 +56,51 @@ This document serves as the foundational truth for all agentic AI entities inter
 - **Logic**: Implements CVA (Class Variance Authority) with theme-aware variants. Primary/Outline/Ghost variants dynamically invert colors based on `html.dark` class.
 
 ### 3.2 Dynamic Routing & Navigation
+#### `app/(public)/page.tsx`
+- **Logic**: Dynamic Entry Point. Switches between `MarketplaceHome` (Classic) and `MarketPlaceSocio` (Social) based on the `marketplaceView` state from `useSystemStore`.
+
 #### `components/shared/Navbar.tsx`
-- **Logic**: Orchestrates global navigation, Cart access, and the **Adaptive Theme Toggle**. Uses a `mounted` check to prevent hydration mismatch for theme icons. Includes the `Linguistic Engine` toggle for EN/NP support.
+- **Logic**: Dual-Mode Navigation. Automatically detects vendor storefronts via `usePathname` and switches to a minimalistic "Jump to..." mode. In this mode, global links are hidden, focusing on the `Explore` (Mega Menu) functionality for platform-wide discovery. Orchestrates global navigation, Cart access, and the **Adaptive Theme Toggle**.
+
+#### `components/shared/VendorNavbar.tsx` (NEW)
+- **Logic**: Vendor-Specific Taxonomies. Rendered on vendor storefronts to provide direct access to vendor-managed categories and sub-categories. Synchronized with `useCMSStore` for real-time updates.
 
 #### `middleware.ts`
 - **Logic**: Strategic interceptor for multi-tenant subdomains and route-based session guards.
 
 ### 3.3 State & Business Logic Orchestration
+#### `store/useSystemStore.ts`
+- **Logic**: Global Platform Configuration. Manages `language` (EN/NP) and `marketplaceView` (Classic vs. Social). Persisted to `bazar-system-storage`.
+
 #### `store/useUserStore.ts`
-- **Logic**: Manages the platform's social graph (Followed Vendors, Favorited Categories).
-- **Hierarchical Favoriting**: Implements logic where favoriting a sub-category automatically triggers the "Favorite" state for its parent category, ensuring logical data consistency.
-- **Global Modal Sync**: Centralizes `isMessageModalOpen` and `activeConversationVendorId` to allow disparate UI components to trigger the global Messaging interface.
+- **Logic**: Manages the platform's social graph and AI preferences.
+- **Hierarchical Favoriting**: Favoriting a sub-category automatically triggers the "Favorite" state for its parent category.
+- **Bazar Intelligence**: Stores `aiSettings` (API Keys, Preferred Model) for both Users and Vendors.
+- **Global Messaging Sync**: Centralizes `isMessageModalOpen` and `activeConversationVendorId`.
 
 #### `store/useAuthStore.ts`
-- **Logic**: Persistent authentication state. Supports role-switching (Customer/Vendor/SuperAdmin) and provides reactive `isAuthenticated` guards for protected actions like direct messaging.
+- **Logic**: Persistent authentication state. Supports role-switching (Customer/Vendor/SuperAdmin) and role-specific redirection logic.
+
+#### `store/useCMSStore.ts`
+- **Logic**: Multi-tenant Configuration & Taxonomy Management. Handles real-time preview and persistence of vendor-specific storefront configurations, including the management of `VendorCategory` and `VendorSubCategory` lifecycles (Create, Update, Archive).
 
 ### 3.4 Shared Architectural Components
+#### `components/templates/TemplateEngine.tsx`
+- **Purpose**: Dynamic Layout Orchestrator.
+- **Logic**: Resolves the correct layout template (`GoldFood`, `Minimal`, etc.) from the `TemplateRegistry` based on the vendor's CMS configuration.
+
 #### `components/shared/FloatingDock.tsx`
 - **Purpose**: The "Agentic Command Center". 
-- **Logic**: Centralized hub for Human-to-Human (Messaging) and Human-to-AI (Assistant) interactions. Uses `useEffect` to synchronize its internal modal state with the global `useUserStore` triggers.
+- **Logic**: Dual-Mode interaction hub. 
+  - **Messaging Mode**: Direct Human-to-Human contact, synchronized with the global messaging store.
+  - **AI Mode**: Role-aware assistant ("User Assistant" vs. "Vendor Assistant"). Includes placeholder logic for API-driven autonomous tasks.
 
 #### `components/shared/AuthModal.tsx`
-- **Logic**: Unified authentication gateway. Automatically triggered by protected action guards (e.g., "Message Vendor") for non-authenticated sessions.
+- **Logic**: Unified authentication gateway. Supports multi-role user accounts with a "Role Selection" phase. Implements role-based redirection: `SuperAdmin` -> `/admin`, `Vendor` -> `/dashboard`, `Customer` -> `/account`.
 
-#### `components/shared/Jobs.tsx` (NEW)
+#### `components/shared/Jobs.tsx`
 - **Purpose**: Career discovery interface.
-- **Logic**: Implements multi-dimensional filtering (Job Type, Sector) and real-time search across job titles and vendor names.
-
-#### `app/(public)/jobs/page.tsx` (NEW)
-- **Purpose**: SEO-ready Jobs landing page.
-- **Logic**: Integrates the `Jobs` component with a high-fidelity editorial header following the **Cal Sans** aesthetic.
+- **Logic**: Multi-dimensional filtering (Job Type, Sector) and real-time search across job titles and vendor names.
 
 ---
 
@@ -102,7 +117,7 @@ This document serves as the foundational truth for all agentic AI entities inter
 - **Transactional Flow**: 3-step Checkout (Shipping -> Payment -> Success).
 - **Mobile Experience**: PWA Shell Simulator for high-fidelity mobile previews.
 - **Linguistic Engine**: Full English & Nepali infrastructure.
-- **Authentication**: Role-switching Mock (Customer/Vendor/Admin).
+- **Authentication**: Role-aware Mock system with selection logic.
 
 ### ✅ Phase 7: Adaptive Design System
 - **next-themes Integration**: Seamless Dark/Light mode orchestration.
@@ -112,21 +127,25 @@ This document serves as the foundational truth for all agentic AI entities inter
 ### ✅ Phase 8: Social & Discovery Engine
 - **Compact Discovery UI**: Refactored Category Catalog with high-density cards and sub-category favoriting.
 - **Advanced Partner Filtering**: Vendor discovery hub with category-based radio filtering and real-time craft search.
-- **Agentic Messaging Bridge**: Direct-to-Vendor communication infrastructure. Integrated "Message" triggers that bridge the gap between discovery and transaction.
-- **Search Architecture**: Multi-level search implementation that traverses both primary and nested data structures (Categories + Sub-categories).
+- **Agentic Messaging Bridge**: Integrated "Message" triggers that bridge discovery and transaction.
 - **Career Ecosystem**: Full end-to-end Jobs module with multi-vendor listings and sector-specific discovery.
 
-### ✅ Phase 9: Socio-Ecommerce & Adaptive Layouts (NEW)
-- **MarketPlaceSocio**: Radical redesign of the storefront as a social-first experience. Features a masonry-based discovery feed, interactive shop tags, and immersive reels-style engagement.
-- **Strategic UI Toggling**: Implementation of `marketplaceView` in `useSystemStore` allowing on-the-fly transitions between "Classic" and "Social" marketplace paradigms.
-- **Story Architecture**: Animated vendor stories with immersive full-screen views and direct collection routing.
+### ✅ Phase 9: Socio-Ecommerce & Adaptive Layouts
+- **MarketPlaceSocio**: Redesign of the storefront as a social-first experience with masonry feeds and interactive tags.
+- **Strategic UI Toggling**: Implementation of `marketplaceView` in `useSystemStore` for on-the-fly paradigm transitions.
+- **Story Architecture**: Animated vendor stories with immersive full-screen views.
 
-### ✅ Phase 10: High-Fidelity C2C Marketplace (NEW)
-- **P2P Trading Hub**: Dedicated interface for peer-to-peer transactions featuring localized discovery and verified trader badges.
-- **Trust Infrastructure**: Simulated escrow support and SMS/ID verification signals to anchor trust in the local economy.
+### ✅ Phase 10: High-Fidelity C2C Marketplace
+- **P2P Trading Hub**: Dedicated interface for peer-to-peer transactions featuring localized discovery.
+- **Trust Infrastructure**: Simulated escrow support and verification signals.
 
-### ✅ Phase 11: Specialized Vertical Templates (NEW)
-- **Advanced Food Templates**: Launch of `GoldFood`, `PlatinumFood`, and `SilverFood` templates. Features include parallax-ready heroes, elegant floating elements, and premium dining menu grids.
+### ✅ Phase 11: Specialized Vertical Templates
+- **Advanced Food Templates**: Launch of `GoldFood`, `PlatinumFood`, and `SilverFood` templates with parallax effects and premium menu grids.
+
+### ✅ Phase 12: Bazar Intelligence & AI Integration (NEW)
+- **Agentic Hub**: Enhanced `FloatingDock` with specialized AI assistance for different user roles.
+- **AI Configuration**: Secured Zustand-based storage for user/vendor API keys to enable private LLM-driven features.
+- **Context-Aware Assistance**: Proactive help system ready for LLM grounding.
 
 ---
 
@@ -140,4 +159,4 @@ This document serves as the foundational truth for all agentic AI entities inter
 
 ---
 *Generated by Agentic Truth Engine*
-*Last Update: 2026-05-04 | Version 1.4*
+*Last Update: 2026-05-07 | Version 1.5*

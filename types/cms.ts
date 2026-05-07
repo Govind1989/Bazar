@@ -24,6 +24,21 @@ export interface SectionConfig {
   layout?: 'grid' | 'list' | 'carousel';
 }
 
+export interface VendorSubCategory {
+  id: string;
+  name: string;
+  slug: string;
+  status: 'active' | 'archived';
+}
+
+export interface VendorCategory {
+  id: string;
+  name: string;
+  slug: string;
+  subCategories: VendorSubCategory[];
+  status: 'active' | 'archived';
+}
+
 export interface VendorCMS {
   templateId: TemplateId;
   category: ProductCategory;
@@ -41,6 +56,7 @@ export interface VendorCMS {
     contact?: SectionConfig;
   };
   theme: ThemeConfig;
+  categories?: VendorCategory[];
 }
 
 export interface TemplateDefinition {

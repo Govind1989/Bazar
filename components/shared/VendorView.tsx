@@ -5,6 +5,7 @@ import { PRODUCTS, VENDORS } from "@/data/mock";
 import { TemplateEngine } from "@/components/templates/TemplateEngine";
 import { useCMSStore } from "@/store/useCMSStore";
 import { useEffect, useState } from "react";
+import { VendorNavbar } from "./VendorNavbar";
 
 interface VendorViewProps {
   vendorSlug: string;
@@ -35,10 +36,13 @@ export default function VendorView({ vendorSlug }: VendorViewProps) {
   const vendorProducts = PRODUCTS.filter((p) => p.vendorId === vendor.id);
 
   return (
-    <TemplateEngine 
-      vendor={vendor} 
-      cms={activeConfig} 
-      products={vendorProducts} 
-    />
+    <div className="pt-16">
+      <VendorNavbar vendor={vendor} />
+      <TemplateEngine 
+        vendor={vendor} 
+        cms={activeConfig} 
+        products={vendorProducts} 
+      />
+    </div>
   );
 }

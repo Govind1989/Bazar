@@ -21,14 +21,32 @@ Static Credentials for Testing:
 ──────────────────────────────────────────────────────────
 
   
-Now in our @MarketplaceHome.tsx and @MarketPlaceSocio.tsx we are using same caetgory selection menu, i want to create a common
-component CategorySelectionMenu.tsx and use it in both the pages. Also in our CategorySelectionMenu.tsx create a full width 
-search input just below the menu selection as we have in our applicaiton as in MarketplaceHome.tsx page. Place type holder 
-"Use @bazar_shop for vendor search or #bazar_products/services for product/service search". When user uses @<vendorName> then 
-we will use the trusted vendor UI to show the searched vendor and when user uses #<productName> then we will use the product
-card ui to show the searched product/service for single or multiple searched result. I want same search implementation in our 
-both pages. Impress me.
+Hide the current navbar when on vendor's slug page, and replace with categories provided by each vendors from the backend. 
+If required to be saved for consistent subcategories for each vendor's create a new static file in data folder and integrate
+ the functionality to create update archive sub categories by vendor. The hidden navbar will only show the explore drop down
+  minimalistic for user to jump any specific category or to our home page or other page than vendors page.
 
+  We need to add subcategory in our products mock data in @data folder to complete our integration of subacategories.
+  With this changes, also in the @CategoryView.tsx and n @CategoryViewSocio.tsx, i want to integrate the subcategories in the pages
+  and filter the products based on the selection of the subcategories in our current layout for each files. 
+  Also Now in vendor dashboard, user must be able to create or manage their subcaetgories shown with easy tree view structre ability
+  to add a new node or delete a node or a leaves. Impress me
+
+Loyalty program
+Vendor must be able to create loyalty campaigns for users through their dashboard. A minimalistic view of all campaigns in 
+aesthetic card layout with title, description, campaign type [on sale (percent value or flat value for each vendor's sub 
+category or specific products), referral campaign, loyalty(user if buys for x number of times from same vendor then vendor
+ can assign percentage discount taken from average value of the purchase on the x+1 buy or bookings, Occasional( on special
+  events like dashain, tohar , new year) , social media shoutout( user can share the vendor link on their social media and
+   can get discount on next transaction provided by percentage by vendor, free delivery.Each campaign can be applied on
+    either vendors subcategories or specific products with each campaign start and end date assigned. where vendor can 
+    easily start the campaign automatically in the future with start date and end the campaign with the enddate. The campaigns 
+    will have filters like current running (if today date is greater than start date and smaller than end date) and 
+    expired where today is greater han both start and end date. Each. Card will 
+    have  all Information like users involved in each campaigns count then total sales report . A glimpse view to know 
+    everything about the campaigns. In users dash board we will show the current each campaign track and a bottom to 
+    cash out for cart items from the campaigned vendor.
 
 Study @AgenticTruth and study the current implementation added in our repo and then add the detail of the implementation of our
-development process and update the missing module or detail in our @AgenticTruth. Impress me.
+development process and update the missing module or detail in our @AgenticTruth adhering to the current format preserving the 
+current informaton in the file. Impress me.

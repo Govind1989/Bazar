@@ -14,9 +14,11 @@ import { User, Globe, Sun, Moon, LayoutDashboard, LayoutGrid, Sparkles, ChevronD
 import { useTheme } from "next-themes";
 import { CalendarToggle } from "./CalendarToggle";
 import { motion, AnimatePresence } from "framer-motion";
-import { CATEGORIES, SERVICE_CATEGORIES } from "@/data/mock";
+import { CATEGORIES, SERVICE_CATEGORIES, VENDORS } from "@/data/mock";
+import { usePathname } from "next/navigation";
 
 export function Navbar() {
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
@@ -25,6 +27,10 @@ export function Navbar() {
   const { theme, setTheme } = useTheme();
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
+
+  // Detect if on vendor page
+  const segments = pathname.split('/').filter(Boolean);
+  const isVendorPage = segments.length > 0 && VENDORS.some(v => v.slug === segments[0]);
 
   // Helper to get initials
   const getInitials = (name: string) => {
@@ -97,7 +103,7 @@ export function Navbar() {
       </Link>
 
       <div className="hidden md:flex items-center gap-8 ml-12">
-        {NAV_ITEMS.map((item) => (
+        {!isVendorPage && NAV_ITEMS.map((item) => (
           <Link
             key={item.name}
             href={item.href}
@@ -115,7 +121,7 @@ export function Navbar() {
             isMegaMenuOpen ? "text-bazar-gray-800" : "text-bazar-gray-500 hover:text-bazar-black dark:hover:text-bazar-white transition-colors text-sm font-medium"
           )}
         >
-          <span>Explore</span>
+          <span>{isVendorPage ? 'Jump to...' : 'Explore'}</span>
           <ChevronDown className={cn("w-3.5 h-3.5 transition-transform duration-300", isMegaMenuOpen && "rotate-180")} />
         </button>
       </div>
@@ -123,39 +129,41 @@ export function Navbar() {
       <div className="ml-auto flex items-center gap-4">
         {mounted && (
           <div className="flex items-center gap-1 mr-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setMarketplaceView(marketplaceView === 'classic' ? 'social' : 'classic')}
-              className={cn(
-                "h-9 px-4 rounded-full transition-all gap-2 border-2",
-                marketplaceView === 'social' 
-                  ? "bg-fuchsia-50 dark:bg-fuchsia-950/30 border-fuchsia-200 dark:border-fuchsia-800 text-fuchsia-600 shadow-sm" 
-                  : "bg-bazar-gray-50 dark:bg-bazar-gray-950 border-bazar-gray-100 dark:border-bazar-gray-900 hover:border-bazar-black dark:hover:border-bazar-white"
-              )}
-            >
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={marketplaceView}
-                  initial={{ opacity: 0, scale: 0.8, rotate: -20 }}
-                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                  exit={{ opacity: 0, scale: 0.8, rotate: 20 }}
-                  className="flex items-center gap-2"
-                >
-                  {marketplaceView === 'classic' ? (
-                    <>
-                      <LayoutGrid className="w-4 h-4" />
-                      <span className="text-[10px] font-black uppercase tracking-widest">Classic</span>
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-4 h-4" />
-                      <span className="text-[10px] font-black uppercase tracking-widest">Social</span>
-                    </>
-                  )}
-                </motion.div>
-              </AnimatePresence>
-            </Button>
+            {!isVendorPage && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setMarketplaceView(marketplaceView === 'classic' ? 'social' : 'classic')}
+                className={cn(
+                  "h-9 px-4 rounded-full transition-all gap-2 border-2",
+                  marketplaceView === 'social' 
+                    ? "bg-fuchsia-50 dark:bg-fuchsia-950/30 border-fuchsia-200 dark:border-fuchsia-800 text-fuchsia-600 shadow-sm" 
+                    : "bg-bazar-gray-50 dark:bg-bazar-gray-950 border-bazar-gray-100 dark:border-bazar-gray-900 hover:border-bazar-black dark:hover:border-bazar-white"
+                )}
+              >
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={marketplaceView}
+                    initial={{ opacity: 0, scale: 0.8, rotate: -20 }}
+                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                    exit={{ opacity: 0, scale: 0.8, rotate: 20 }}
+                    className="flex items-center gap-2"
+                  >
+                    {marketplaceView === 'classic' ? (
+                      <>
+                        <LayoutGrid className="w-4 h-4" />
+                        <span className="text-[10px] font-black uppercase tracking-widest">Classic</span>
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-4 h-4" />
+                        <span className="text-[10px] font-black uppercase tracking-widest">Social</span>
+                      </>
+                    )}
+                  </motion.div>
+                </AnimatePresence>
+              </Button>
+            )}
             
             <Button
               variant="ghost"

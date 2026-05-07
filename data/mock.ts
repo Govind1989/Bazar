@@ -184,7 +184,29 @@ export const VENDORS: Vendor[] = [
         borderRadius: 'lg',
         headerStyle: 'transparent',
         cardVariant: 'default'
-      }
+      },
+      categories: [
+        {
+          id: 'vc1',
+          name: 'iPhone',
+          slug: 'iphone',
+          status: 'active',
+          subCategories: [
+            { id: 'vsc1', name: 'iPhone 15 Series', slug: 'iphone-15', status: 'active' },
+            { id: 'vsc2', name: 'iPhone 14 Series', slug: 'iphone-14', status: 'active' },
+          ]
+        },
+        {
+          id: 'vc2',
+          name: 'Mac',
+          slug: 'mac',
+          status: 'active',
+          subCategories: [
+            { id: 'vsc4', name: 'MacBook Air', slug: 'macbook-air', status: 'active' },
+            { id: 'vsc5', name: 'MacBook Pro', slug: 'macbook-pro', status: 'active' },
+          ]
+        }
+      ]
     }
   },
   {
@@ -212,7 +234,19 @@ export const VENDORS: Vendor[] = [
         borderRadius: 'md',
         headerStyle: 'solid',
         cardVariant: 'surface'
-      }
+      },
+      categories: [
+        {
+          id: 'vc4',
+          name: 'Bread',
+          slug: 'bread',
+          status: 'active',
+          subCategories: [
+            { id: 'vsc9', name: 'Sourdough', slug: 'sourdough', status: 'active' },
+            { id: 'vsc10', name: 'Whole Wheat', slug: 'whole-wheat', status: 'active' },
+          ]
+        }
+      ]
     }
   },
   {
