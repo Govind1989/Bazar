@@ -5,14 +5,17 @@ import { Typography } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";
 import { USERS } from "@/data/users";
 import { VENDORS } from "@/data/mock";
-import { Calendar, Mail, MapPin, Phone, Star, ShieldCheck, TrendingUp } from "lucide-react";
+import { Calendar, Mail, MapPin, Phone, Star, ShieldCheck, TrendingUp, Gift, ArrowRight } from "lucide-react";
+import { useCampaignStore } from "@/store/useCampaignStore";
 
 export default function AccountOverview() {
   const { user } = useAuthStore();
+  const { campaigns } = useCampaignStore();
   
   if (!user) return null;
 
   const followedVendors = VENDORS.filter(v => user.followedVendors.includes(v.id));
+  const activeUserCampaigns = campaigns.filter(c => c.status === 'ACTIVE' && c.userCount > 0);
 
   return (
     <div className="space-y-12">
@@ -73,6 +76,73 @@ export default function AccountOverview() {
            </div>
         </Card>
       </div>
+
+      {/* Campaign Tracking */}
+      <section className="space-y-6">
+        <div className="flex items-center justify-between">
+           <Typography variant="titleMd" className="font-black uppercase tracking-widest text-xs">Active Campaigns Tracking</Typography>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+           {activeUserCampaigns.map((campaign) => {
+             const vendor = VENDORS.find(v => v.id === campaign.vendorId);
+             const progress = Math.floor(Math.random() * 80) + 10;
+             
+             return (
+               <Card key={campaign.id} className="p-6 border-2 border-bazar-gray-100 dark:border-bazar-gray-900 hover:border-purple-500/20 transition-all group overflow-hidden relative">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/5 dark:bg-purple-500/10 rounded-full -mr-12 -mt-12 group-hover:scale-125 transition-transform" />
+                  
+                  <div className="relative z-10 space-y-4">
+                    <div className="flex items-center justify-between">
+                       <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-lg bg-bazar-gray-50 dark:bg-bazar-gray-950 p-1.5 border border-bazar-gray-100 dark:border-bazar-gray-900">
+                             <img src={vendor?.logo} alt={vendor?.name} className="w-full h-full object-contain grayscale" />
+                          </div>
+                          <Typography variant="bodySm" className="text-[10px] font-black uppercase tracking-widest opacity-40">{vendor?.name}</Typography>
+                       </div>
+                       <div className="px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 text-[8px] font-black uppercase tracking-widest">
+                          {campaign.type}
+                       </div>
+                    </div>
+
+                    <div>
+                       <Typography variant="titleSm" className="font-black line-clamp-1">{campaign.title}</Typography>
+                       <Typography variant="bodySm" className="text-[10px] opacity-40 mt-1 line-clamp-1">{campaign.description}</Typography>
+                    </div>
+
+                    <div className="space-y-2">
+                       <div className="flex justify-between items-end">
+                          <Typography variant="bodySm" className="text-[9px] font-black uppercase tracking-widest opacity-40">Progress</Typography>
+                          <Typography variant="bodySm" className="text-[10px] font-black">{progress}%</Typography>
+                       </div>
+                       <div className="h-1 w-full bg-bazar-gray-100 dark:bg-bazar-gray-900 rounded-full overflow-hidden">
+                          <div className="h-full bg-purple-500 rounded-full" style={{ width: `${progress}%` }} />
+                       </div>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-2">
+                       <div className="flex items-center gap-1">
+                          <Gift className="w-3 h-3 text-purple-500" />
+                          <Typography variant="bodySm" className="text-[10px] font-black text-purple-600 dark:text-purple-400">
+                             {campaign.valueType === 'PERCENT' ? `${campaign.value}% OFF` : `रु ${campaign.value} OFF`}
+                          </Typography>
+                       </div>
+                       <Button 
+                         variant="outline" 
+                         size="sm" 
+                         className="h-7 text-[9px] font-black uppercase tracking-widest border-purple-500/20 hover:bg-purple-500 hover:text-white transition-all"
+                         disabled={progress < 100 && campaign.type === 'LOYALTY'}
+                       >
+                          {progress >= 100 || campaign.type !== 'LOYALTY' ? 'Cash Out' : 'Locked'}
+                          <ArrowRight className="w-3 h-3 ml-1.5" />
+                       </Button>
+                    </div>
+                  </div>
+               </Card>
+             );
+           })}
+        </div>
+      </section>
 
       {/* Followed Vendors */}
       <section className="space-y-6">

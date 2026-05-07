@@ -15,7 +15,8 @@ import {
   ExternalLink,
   LogOut,
   User,
-  Tags
+  Tags,
+  Gift
 } from "lucide-react";
 
 const SIDEBAR_ITEMS = [
@@ -23,6 +24,7 @@ const SIDEBAR_ITEMS = [
   { name: "Orders", href: "/dashboard/orders", icon: ShoppingBag },
   { name: "Taxonomy", href: "/dashboard/categories", icon: Tags },
   { name: "Products", href: "/dashboard/inventory", icon: Package },
+  { name: "Campaigns", href: "/dashboard/campaigns", icon: Gift },
   { name: "Reports", href: "/dashboard/reports", icon: BarChart3 },
   { name: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
