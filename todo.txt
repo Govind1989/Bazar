@@ -19,10 +19,7 @@ Static Credentials for Testing:
 
   $env:ANALYZE="true"; npm run build                                                                                                                                       ? for shortcuts
 ──────────────────────────────────────────────────────────
-
-Excellent now replace the taxonomy placement from the cms settings to a new menu in vendor dashboard side bar. before Products. As i created a new    
-   subcategory for a vendor , "MOMO" and published the cms but still i am not seeing the category in the vendor page. Resolve what is wrong. Each vendor 
-   will have their own categories and we will show categories for each vendor in vendor navbar as menu. Impress me                                       
+                                    
 
 In vendor dashboard, in taxonomy management use flow of taxonomy management. i am able to create category for each vendor but unable
 to create/manage sub category for each category created., use same layout and UI we have for the category management for sub category

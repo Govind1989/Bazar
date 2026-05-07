@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback } from "react";
 import { useCategoryProducts } from "@/hooks/useCategoryData";
-import { CATEGORIES, VENDORS, Product } from "@/data/mock";
+import { CATEGORIES, SERVICE_CATEGORIES, VENDORS, Product } from "@/data/mock";
 import { Typography } from "@/components/ui/typography";
 import { ProductCard } from "@/components/shared/ProductCard";
 import { ChevronRight, Search, SlidersHorizontal, ChevronDown } from "lucide-react";
@@ -27,7 +27,7 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
     setIsHydrated(true);
   }, []);
 
-  const category = CATEGORIES.find((c) => c.slug === categorySlug);
+  const category = [...CATEGORIES, ...SERVICE_CATEGORIES].find((c) => c.slug === categorySlug);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   
   const [filters, setFilters] = useState({

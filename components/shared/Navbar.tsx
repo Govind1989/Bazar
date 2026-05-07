@@ -264,7 +264,7 @@ export function Navbar() {
                   {CATEGORIES.map((cat) => (
                     <Link 
                       key={cat.id} 
-                      href={`/categories?id=${cat.id}`}
+                      href={`/${cat.slug}`}
                       onClick={() => setIsMegaMenuOpen(false)}
                       className="group flex items-start gap-4 p-4 rounded-2xl hover:bg-neutral-50 dark:hover:bg-neutral-900/50 transition-all border border-transparent hover:border-neutral-100 dark:hover:border-neutral-800"
                     >
@@ -290,7 +290,7 @@ export function Navbar() {
                   {SERVICE_CATEGORIES.map((cat) => (
                     <Link 
                       key={cat.id} 
-                      href={`/categories?id=${cat.id}`}
+                      href={`/${cat.slug}`}
                       onClick={() => setIsMegaMenuOpen(false)}
                       className="group flex items-center gap-4 p-4 rounded-2xl hover:bg-neutral-50 dark:hover:bg-neutral-900/50 transition-all border border-transparent hover:border-neutral-100 dark:hover:border-neutral-800"
                     >

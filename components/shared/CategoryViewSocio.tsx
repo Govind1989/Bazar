@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { useCategoryProducts } from "@/hooks/useCategoryData";
-import { CATEGORIES, VENDORS, Product } from "@/data/mock";
+import { CATEGORIES, SERVICE_CATEGORIES, VENDORS, Product } from "@/data/mock";
 import { Typography } from "@/components/ui/typography";
 import { 
   ChevronRight, 
@@ -42,7 +42,7 @@ interface CategoryViewSocioProps {
 }
 
 export default function CategoryViewSocio({ categorySlug }: CategoryViewSocioProps) {
-  const category = CATEGORIES.find((c) => c.slug === categorySlug);
+  const category = [...CATEGORIES, ...SERVICE_CATEGORIES].find((c) => c.slug === categorySlug);
   const [likedProducts, setLikedProducts] = useState<Set<string>>(new Set());
   const [showFilters, setShowFilters] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
