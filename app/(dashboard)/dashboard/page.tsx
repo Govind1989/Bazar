@@ -14,11 +14,11 @@ export default function DashboardPage() {
   const { data: inventory, isLoading: inventoryLoading } = useInventoryAlerts();
 
   return (
-    <div className="p-8 space-y-8 animate-in fade-in duration-700">
+    <div className="p-4 sm:p-8 space-y-6 sm:space-y-8 animate-in fade-in duration-700">
       {/* Stats Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <StatsCard 
-          label="Revenue (this month)" 
+          label="Revenue" 
           value={`NPR ${((stats?.revenue || 0) / 100000).toFixed(1)}L`} 
           change={stats?.revenueChange} 
           icon={Wallet}
@@ -32,7 +32,7 @@ export default function DashboardPage() {
           loading={statsLoading}
         />
         <StatsCard 
-          label="Products Listed" 
+          label="Products" 
           value={stats?.productsListed.toString() || "0"} 
           description={`${stats?.outOfStock} out of stock`}
           icon={Package}
@@ -47,46 +47,44 @@ export default function DashboardPage() {
         />
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
         {/* Recent Orders Table */}
         <Card className="lg:col-span-2 p-0 overflow-hidden">
-          <div className="p-6 border-b border-bazar-gray-100 dark:border-bazar-gray-900 flex justify-between items-center">
-            <Typography variant="titleSm" className="uppercase tracking-widest text-xs opacity-60">Recent Orders</Typography>
-            <button className="text-[10px] font-mono uppercase tracking-widest hover:underline opacity-40 hover:opacity-100 transition-opacity">
+          <div className="p-4 sm:p-6 border-b border-bazar-gray-100 dark:border-bazar-gray-900 flex justify-between items-center">
+            <Typography variant="titleSm" className="uppercase tracking-widest text-[10px] sm:text-xs opacity-60">Recent Orders</Typography>
+            <button className="text-[9px] sm:text-[10px] font-mono uppercase tracking-widest hover:underline opacity-40 hover:opacity-100 transition-opacity">
               View All
             </button>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full text-left">
+            <table className="w-full text-left min-w-[500px] sm:min-w-0">
               <thead>
                 <tr className="bg-bazar-gray-50 dark:bg-bazar-gray-950 border-b border-bazar-gray-100 dark:border-bazar-gray-900">
-                  <th className="px-6 py-3 text-[10px] font-mono uppercase tracking-widest text-bazar-gray-500">Order</th>
-                  <th className="px-6 py-3 text-[10px] font-mono uppercase tracking-widest text-bazar-gray-500">Customer</th>
-                  <th className="px-6 py-3 text-[10px] font-mono uppercase tracking-widest text-bazar-gray-500">Date</th>
-                  <th className="px-6 py-3 text-[10px] font-mono uppercase tracking-widest text-bazar-gray-500 text-right">Amount</th>
-                  <th className="px-6 py-3 text-[10px] font-mono uppercase tracking-widest text-bazar-gray-500 text-right">Status</th>
+                  <th className="px-4 sm:px-6 py-2 sm:py-3 text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-bazar-gray-500">Order</th>
+                  <th className="px-4 sm:px-6 py-2 sm:py-3 text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-bazar-gray-500">Customer</th>
+                  <th className="px-4 sm:px-6 py-2 sm:py-3 text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-bazar-gray-500 text-right">Amount</th>
+                  <th className="px-4 sm:px-6 py-2 sm:py-3 text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-bazar-gray-500 text-right">Status</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-bazar-gray-100 dark:divide-bazar-gray-900">
                 {ordersLoading ? (
                    [1, 2, 3, 4, 5].map((i) => (
                     <tr key={i}>
-                      <td colSpan={5} className="px-6 py-4">
-                         <Skeleton className="h-8 w-full" />
+                      <td colSpan={4} className="px-4 sm:px-6 py-3 sm:py-4">
+                         <Skeleton className="h-6 sm:h-8 w-full" />
                       </td>
                     </tr>
                    ))
                 ) : (
                   orders?.map((order) => (
                     <tr key={order.id} className="hover:bg-bazar-gray-50 dark:hover:bg-bazar-gray-950 transition-colors group">
-                      <td className="px-6 py-4 font-mono text-xs">{order.id}</td>
-                      <td className="px-6 py-4">
-                        <Typography variant="bodySm" className="text-bazar-black dark:text-bazar-white">{order.customer}</Typography>
-                        <Typography variant="bodySm" className="text-[10px] opacity-40">{order.product}</Typography>
+                      <td className="px-4 sm:px-6 py-3 sm:py-4 font-mono text-[10px] sm:text-xs">{order.id}</td>
+                      <td className="px-4 sm:px-6 py-3 sm:py-4">
+                        <Typography variant="bodySm" className="text-[11px] sm:text-sm text-bazar-black dark:text-bazar-white truncate max-w-[100px] sm:max-w-none">{order.customer}</Typography>
+                        <Typography variant="bodySm" className="text-[8px] sm:text-[10px] opacity-40 truncate max-w-[100px] sm:max-w-none">{order.product}</Typography>
                       </td>
-                      <td className="px-6 py-4 text-xs opacity-60">{order.date}</td>
-                      <td className="px-6 py-4 text-right font-medium text-xs">NPR {order.amount.toLocaleString()}</td>
-                      <td className="px-6 py-4 text-right">
+                      <td className="px-4 sm:px-6 py-3 sm:py-4 text-right font-medium text-[10px] sm:text-xs">NPR {order.amount.toLocaleString()}</td>
+                      <td className="px-4 sm:px-6 py-3 sm:py-4 text-right">
                          <StatusBadge status={order.status} />
                       </td>
                     </tr>
@@ -99,28 +97,28 @@ export default function DashboardPage() {
 
         {/* Sidebar Cards */}
         <div className="space-y-4">
-          <Card className="p-6">
-            <Typography variant="titleSm" className="uppercase tracking-widest text-xs opacity-60 mb-6">Inventory Alerts</Typography>
-            <div className="space-y-4">
+          <Card className="p-4 sm:p-6">
+            <Typography variant="titleSm" className="uppercase tracking-widest text-[10px] sm:text-xs opacity-60 mb-4 sm:mb-6">Inventory Alerts</Typography>
+            <div className="space-y-3 sm:space-y-4">
               {inventoryLoading ? (
-                <div className="space-y-4">
-                   {[1, 2, 3].map(i => <Skeleton key={i} className="h-8 w-full" />)}
+                <div className="space-y-3 sm:space-y-4">
+                   {[1, 2, 3].map(i => <Skeleton key={i} className="h-6 sm:h-8 w-full" />)}
                 </div>
               ) : (
                 inventory?.map((item) => (
-                  <div key={item.name} className="flex justify-between items-center py-2 border-b border-bazar-gray-100 dark:border-bazar-gray-900 last:border-none">
-                    <Typography variant="bodySm" className="text-xs">{item.name}</Typography>
+                  <div key={item.name} className="flex justify-between items-center py-1.5 sm:py-2 border-b border-bazar-gray-100 dark:border-bazar-gray-900 last:border-none">
+                    <Typography variant="bodySm" className="text-[10px] sm:text-xs truncate max-w-[120px]">{item.name}</Typography>
                     <div className={cn(
-                      "font-mono text-[10px] px-2 py-0.5 rounded",
+                      "font-mono text-[8px] sm:text-[10px] px-1.5 sm:px-2 py-0.5 rounded",
                       item.low ? "bg-red-100 text-red-600 dark:bg-red-950/30" : "bg-bazar-gray-100 dark:bg-bazar-gray-900"
                     )}>
-                      {item.stock} LEFT {item.low && "(LOW)"}
+                      {item.stock} {item.low && "(LOW)"}
                     </div>
                   </div>
                 ))
               )}
             </div>
-            <Button variant="outline" className="w-full mt-6 text-[10px] h-8">Stock Report</Button>
+            <Button variant="outline" className="w-full mt-4 sm:mt-6 text-[9px] sm:text-[10px] h-8">Stock Report</Button>
           </Card>
 
           <Card className="p-6 border-2 border-purple-500/20 bg-purple-500/[0.02]">
