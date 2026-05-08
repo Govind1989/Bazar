@@ -4,9 +4,10 @@ import { useState } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Typography } from "@/components/ui/typography";
 import { MOCK_CONVERSATIONS, Conversation } from "@/data/messages";
-import { MessageSquare, Search, Send, User, MoreVertical, Paperclip, Smile, ChevronRight, ChevronLeft } from "lucide-react";
+import { Search, Send, User, MoreVertical, Paperclip, Smile, ChevronRight, ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function VendorMessagesPage() {
   const { user } = useAuthStore();
@@ -29,11 +30,16 @@ export default function VendorMessagesPage() {
               size="icon" 
               onClick={() => setShowHistory(!showHistory)}
               className={cn(
-                "rounded-full h-10 w-10 border-2 transition-all hover:bg-bazar-black hover:text-bazar-white dark:hover:bg-bazar-white dark:hover:text-bazar-black",
+                "rounded-full h-10 w-10 border-2 transition-all hover:bg-bazar-black hover:text-bazar-white dark:hover:bg-bazar-white dark:hover:text-bazar-black overflow-hidden",
                 !showHistory && "bg-bazar-black text-bazar-white dark:bg-bazar-white dark:text-bazar-black"
               )}
             >
-              {showHistory ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+              <motion.div
+                animate={{ rotate: showHistory ? 0 : 180 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </motion.div>
             </Button>
             <div className="w-px h-8 bg-bazar-gray-100 dark:bg-bazar-gray-900 mx-2" />
             <Button variant="outline" size="sm" className="rounded-full text-[10px] uppercase font-bold tracking-widest px-6">Broadcast</Button>
