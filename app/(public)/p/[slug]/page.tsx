@@ -22,19 +22,19 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   return (
-    <main className="pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto">
+    <main className="pt-24 sm:pt-32 pb-12 sm:pb-24 px-4 sm:px-6 md:px-12 max-w-7xl mx-auto">
       <Link 
         href={`/${vendor.slug}`}
-        className="inline-flex items-center gap-2 text-bazar-gray-500 hover:text-bazar-black dark:hover:text-bazar-white mb-12 transition-colors group"
+        className="inline-flex items-center gap-2 text-bazar-gray-500 hover:text-bazar-black dark:hover:text-bazar-white mb-6 sm:mb-12 transition-colors group"
       >
         <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
-        <Typography variant="navLink" className="uppercase tracking-widest text-xs">Back to {vendor.name}</Typography>
+        <Typography variant="navLink" className="uppercase tracking-widest text-[10px] sm:text-xs">Back to {vendor.name}</Typography>
       </Link>
 
-      <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-16 lg:gap-24">
         {/* Product Images */}
-        <div className="space-y-6">
-           <div className="relative aspect-square rounded-2xl overflow-hidden bg-bazar-gray-100 dark:bg-bazar-gray-900 border border-bazar-gray-200 dark:border-bazar-gray-800">
+        <div className="space-y-4 sm:space-y-6">
+           <div className="relative aspect-square rounded-xl sm:rounded-2xl overflow-hidden bg-bazar-gray-100 dark:bg-bazar-gray-900 border border-bazar-gray-200 dark:border-bazar-gray-800">
               <Image 
                 src={product.image}
                 alt={product.name}
@@ -43,7 +43,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 priority
               />
            </div>
-           <div className="grid grid-cols-4 gap-4">
+           <div className="grid grid-cols-4 gap-2 sm:gap-4">
               {[1, 2, 3, 4].map((i) => (
                 <div key={i} className="aspect-square rounded-lg bg-bazar-gray-100 dark:bg-bazar-gray-900 border border-bazar-gray-200 dark:border-bazar-gray-800 opacity-50" />
               ))}
@@ -52,57 +52,56 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
         {/* Product Details */}
         <div className="flex flex-col">
-          <div className="mb-8">
-            <Typography variant="displaySm" className="mb-2">{product.name}</Typography>
+          <div className="mb-6 sm:mb-8">
+            <Typography variant="displaySm" className="mb-1 sm:mb-2 text-2xl sm:text-4xl">{product.name}</Typography>
             <Link href={`/${vendor.slug}`} className="inline-block">
-               <Typography variant="bodySm" className="text-bazar-gray-500 hover:text-bazar-black dark:hover:text-bazar-white transition-colors">
+               <Typography variant="bodySm" className="text-[11px] sm:text-sm text-bazar-gray-500 hover:text-bazar-black dark:hover:text-bazar-white transition-colors">
                   by {vendor.name}
                </Typography>
             </Link>
           </div>
 
-          <div className="flex items-center gap-4 mb-8">
-            <Typography variant="displaySm">NPR {product.price.toLocaleString()}</Typography>
+          <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
+            <Typography variant="displaySm" className="text-xl sm:text-3xl">NPR {product.price.toLocaleString()}</Typography>
             {product.compareAtPrice && (
-              <Typography variant="titleMd" className="text-bazar-gray-400 line-through">
+              <Typography variant="titleMd" className="text-sm sm:text-xl text-bazar-gray-400 line-through">
                 NPR {product.compareAtPrice.toLocaleString()}
               </Typography>
             )}
           </div>
 
-          <div className="space-y-6 mb-12 py-8 border-y border-bazar-gray-100 dark:border-bazar-gray-900">
-             <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-bazar-gray-100 dark:bg-bazar-gray-900 flex items-center justify-center">
-                   <Star className="w-5 h-5 text-bazar-black dark:text-bazar-white" />
+          <div className="space-y-4 sm:space-y-6 mb-8 sm:mb-12 py-6 sm:py-8 border-y border-bazar-gray-100 dark:border-bazar-gray-900">
+             <div className="flex items-center gap-3 sm:gap-4">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-bazar-gray-100 dark:bg-bazar-gray-900 flex items-center justify-center">
+                   <Star className="w-4 h-4 sm:w-5  text-bazar-black dark:text-bazar-white" />
                 </div>
                 <div>
-                   <Typography variant="titleSm">Premium Quality</Typography>
-                   <Typography variant="bodySm">Verified and inspected by Bazar Quality Control.</Typography>
+                   <Typography variant="titleSm" className="text-xs sm:text-base">Premium Quality</Typography>
+                   <Typography variant="bodySm" className="text-[10px] sm:text-sm opacity-60">Verified and inspected by Bazar QC.</Typography>
                 </div>
              </div>
-             <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-bazar-gray-100 dark:bg-bazar-gray-900 flex items-center justify-center">
-                   <ShieldCheck className="w-5 h-5 text-bazar-black dark:text-bazar-white" />
+             <div className="flex items-center gap-3 sm:gap-4">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-bazar-gray-100 dark:bg-bazar-gray-900 flex items-center justify-center">
+                   <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5 text-bazar-black dark:text-bazar-white" />
                 </div>
                 <div>
-                   <Typography variant="titleSm">7-Day Guarantee</Typography>
-                   <Typography variant="bodySm">Full refund if the product doesn't meet expectations.</Typography>
+                   <Typography variant="titleSm" className="text-xs sm:text-base">7-Day Guarantee</Typography>
+                   <Typography variant="bodySm" className="text-[10px] sm:text-sm opacity-60">Full refund if not met expectations.</Typography>
                 </div>
              </div>
           </div>
 
-          <div className="mb-12">
-            <Typography variant="titleSm" className="mb-4 uppercase tracking-widest text-xs opacity-60">Description</Typography>
-            <Typography variant="bodyMd" className="leading-relaxed">
+          <div className="mb-8 sm:mb-12">
+            <Typography variant="titleSm" className="mb-3 sm:mb-4 uppercase tracking-widest text-[9px] sm:text-xs opacity-60">Description</Typography>
+            <Typography variant="bodyMd" className="text-sm sm:text-base leading-relaxed opacity-80">
               {product.description} Experience the best of {vendor.name} with our carefully curated {product.name}. 
-              Built with attention to detail and high-quality materials, this product is designed for those 
-              who appreciate excellence in the {product.category} category.
+              Built with attention to detail and high-quality materials.
             </Typography>
           </div>
 
-          <div className="mt-auto flex flex-col sm:flex-row gap-4">
-            <AddToCartButton product={product} className="flex-1" />
-            <Button variant="outline" size="lg" className="flex-1">Add to Wishlist</Button>
+          <div className="mt-auto flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <AddToCartButton product={product} className="flex-1 h-12 sm:h-14 rounded-xl" />
+            <Button variant="outline" size="lg" className="flex-1 h-12 sm:h-14 rounded-xl text-xs sm:text-base">Add to Wishlist</Button>
           </div>
         </div>
       </div>

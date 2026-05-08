@@ -42,9 +42,9 @@ const FOOTER_SECTIONS = [
 
 export function Footer() {
   return (
-    <footer className="bg-bazar-gray-950 text-bazar-white py-24 px-6 md:px-12 border-t border-bazar-gray-900">
-      <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12">
-        <div className="col-span-2 lg:col-span-1">
+    <footer className="bg-bazar-gray-950 text-bazar-white py-12 md:py-24 px-6 md:px-12 border-t border-bazar-gray-900">
+      <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 md:gap-12">
+        <div className="col-span-2 lg:col-span-1 mb-8 md:mb-0">
           <div className="flex items-center gap-2 mb-6">
             <div className="w-8 h-8 bg-bazar-white rounded-full flex items-center justify-center">
               <div className="w-4 h-4 bg-bazar-black rounded-full" />

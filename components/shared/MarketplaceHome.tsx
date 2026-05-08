@@ -188,7 +188,7 @@ export default function MarketplaceHome() {
 
             <motion.h1
               variants={fadeUp}
-              className="text-4xl md:text-5xl lg:text-6xl font-semibold text-neutral-900 dark:text-white tracking-tight leading-[1.05] mb-6"
+              className="text-3xl md:text-5xl lg:text-6xl font-semibold text-neutral-900 dark:text-white tracking-tight leading-[1.05] mb-6"
               style={{ letterSpacing: "-0.03em" }}
             >
               The better way to{" "}
@@ -197,7 +197,7 @@ export default function MarketplaceHome() {
 
             <motion.p
               variants={fadeUp}
-              className="text-lg md:text-xl text-neutral-700 dark:text-neutral-300 max-w-xl mb-10 leading-relaxed"
+              className="text-base md:text-xl text-neutral-700 dark:text-neutral-300 max-w-xl mb-10 leading-relaxed"
             >
               A unified ecosystem for multi-category vendors. Launch your store
               in minutes with AI-scaffolding and reach customers across the
@@ -324,7 +324,7 @@ export default function MarketplaceHome() {
             {activeTab === "products" && (
               <>
                 {featuredProducts.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                  <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-8">
                     {featuredProducts.map((product, idx) => {
                       const vendor = VENDORS.find(
                         (v) => v.id === product.vendorId
@@ -359,7 +359,7 @@ export default function MarketplaceHome() {
             {activeTab === "services" && (
               <>
                 {featuredServices.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                  <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-8">
                     {featuredServices.map((service: any, idx: number) => (
                       <motion.div
                         key={service.id}
@@ -458,7 +458,7 @@ export default function MarketplaceHome() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
               {flashSaleProducts.map((product: any) => {
                 const vendor = VENDORS.find((v) => v.id === product.vendorId);
                 return (
@@ -519,7 +519,7 @@ export default function MarketplaceHome() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
               {flashSaleProducts.map((product: any) => {
                 const vendor = VENDORS.find((v) => v.id === product.vendorId);
                 return (
@@ -699,34 +699,34 @@ export default function MarketplaceHome() {
           >
             Trusted Vendors
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
             {trustedVendors.map((vendor) => (
               <Link key={vendor.id} href={`/${vendor.slug}`}>
-                <Card className="p-6 bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800 rounded-xl hover:border-neutral-900 dark:hover:border-white transition-colors cursor-pointer group h-full">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="w-12 h-12 rounded-full bg-neutral-100 dark:bg-neutral-900 overflow-hidden relative shrink-0">
+                <Card className="p-3 sm:p-6 bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800 rounded-xl hover:border-neutral-900 dark:hover:border-white transition-colors cursor-pointer group h-full">
+                  <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 sm:gap-4 mb-3 sm:mb-4">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-neutral-100 dark:bg-neutral-900 overflow-hidden relative shrink-0">
                       <Image
                         src={vendor.logo}
                         alt={vendor.name}
                         fill
                         className="object-cover"
-                        sizes="48px"
+                        sizes="(max-width: 640px) 40px, 48px"
                       />
                     </div>
                     <div className="min-w-0">
-                      <h3 className="font-semibold text-neutral-900 dark:text-white group-hover:text-blue-500 transition-colors truncate">
+                      <h3 className="font-semibold text-neutral-900 dark:text-white group-hover:text-blue-500 transition-colors truncate text-sm sm:text-base">
                         {vendor.name}
                       </h3>
-                      <div className="flex items-center gap-1 text-xs text-neutral-500 dark:text-neutral-400">
-                        <Star className="w-3 h-3 fill-orange-400 text-orange-400" />
+                      <div className="flex items-center justify-center sm:justify-start gap-1 text-[10px] sm:text-xs text-neutral-500 dark:text-neutral-400">
+                        <Star className="w-3 h-3  fill-orange-400 text-orange-400" />
                         <span className="font-medium text-neutral-900 dark:text-white">
                           {vendor.rating}
                         </span>
-                        <span>· {vendor.categories.join(', ')}</span>
+                        <span className="hidden sm:inline">· {vendor.categories.join(', ')}</span>
                       </div>
                     </div>
                   </div>
-                  <p className="text-sm text-neutral-500 dark:text-neutral-400 line-clamp-2 leading-relaxed">
+                  <p className="text-[11px] sm:text-sm text-neutral-500 dark:text-neutral-400 line-clamp-2 leading-relaxed hidden sm:block">
                     {vendor.description}
                   </p>
                 </Card>

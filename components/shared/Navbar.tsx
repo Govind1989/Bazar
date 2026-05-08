@@ -10,7 +10,7 @@ import { AuthModal } from "./AuthModal";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useSystemStore } from "@/store/useSystemStore";
 import { useTranslation } from "@/hooks/useTranslation";
-import { User, Globe, Sun, Moon, LayoutDashboard, LayoutGrid, Sparkles, ChevronDown, Utensils, Shirt, Zap, TreePine, Armchair, Monitor, Smartphone, Calendar, MapPin, Clock, ShoppingBag, ArrowRight } from "lucide-react";
+import { User, Globe, Sun, Moon, LayoutDashboard, LayoutGrid, Sparkles, ChevronDown, Utensils, Shirt, Zap, TreePine, Armchair, Monitor, Smartphone, Calendar, MapPin, Clock, ShoppingBag, ArrowRight, Menu, X as CloseIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { CalendarToggle } from "./CalendarToggle";
 import { motion, AnimatePresence } from "framer-motion";
@@ -22,6 +22,7 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user, isAuthenticated, activeRole, logout } = useAuthStore();
   const { language, setLanguage, marketplaceView, setMarketplaceView } = useSystemStore();
   const { theme, setTheme } = useTheme();
@@ -87,20 +88,30 @@ export function Navbar() {
     <>
     <nav
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 h-16 flex items-center px-6 md:px-12 border-b",
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 h-16 flex items-center px-4 md:px-12 border-b",
         isScrolled || isMegaMenuOpen
           ? "bg-white/80 dark:bg-bazar-black/80 backdrop-blur-md border-bazar-gray-200 dark:border-bazar-gray-800"
           : "bg-transparent border-transparent"
       )}
     >
-      <Link href="/" className="flex items-center gap-2 cursor-pointer">
-        <div className="w-8 h-8 bg-bazar-black dark:bg-bazar-white rounded-full flex items-center justify-center">
-          <div className="w-4 h-4 bg-white dark:bg-bazar-black rounded-full" />
-        </div>
-        <Typography variant="titleMd" as="span" className="font-mono tracking-tighter">
-          BAZAR
-        </Typography>
-      </Link>
+      <div className="flex items-center gap-4">
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="md:hidden" 
+          onClick={() => setIsMobileMenuOpen(true)}
+        >
+          <Menu className="w-5 h-5" />
+        </Button>
+        <Link href="/" className="flex items-center gap-2 cursor-pointer">
+          <div className="w-8 h-8 bg-bazar-black dark:bg-bazar-white rounded-full flex items-center justify-center">
+            <div className="w-4 h-4 bg-white dark:bg-bazar-black rounded-full" />
+          </div>
+          <Typography variant="titleMd" as="span" className="font-mono tracking-tighter">
+            BAZAR
+          </Typography>
+        </Link>
+      </div>
 
       <div className="hidden md:flex items-center gap-8 ml-12">
         {!isVendorPage && NAV_ITEMS.map((item) => (
@@ -126,16 +137,16 @@ export function Navbar() {
         </button>
       </div>
 
-      <div className="ml-auto flex items-center gap-4">
+      <div className="ml-auto flex items-center gap-2 md:gap-4">
         {mounted && (
-          <div className="flex items-center gap-1 mr-2">
+          <div className="flex items-center gap-1">
             {!isVendorPage && (
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setMarketplaceView(marketplaceView === 'classic' ? 'social' : 'classic')}
                 className={cn(
-                  "h-9 px-4 rounded-full transition-all gap-2 border-2",
+                  "h-9 px-3 md:px-4 rounded-full transition-all gap-2 border-2",
                   marketplaceView === 'social' 
                     ? "bg-fuchsia-50 dark:bg-fuchsia-950/30 border-fuchsia-200 dark:border-fuchsia-800 text-fuchsia-600 shadow-sm" 
                     : "bg-bazar-gray-50 dark:bg-bazar-gray-950 border-bazar-gray-100 dark:border-bazar-gray-900 hover:border-bazar-black dark:hover:border-bazar-white"
@@ -150,16 +161,13 @@ export function Navbar() {
                     className="flex items-center gap-2"
                   >
                     {marketplaceView === 'classic' ? (
-                      <>
-                        <LayoutGrid className="w-4 h-4" />
-                        <span className="text-[10px] font-black uppercase tracking-widest">Classic</span>
-                      </>
+                      <LayoutGrid className="w-4 h-4" />
                     ) : (
-                      <>
-                        <Sparkles className="w-4 h-4" />
-                        <span className="text-[10px] font-black uppercase tracking-widest">Social</span>
-                      </>
+                      <Sparkles className="w-4 h-4" />
                     )}
+                    <span className="text-[10px] font-black uppercase tracking-widest hidden lg:inline">
+                      {marketplaceView === 'classic' ? 'Classic' : 'Social'}
+                    </span>
                   </motion.div>
                 </AnimatePresence>
               </Button>
@@ -183,52 +191,145 @@ export function Navbar() {
           variant="ghost" 
           size="sm" 
           onClick={() => setLanguage(language === 'en' ? 'np' : 'en')}
-          className="gap-2 font-mono text-[10px] tracking-widest hidden md:flex"
+          className="gap-2 font-mono text-[10px] tracking-widest hidden lg:flex"
         >
           <Globe className="w-3.5 h-3.5" />
           {language.toUpperCase()}
         </Button>
-        <CartToggle />
-        <CalendarToggle />
+        <div className="flex items-center gap-1 md:gap-2">
+          <CartToggle />
+          <CalendarToggle />
+        </div>
         {isAuthenticated ? (
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3">
             <Link href={activeRole === 'SuperAdmin' ? '/admin' : activeRole === 'Vendor' ? '/dashboard' : '/account'}>
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="w-8 h-8  border border-bazar-gray-100 dark:border-bazar-gray-900 hover:border-bazar-black dark:hover:border-bazar-white transition-all"
+                className="w-7 h-7 sm:w-8 sm:h-8 border border-bazar-gray-100 dark:border-bazar-gray-900 hover:border-bazar-black dark:hover:border-bazar-white transition-all"
               >
-                <LayoutDashboard className="w-4 h-4" />
+                <LayoutDashboard className="w-3.5 sm:w-4 h-4" />
               </Button>
             </Link>
             
             <button 
               onClick={handleUserClick}
-              className="group relative flex items-center justify-center w-8 h-8 rounded-full transition-transform active:scale-95"
+              className="group relative flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full transition-transform active:scale-95"
             >
               {/* Thin Ring */}
               <div className="absolute inset-0 rounded-full border border-bazar-black/10 dark:border-bazar-white/10 group-hover:border-bazar-black dark:group-hover:border-bazar-white transition-colors" />
               
               {/* Initials Container */}
-              <div className="w-7 h-7 rounded-full bg-bazar-gray-50 dark:bg-bazar-gray-950 flex items-center justify-center overflow-hidden">
-                <Typography variant="bodySm" className="text-[14px] font-black tracking-tighter">
+              <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-bazar-gray-50 dark:bg-bazar-gray-950 flex items-center justify-center overflow-hidden">
+                <Typography variant="bodySm" className="text-[12px] sm:text-[14px] font-black tracking-tighter">
                   {getInitials(user?.name || 'User')}
                 </Typography>
               </div>
             </button>
           </div>
         ) : (
-          <>
-            <Button variant="ghost" size="sm" onClick={() => setIsAuthModalOpen(true)}>
+          <div className="flex items-center gap-1 sm:gap-2">
+            <Button variant="ghost" size="sm" onClick={() => setIsAuthModalOpen(true)} className="h-8 px-2 sm:h-9 sm:px-4 text-[11px] sm:text-sm">
               {t('signIn')}
             </Button>
-            <Button size="sm" onClick={() => setIsAuthModalOpen(true)}>
+            <Button size="sm" onClick={() => setIsAuthModalOpen(true)} className="h-8 px-3 sm:h-9 sm:px-4 text-[11px] sm:text-sm">
               {t('joinBazar')}
             </Button>
-          </>
+          </div>
         )}
       </div>
     </nav>
+    
+    {/* Mobile Menu Drawer */}
+    <AnimatePresence>
+      {isMobileMenuOpen && (
+        <>
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm md:hidden"
+          />
+          <motion.aside
+            initial={{ x: "-100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "-100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="fixed inset-y-0 left-0 w-80 z-[101] bg-white dark:bg-bazar-black md:hidden flex flex-col"
+          >
+            <div className="p-6 border-b border-bazar-gray-100 dark:border-bazar-gray-900 flex justify-between items-center">
+              <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-bazar-black dark:bg-bazar-white rounded-full flex items-center justify-center">
+                  <div className="w-4 h-4 bg-white dark:bg-bazar-black rounded-full" />
+                </div>
+                <Typography variant="titleMd" as="span" className="font-mono tracking-tighter">
+                  BAZAR
+                </Typography>
+              </Link>
+              <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)}>
+                <CloseIcon className="w-5 h-5" />
+              </Button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-6">
+              <div className="space-y-6">
+                <div>
+                  <Typography variant="bodySm" className="uppercase tracking-[0.3em] font-black opacity-30 mb-4 block">Navigation</Typography>
+                  <div className="flex flex-col gap-4">
+                    {NAV_ITEMS.map((item) => (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="text-lg font-black uppercase tracking-tight hover:text-fuchsia-600 transition-colors"
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <Typography variant="bodySm" className="uppercase tracking-[0.3em] font-black opacity-30 mb-4 block">Categories</Typography>
+                  <div className="grid grid-cols-1 gap-2">
+                    {CATEGORIES.slice(0, 6).map((cat) => (
+                      <Link 
+                        key={cat.id} 
+                        href={`/${cat.slug}`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="flex items-center gap-3 p-3 rounded-xl hover:bg-neutral-50 dark:hover:bg-neutral-900/50 transition-all border border-transparent hover:border-neutral-100 dark:hover:border-neutral-800"
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-900 flex items-center justify-center">
+                          <CategoryIcon icon={cat.icon} className="w-4 h-4 text-bazar-gray-500" />
+                        </div>
+                        <span className="text-xs font-bold uppercase tracking-widest">{cat.name}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6 border-t border-bazar-gray-100 dark:border-bazar-gray-900 space-y-4">
+              <Button 
+                variant="outline" 
+                className="w-full justify-start gap-3 rounded-xl"
+                onClick={() => setLanguage(language === 'en' ? 'np' : 'en')}
+              >
+                <Globe className="w-4 h-4" />
+                Language: {language.toUpperCase()}
+              </Button>
+              {!isAuthenticated && (
+                <Button className="w-full rounded-xl" onClick={() => {setIsMobileMenuOpen(false); setIsAuthModalOpen(true);}}>
+                  {t('joinBazar')}
+                </Button>
+              )}
+            </div>
+          </motion.aside>
+        </>
+      )}
+    </AnimatePresence>
     
     <AuthModal 
       isOpen={isAuthModalOpen} 

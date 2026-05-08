@@ -106,32 +106,32 @@ function FeedCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: (index % 10) * 0.1 }}
-      className="group bg-white dark:bg-neutral-950 rounded-[3rem] overflow-hidden border border-neutral-100 dark:border-neutral-900 hover:shadow-[0_60px_100px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_60px_100px_rgba(0,0,0,0.4)] transition-all duration-700"
+      className="group bg-white dark:bg-neutral-950 rounded-[2rem] sm:rounded-[3rem] overflow-hidden border border-neutral-100 dark:border-neutral-900 hover:shadow-[0_60px_100px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_60px_100px_rgba(0,0,0,0.4)] transition-all duration-700"
     >
       {/* Post Header */}
-      <div className="px-7 py-5 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className="w-10 h-10 rounded-2xl overflow-hidden border-2 border-neutral-100 dark:border-neutral-900 group-hover:rotate-6 transition-transform">
+      <div className="px-4 py-3 sm:px-7 sm:py-5 flex items-center justify-between">
+        <div className="flex items-center gap-2 sm:gap-4">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl overflow-hidden border-2 border-neutral-100 dark:border-neutral-900 group-hover:rotate-6 transition-transform">
             <img src={vendor?.logo} alt="" className="w-full h-full object-cover" />
           </div>
           <div>
-            <span className="text-[11px] font-black uppercase tracking-tighter block">{vendor?.name}</span>
-            <span className="text-[9px] font-bold uppercase opacity-30 tracking-widest flex items-center gap-1">
-               <MapPin className="w-2.5 h-2.5" /> {item.location || 'Kathmandu'}
+            <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-tighter block truncate max-w-[100px] sm:max-w-none">{vendor?.name}</span>
+            <span className="text-[8px] sm:text-[9px] font-bold uppercase opacity-30 tracking-widest flex items-center gap-1">
+               <MapPin className="w-2 sm:w-2.5 h-2 sm:h-2.5" /> <span className="truncate max-w-[60px] sm:max-w-none">{item.location || 'Kathmandu'}</span>
             </span>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-           <button onClick={() => onSave(item.id)} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors">
-              <Bookmark className={cn("w-4 h-4 transition-all", isSaved ? "fill-fuchsia-600 text-fuchsia-600" : "opacity-20")} />
+        <div className="flex items-center gap-1 sm:gap-2">
+           <button onClick={() => onSave(item.id)} className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors">
+              <Bookmark className={cn("w-3.5 h-3.5 sm:w-4 sm:h-4 transition-all", isSaved ? "fill-fuchsia-600 text-fuchsia-600" : "opacity-20")} />
            </button>
-           <button className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors">
-              <MoreHorizontal className="w-4 h-4 opacity-20" />
+           <button className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors">
+              <MoreHorizontal className="w-3.5 h-3.5 sm:w-4 sm:h-4 opacity-20" />
            </button>
         </div>
       </div>
 
-      {/* Immersive Media Section ... same logic ... */}
+      {/* Immersive Media Section */}
       <div 
         className="relative overflow-hidden cursor-none group/media"
         style={{ aspectRatio: item.media[0].aspectRatio }}
@@ -141,47 +141,48 @@ function FeedCard({
           alt={item.caption} 
           fill 
           className="object-cover group-hover:scale-110 transition-transform duration-[3s] ease-out"
+          sizes="(max-width: 640px) 50vw, 33vw"
         />
         
         {/* Overlay Gradients */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 opacity-0 sm:group-hover:opacity-100 transition-opacity duration-700" />
         
         {/* Post Badges */}
-        <div className="absolute top-6 left-6 flex flex-col gap-2">
+        <div className="absolute top-3 left-3 sm:top-6 sm:left-6 flex flex-col gap-1 sm:gap-2">
            {item.type === 'flash_sale' && (
-             <div className="px-4 py-1.5 bg-red-600 text-white text-[9px] font-black uppercase rounded-full shadow-2xl flex items-center gap-2">
-                <Flame className="w-3 h-3" /> Flash Sale
+             <div className="px-2 py-1 sm:px-4 sm:py-1.5 bg-red-600 text-white text-[7px] sm:text-[9px] font-black uppercase rounded-full shadow-2xl flex items-center gap-1 sm:gap-2">
+                <Flame className="w-2.5 h-2.5 sm:w-3 sm:h-3" /> Flash
              </div>
            )}
            {item.isLive && (
-             <div className="px-4 py-1.5 bg-fuchsia-600 text-white text-[9px] font-black uppercase rounded-full shadow-2xl flex items-center gap-2">
-                <Sparkles className="w-3 h-3" /> Trending
+             <div className="px-2 py-1 sm:px-4 sm:py-1.5 bg-fuchsia-600 text-white text-[7px] sm:text-[9px] font-black uppercase rounded-full shadow-2xl flex items-center gap-1 sm:gap-2">
+                <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3" /> Trending
              </div>
            )}
         </div>
 
-        {/* Interactive Shop Tag */}
+        {/* Interactive Shop Tag - Hidden on mobile or made simpler */}
         {item.relatedId && (
-           <div className="absolute bottom-6 left-6 right-6 translate-y-20 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-700">
-              <div className="p-4 bg-white/10 backdrop-blur-3xl border border-white/20 rounded-[2rem] flex items-center justify-between text-white shadow-2xl">
-                 <div className="flex items-center gap-4">
-                    <div className="w-14 h-14 rounded-2xl overflow-hidden shadow-2xl rotate-3">
+           <div className="absolute bottom-3 left-3 right-3 sm:bottom-6 sm:left-6 sm:right-6 translate-y-2 sm:translate-y-20 sm:group-hover:translate-y-0 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-700">
+              <div className="p-2 sm:p-4 bg-white/10 backdrop-blur-3xl border border-white/20 rounded-2xl sm:rounded-[2rem] flex items-center justify-between text-white shadow-2xl">
+                 <div className="flex items-center gap-2 sm:gap-4">
+                    <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl rotate-3">
                        <img src={item.media[0].url} alt="" className="w-full h-full object-cover" />
                     </div>
                     <div className="flex flex-col">
-                       <span className="text-[10px] font-black uppercase tracking-widest opacity-60">Shop This</span>
-                       <span className="text-sm font-black tracking-tight truncate w-32">View Details</span>
+                       <span className="text-[8px] sm:text-[10px] font-black uppercase tracking-widest opacity-60">Shop</span>
+                       <span className="text-[10px] sm:text-sm font-black tracking-tight truncate w-20 sm:w-32">Details</span>
                     </div>
                  </div>
-                 <Button className="h-10 px-6 bg-white text-black hover:bg-fuchsia-600 hover:text-white rounded-full text-[10px] font-black uppercase transition-colors">
-                    Buy Now
+                 <Button className="h-7 sm:h-10 px-3 sm:px-6 bg-white text-black hover:bg-fuchsia-600 hover:text-white rounded-full text-[8px] sm:text-[10px] font-black uppercase transition-colors">
+                    Buy
                  </Button>
               </div>
            </div>
         )}
         
-        {/* Custom Cursor Overlay */}
-        <div className="hidden group-hover/media:flex absolute inset-0 items-center justify-center pointer-events-none">
+        {/* Custom Cursor Overlay - Hidden on mobile */}
+        <div className="hidden sm:group-hover/media:flex absolute inset-0 items-center justify-center pointer-events-none">
            <div className="w-12 h-12 rounded-full border-2 border-white/40 flex items-center justify-center backdrop-blur-sm">
               <Plus className="w-6 h-6 text-white" />
            </div>
@@ -189,44 +190,44 @@ function FeedCard({
       </div>
 
       {/* Interaction & Engagement */}
-      <div className="p-8">
-        <div className="flex items-center gap-8 mb-6">
+      <div className="p-4 sm:p-8">
+        <div className="flex items-center gap-4 sm:gap-8 mb-4 sm:mb-6">
            <button 
              onClick={() => onLike(item.id)}
-             className="flex flex-col items-center gap-2 group/btn"
+             className="flex flex-col items-center gap-1 sm:gap-2 group/btn"
            >
              <div className={cn(
-               "w-12 h-12 rounded-full border-2 flex items-center justify-center transition-all duration-500",
+               "w-9 h-9 sm:w-12 sm:h-12 rounded-full border-2 flex items-center justify-center transition-all duration-500",
                isLiked ? "bg-red-50 border-red-200" : "border-neutral-100 dark:border-neutral-900 group-hover/btn:border-red-500"
              )}>
-                <Heart className={cn("w-5 h-5 transition-all", isLiked ? "fill-red-500 text-red-500 scale-125" : "text-neutral-300")} />
+                <Heart className={cn("w-4 h-4 sm:w-5 sm:h-5 transition-all", isLiked ? "fill-red-500 text-red-500 scale-125" : "text-neutral-300")} />
              </div>
-             <span className="text-[10px] font-black uppercase">{formatNumber(item.likes + (isLiked ? 1 : 0))}</span>
+             <span className="text-[8px] sm:text-[10px] font-black uppercase">{formatNumber(item.likes + (isLiked ? 1 : 0))}</span>
            </button>
            
-           <button className="flex flex-col items-center gap-2 group/btn">
-             <div className="w-12 h-12 rounded-full border-2 border-neutral-100 dark:border-neutral-900 flex items-center justify-center group-hover/btn:border-blue-500 transition-all">
-                <MessageSquare className="w-5 h-5 text-neutral-300 group-hover/btn:text-blue-500" />
+           <button className="flex flex-col items-center gap-1 sm:gap-2 group/btn">
+             <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-full border-2 border-neutral-100 dark:border-neutral-900 flex items-center justify-center group-hover/btn:border-blue-500 transition-all">
+                <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-neutral-300 group-hover/btn:text-blue-500" />
              </div>
-             <span className="text-[10px] font-black uppercase">{formatNumber(item.comments)}</span>
+             <span className="text-[8px] sm:text-[10px] font-black uppercase">{formatNumber(item.comments)}</span>
            </button>
            
-           <button className="flex flex-col items-center gap-2 group/btn">
-             <div className="w-12 h-12 rounded-full border-2 border-neutral-100 dark:border-neutral-900 flex items-center justify-center group-hover/btn:border-fuchsia-500 transition-all">
-                <Share2 className="w-5 h-5 text-neutral-300 group-hover/btn:text-fuchsia-500" />
+           <button className="flex flex-col items-center gap-1 sm:gap-2 group/btn">
+             <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-full border-2 border-neutral-100 dark:border-neutral-900 flex items-center justify-center group-hover/btn:border-fuchsia-500 transition-all">
+                <Share2 className="w-4 h-4 sm:w-5 sm:h-5 text-neutral-300 group-hover/btn:text-fuchsia-500" />
              </div>
-             <span className="text-[10px] font-black uppercase">Share</span>
+             <span className="text-[8px] sm:text-[10px] font-black uppercase">Share</span>
            </button>
         </div>
         
-        <p className="text-xs font-medium leading-relaxed opacity-60 line-clamp-2 mb-6">
-           <span className="font-black text-black dark:text-white mr-3 uppercase tracking-tighter">{vendor?.name.split(' ')[0]}</span>
+        <p className="text-[10px] sm:text-xs font-medium leading-relaxed opacity-60 line-clamp-2 mb-4 sm:mb-6">
+           <span className="font-black text-black dark:text-white mr-2 sm:mr-3 uppercase tracking-tighter">{vendor?.name.split(' ')[0]}</span>
            {item.caption}
         </p>
         
-        <div className="flex flex-wrap gap-2">
-           {['#bazar', '#handmade', '#nepal'].map(tag => (
-             <span key={tag} className="text-[9px] font-black text-fuchsia-600 bg-fuchsia-600/5 px-3 py-1.5 rounded-full uppercase tracking-widest cursor-pointer hover:bg-fuchsia-600 hover:text-white transition-colors">{tag}</span>
+        <div className="flex flex-wrap gap-1 sm:gap-2">
+           {['#bazar', '#nepal'].map(tag => (
+             <span key={tag} className="text-[7px] sm:text-[9px] font-black text-fuchsia-600 bg-fuchsia-600/5 px-2 py-1 sm:px-3 sm:py-1.5 rounded-full uppercase tracking-widest cursor-pointer hover:bg-fuchsia-600 hover:text-white transition-colors">{tag}</span>
            ))}
         </div>
       </div>
@@ -531,7 +532,7 @@ export default function MarketPlaceSocio() {
                       items={filteredFeed.slice(0, 4)}
                       gap={32}
                       columnWidth={360}
-                      predictHeight={(item) => (360 * item.media[0].aspectRatio) + 180}
+                      predictHeight={(item, width) => (width * item.media[0].aspectRatio) + 180}
                       renderItem={(item, index) => (
                         <FeedCard 
                           item={item} 
@@ -577,7 +578,7 @@ export default function MarketPlaceSocio() {
                       items={filteredFeed.slice(4)}
                       gap={32}
                       columnWidth={360}
-                      predictHeight={(item) => (360 * item.media[0].aspectRatio) + 180}
+                      predictHeight={(item, width) => (width * item.media[0].aspectRatio) + 180}
                       renderItem={(item, index) => (
                         <FeedCard 
                           item={item} 

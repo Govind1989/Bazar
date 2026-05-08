@@ -317,14 +317,14 @@ export function CategorySelectionMenu({
               initial={{ opacity: 0, y: 10, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.98 }}
-              className="absolute left-0 right-0 top-full mt-2 z-50 p-2 bg-white/95 dark:bg-neutral-950/95 backdrop-blur-2xl border border-neutral-200 dark:border-neutral-800 rounded-[2.5rem] shadow-[0_50px_100px_rgba(0,0,0,0.15)] dark:shadow-[0_50px_100px_rgba(0,0,0,0.5)] overflow-hidden max-h-[70vh] overflow-y-auto no-scrollbar"
+              className="absolute left-0 right-0 top-full mt-2 z-50 p-2 bg-white/95 dark:bg-neutral-950/95 backdrop-blur-2xl border border-neutral-200 dark:border-neutral-800 rounded-3xl sm:rounded-[2.5rem] shadow-[0_50px_100px_rgba(0,0,0,0.15)] dark:shadow-[0_50px_100px_rgba(0,0,0,0.5)] overflow-hidden max-h-[70vh] overflow-y-auto no-scrollbar"
             >
               {!searchQuery ? (
-                <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div className="p-4 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
                   {/* Left Column: Tips & History */}
-                  <div className="space-y-8">
-                    <div className="space-y-4">
-                       <Typography variant="bodySm" className="text-[10px] font-black uppercase tracking-[0.2em] opacity-30 flex items-center gap-2">
+                  <div className="space-y-6 sm:space-y-8">
+                    <div className="space-y-3 sm:space-y-4">
+                       <Typography variant="bodySm" className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] opacity-30 flex items-center gap-2">
                           <History className="w-3 h-3" /> Recent Searches
                        </Typography>
                        {recentSearches.length > 0 ? (
@@ -333,7 +333,7 @@ export function CategorySelectionMenu({
                               <div key={s} className="flex items-center justify-between group/item">
                                 <button 
                                   onClick={() => setSearchQuery(s)}
-                                  className="flex-1 text-left py-2 text-sm font-medium hover:text-fuchsia-600 transition-colors truncate"
+                                  className="flex-1 text-left py-1.5 sm:py-2 text-xs sm:text-sm font-medium hover:text-fuchsia-600 transition-colors truncate"
                                 >
                                   {s}
                                 </button>
@@ -347,55 +347,55 @@ export function CategorySelectionMenu({
                             ))}
                          </div>
                        ) : (
-                         <p className="text-xs opacity-40 italic">No recent searches yet.</p>
+                         <p className="text-[10px] sm:text-xs opacity-40 italic">No recent searches yet.</p>
                        )}
                     </div>
 
-                    <div className="space-y-4 pt-4 border-t border-neutral-100 dark:border-neutral-900">
-                      <Typography variant="bodySm" className="text-[10px] font-black uppercase tracking-[0.2em] opacity-30">Search Tips</Typography>
-                      <div className="space-y-3">
+                    <div className="space-y-3 sm:space-y-4 pt-4 border-t border-neutral-100 dark:border-neutral-900">
+                      <Typography variant="bodySm" className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] opacity-30">Search Tips</Typography>
+                      <div className="space-y-2.5 sm:space-y-3">
                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-900 flex items-center justify-center text-xs font-black text-fuchsia-600">@</div>
-                            <p className="text-[11px] font-medium opacity-60">Prefix with <span className="font-black">@</span> to find Trusted Vendors</p>
+                            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-neutral-100 dark:bg-neutral-900 flex items-center justify-center text-[10px] sm:text-xs font-black text-fuchsia-600">@</div>
+                            <p className="text-[10px] sm:text-[11px] font-medium opacity-60">Prefix with <span className="font-black">@</span> to find Vendors</p>
                          </div>
                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-900 flex items-center justify-center text-xs font-black text-fuchsia-600">#</div>
-                            <p className="text-[11px] font-medium opacity-60">Prefix with <span className="font-black">#</span> to find Products or Services</p>
+                            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-neutral-100 dark:bg-neutral-900 flex items-center justify-center text-[10px] sm:text-xs font-black text-fuchsia-600">#</div>
+                            <p className="text-[10px] sm:text-[11px] font-medium opacity-60">Prefix with <span className="font-black">#</span> to find Products</p>
                          </div>
                       </div>
                     </div>
                   </div>
 
                   {/* Right Column: Trending */}
-                  <div className="space-y-8">
-                    <div className="space-y-6">
-                       <Typography variant="bodySm" className="text-[10px] font-black uppercase tracking-[0.2em] opacity-30 flex items-center gap-2">
+                  <div className="space-y-6 sm:space-y-8">
+                    <div className="space-y-4 sm:space-y-6">
+                       <Typography variant="bodySm" className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] opacity-30 flex items-center gap-2">
                           <TrendingUp className="w-3 h-3" /> Trending Vendors
                        </Typography>
-                       <div className="flex flex-col gap-4">
+                       <div className="flex flex-col gap-3 sm:gap-4">
                           {trendingVendors.map(vendor => (
-                            <Link key={vendor.id} href={`/${vendor.slug}`} className="flex items-center gap-4 group/v" onClick={() => setIsFocused(false)}>
-                               <div className="w-10 h-10 rounded-xl overflow-hidden bg-neutral-100 border border-neutral-100 dark:border-neutral-900 transition-transform group-hover/v:scale-110">
+                            <Link key={vendor.id} href={`/${vendor.slug}`} className="flex items-center gap-3 sm:gap-4 group/v" onClick={() => setIsFocused(false)}>
+                               <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl overflow-hidden bg-neutral-100 border border-neutral-100 dark:border-neutral-900 transition-transform group-hover/v:scale-110">
                                   <img src={vendor.logo} alt="" className="w-full h-full object-cover" />
                                </div>
-                               <div className="flex-1">
-                                  <Typography variant="bodySm" className="font-bold uppercase tracking-tighter text-[11px] group-hover/v:text-fuchsia-600 transition-colors">{vendor.name}</Typography>
-                                  <Typography variant="bodySm" className="text-[9px] opacity-40 uppercase tracking-widest">{vendor.categories[0]}</Typography>
+                               <div className="flex-1 min-w-0">
+                                  <Typography variant="bodySm" className="font-bold uppercase tracking-tighter text-[10px] sm:text-[11px] group-hover/v:text-fuchsia-600 transition-colors truncate">{vendor.name}</Typography>
+                                  <Typography variant="bodySm" className="text-[8px] sm:text-[9px] opacity-40 uppercase tracking-widest truncate">{vendor.categories[0]}</Typography>
                                </div>
-                               <ArrowRight className="w-3 h-3 opacity-0 group-hover/v:opacity-100 group-hover/v:translate-x-1 transition-all text-fuchsia-600" />
+                               <ArrowRight className="w-3 h-3 opacity-0 group-hover/v:opacity-100 group-hover/v:translate-x-1 transition-all text-fuchsia-600 shrink-0" />
                             </Link>
                           ))}
                        </div>
                     </div>
 
-                    <div className="space-y-6 pt-4 border-t border-neutral-100 dark:border-neutral-900">
-                       <Typography variant="bodySm" className="text-[10px] font-black uppercase tracking-[0.2em] opacity-30">Featured Collections</Typography>
-                       <div className="flex flex-wrap gap-2">
+                    <div className="space-y-4 sm:space-y-6 pt-4 border-t border-neutral-100 dark:border-neutral-900">
+                       <Typography variant="bodySm" className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] opacity-30">Featured Collections</Typography>
+                       <div className="flex flex-wrap gap-1.5 sm:gap-2">
                           {trendingItems.map(item => (
                             <button 
                               key={item.id}
                               onClick={() => setSearchQuery(`#${item.name}`)}
-                              className="px-4 py-2 rounded-xl bg-neutral-100 dark:bg-neutral-900 text-[10px] font-black uppercase tracking-widest hover:bg-fuchsia-600 hover:text-white transition-all"
+                              className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl bg-neutral-100 dark:bg-neutral-900 text-[9px] sm:text-[10px] font-black uppercase tracking-widest hover:bg-fuchsia-600 hover:text-white transition-all"
                             >
                               {item.name}
                             </button>

@@ -22,31 +22,32 @@ export function MinimalTemplate({ vendor, cms, products }: TemplateProps) {
     )}>
       {/* Dynamic Header Style */}
       <header className={cn(
-        "h-20 flex items-center justify-between px-6 md:px-12 border-b transition-all",
+        "h-16 sm:h-20 flex items-center justify-between px-4 sm:px-6 md:px-12 border-b transition-all",
         theme.headerStyle === 'transparent' 
           ? "bg-transparent border-transparent" 
           : "bg-bazar-white dark:bg-bazar-black border-bazar-gray-100 dark:border-bazar-gray-900"
       )}>
-        <Typography variant="titleMd" className="font-bold tracking-tighter">
+        <Typography variant="titleMd" className="font-bold tracking-tighter text-sm sm:text-base">
           {vendor.name.toUpperCase()}
         </Typography>
-        <div className="flex gap-6">
-           <Typography variant="navLink" className="opacity-60 cursor-pointer hover:opacity-100">Shop</Typography>
-           <Typography variant="navLink" className="opacity-60 cursor-pointer hover:opacity-100">About</Typography>
+        <div className="flex gap-4 sm:gap-6">
+           <Typography variant="navLink" className="opacity-60 cursor-pointer hover:opacity-100 text-[10px] sm:text-xs">Shop</Typography>
+           <Typography variant="navLink" className="opacity-60 cursor-pointer hover:opacity-100 text-[10px] sm:text-xs">About</Typography>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="px-6 md:px-12 py-24 max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-        <div>
-           <Typography variant="displayLg" className="mb-6 leading-[1.05]">
+      <section className="px-4 sm:px-6 md:px-12 py-12 sm:py-24 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-16 items-center">
+        <div className="order-2 lg:order-1 text-center lg:text-left">
+           <Typography variant="displayLg" className="mb-4 sm:mb-6 leading-[1.05] text-3xl sm:text-5xl lg:text-7xl">
               {cms.heroTitle}
            </Typography>
-           <Typography variant="bodyMd" className="text-xl mb-10 max-w-md opacity-60">
+           <Typography variant="bodyMd" className="text-sm sm:text-xl mb-6 sm:mb-10 max-w-md mx-auto lg:mx-0 opacity-60">
               {cms.heroSubtitle}
            </Typography>
            <Button 
               size="lg" 
+              className="h-10 sm:h-12 px-6 sm:px-8 text-xs sm:text-base"
               style={{ 
                  backgroundColor: theme.primaryColor, 
                  color: '#fff',
@@ -56,7 +57,7 @@ export function MinimalTemplate({ vendor, cms, products }: TemplateProps) {
               Shop Collection
            </Button>
         </div>
-        <div className="relative aspect-square rounded-3xl overflow-hidden border border-bazar-gray-100 dark:border-bazar-gray-900 shadow-2xl">
+        <div className="order-1 lg:order-2 relative aspect-square rounded-2xl sm:rounded-3xl overflow-hidden border border-bazar-gray-100 dark:border-bazar-gray-900 shadow-xl sm:shadow-2xl">
            <Image 
               src={cms.heroImage} 
               alt={vendor.name} 
@@ -67,9 +68,9 @@ export function MinimalTemplate({ vendor, cms, products }: TemplateProps) {
       </section>
 
       {/* Product Grid */}
-      <section className="px-6 md:px-12 py-24 max-w-7xl mx-auto border-t border-bazar-gray-100 dark:border-bazar-gray-900">
-        <Typography variant="displaySm" className="mb-16">Selected Items</Typography>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <section className="px-4 sm:px-6 md:px-12 py-12 sm:py-24 max-w-7xl mx-auto border-t border-bazar-gray-100 dark:border-bazar-gray-900">
+        <Typography variant="displaySm" className="mb-8 sm:mb-16 text-2xl sm:text-4xl">Selected Items</Typography>
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
            {products.map(p => (
              <ProductCard key={p.id} product={p} />
            ))}
@@ -77,10 +78,10 @@ export function MinimalTemplate({ vendor, cms, products }: TemplateProps) {
       </section>
 
       {/* About Section */}
-      <section className="px-6 md:px-12 py-24 bg-bazar-gray-50 dark:bg-bazar-gray-950">
+      <section className="px-4 sm:px-6 md:px-12 py-12 sm:py-24 bg-bazar-gray-50 dark:bg-bazar-gray-950">
          <div className="max-w-3xl mx-auto text-center">
-            <Typography variant="displaySm" className="mb-6">{cms.aboutTitle}</Typography>
-            <Typography variant="bodyMd" className="text-lg leading-relaxed opacity-80">
+            <Typography variant="displaySm" className="mb-4 sm:mb-6 text-2xl sm:text-4xl">{cms.aboutTitle}</Typography>
+            <Typography variant="bodyMd" className="text-sm sm:text-lg leading-relaxed opacity-80">
                {cms.aboutContent}
             </Typography>
          </div>

@@ -18,8 +18,12 @@ import {
   LogOut,
   User,
   Tags,
-  Gift
+  Gift,
+  Menu,
+  X as CloseIcon
 } from "lucide-react";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 const SIDEBAR_ITEMS = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -40,6 +44,7 @@ export default function DashboardLayout({
 }) {
   const { logout, user } = useAuthStore();
   const router = useRouter();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Helper to get initials
   const getInitials = (name: string) => {
@@ -56,14 +61,13 @@ export default function DashboardLayout({
     router.push("/");
   };
 
-  return (
-    <div className="flex min-h-screen bg-bazar-white dark:bg-bazar-black">
-      {/* Sidebar */}
-      <aside className="w-64 border-r border-bazar-gray-200 dark:border-bazar-gray-800 flex flex-col fixed h-full z-10 bg-bazar-white dark:bg-bazar-black">
-        <div className="p-6 border-b border-bazar-gray-100 dark:border-bazar-gray-900">
-           <div className="flex items-center gap-2 mb-2">
+  const SidebarContent = () => (
+    <div className="flex flex-col h-full bg-bazar-white dark:bg-bazar-black">
+      <div className="p-6 border-b border-bazar-gray-100 dark:border-bazar-gray-900 flex justify-between items-center">
+         <div className="flex flex-col">
+          <div className="flex items-center gap-2 mb-2">
             <div className="w-6 h-6 bg-bazar-black dark:bg-bazar-white rounded-full flex items-center justify-center">
-              <div className="w-3 h-3 bg-bazar-white dark:bg-bazar-black rounded-full" />
+              <div className="w-3 h-3 bg-white dark:bg-bazar-black rounded-full" />
             </div>
             <Typography variant="titleSm" as="span" className="font-mono tracking-tighter">
               BAZAR <span>VENDOR</span>
@@ -83,55 +87,97 @@ export default function DashboardLayout({
             </Typography>
           </div>
         </div>
+        <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setIsSidebarOpen(false)}>
+          <CloseIcon className="w-5 h-5" />
+        </Button>
+      </div>
 
-        <nav className="flex-1 p-4 space-y-1">
-          {SIDEBAR_ITEMS.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-bazar-gray-500 hover:text-bazar-black dark:hover:text-bazar-white hover:bg-bazar-gray-100 dark:hover:bg-bazar-gray-900 rounded-md transition-all group"
-            >
-              <item.icon className="w-4 h-4" />
-              {item.name}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="p-4 border-t border-bazar-gray-100 dark:border-bazar-gray-900">
-          <Link 
-            href="/apple" 
-            target="_blank"
-            className="flex items-center justify-between px-3 py-2 text-xs font-mono text-bazar-gray-400 hover:text-bazar-black dark:hover:text-bazar-white transition-colors group"
+      <nav className="flex-1 p-4 space-y-1 overflow-y-auto custom-scrollbar">
+        {SIDEBAR_ITEMS.map((item) => (
+          <Link
+            key={item.name}
+            href={item.href}
+            onClick={() => setIsSidebarOpen(false)}
+            className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-bazar-gray-500 hover:text-bazar-black dark:hover:text-bazar-white hover:bg-bazar-gray-100 dark:hover:bg-bazar-gray-900 rounded-md transition-all group"
           >
-            PUBLIC STORE
-            <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <item.icon className="w-4 h-4" />
+            {item.name}
           </Link>
-          <button 
-            onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-md transition-all"
-          >
-            <LogOut className="w-4 h-4" />
-            Sign Out
-          </button>
-        </div>
+        ))}
+      </nav>
+
+      <div className="p-4 border-t border-bazar-gray-100 dark:border-bazar-gray-900">
+        <Link 
+          href="/apple" 
+          target="_blank"
+          className="flex items-center justify-between px-3 py-2 text-xs font-mono text-bazar-gray-400 hover:text-bazar-black dark:hover:text-bazar-white transition-colors group"
+        >
+          PUBLIC STORE
+          <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+        </Link>
+        <button 
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-md transition-all"
+        >
+          <LogOut className="w-4 h-4" />
+          Sign Out
+        </button>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="flex min-h-screen bg-bazar-white dark:bg-bazar-black relative">
+      {/* Mobile Sidebar Overlay */}
+      <AnimatePresence>
+        {isSidebarOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsSidebarOpen(false)}
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[40] lg:hidden"
+            />
+            <motion.aside
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed inset-y-0 left-0 w-72 z-[50] lg:hidden"
+            >
+              <SidebarContent />
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Desktop Sidebar */}
+      <aside className="w-64 border-r border-bazar-gray-200 dark:border-bazar-gray-800 hidden lg:flex flex-col fixed h-full z-10 bg-bazar-white dark:bg-bazar-black">
+        <SidebarContent />
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 ml-64 flex flex-col">
+      <main className="flex-1 lg:ml-64 flex flex-col w-full min-w-0">
         {/* Dashboard Header */}
-        <header className="h-16 border-b border-bazar-gray-100 dark:border-bazar-gray-900 flex items-center justify-between px-8 sticky top-0 bg-bazar-white/80 dark:bg-bazar-black/80 backdrop-blur-md z-[5]">
-          <Typography variant="titleSm" className="uppercase tracking-widest text-xs opacity-60">
-            Overview
-          </Typography>
+        <header className="h-16 border-b border-bazar-gray-100 dark:border-bazar-gray-900 flex items-center justify-between px-4 md:px-8 sticky top-0 bg-bazar-white/80 dark:bg-bazar-black/80 backdrop-blur-md z-[5]">
           <div className="flex items-center gap-4">
-            <Button size="sm" className="gap-2">
+            <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setIsSidebarOpen(true)}>
+              <Menu className="w-5 h-5" />
+            </Button>
+            <Typography variant="titleSm" className="uppercase tracking-widest text-xs opacity-60">
+              Overview
+            </Typography>
+          </div>
+          <div className="flex items-center gap-4">
+            <Button size="sm" className="gap-2 px-3 md:px-4">
               <Plus className="w-4 h-4" />
-              Add Product
+              <span className="hidden sm:inline">Add Product</span>
             </Button>
           </div>
         </header>
 
-        <div className="flex-1">
+        <div className="flex-1 w-full">
           {children}
         </div>
       </main>

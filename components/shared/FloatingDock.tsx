@@ -58,7 +58,7 @@ export function FloatingDock() {
   ];
 
   return (
-    <div className="fixed bottom-8 right-8 z-[300] flex flex-col items-end gap-4">
+    <div className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-[300] flex flex-col items-end gap-4">
       {/* Modals Container */}
       <AnimatePresence>
         {activeModal && (
@@ -66,7 +66,7 @@ export function FloatingDock() {
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="mb-4 w-[400px] h-[500px] bg-white/80 dark:bg-bazar-black/80 backdrop-blur-xl border-2 border-bazar-black dark:border-bazar-white rounded-3xl overflow-hidden shadow-2xl flex flex-col"
+            className="mb-4 w-[calc(100vw-3rem)] sm:w-[400px] h-[450px] sm:h-[500px] bg-white/80 dark:bg-bazar-black/80 backdrop-blur-xl border-2 border-bazar-black dark:border-bazar-white rounded-3xl overflow-hidden shadow-2xl flex flex-col"
           >
             {/* Modal Header */}
             <div className="p-6 border-b border-bazar-gray-100 dark:border-bazar-gray-900 flex justify-between items-center bg-bazar-gray-50/50 dark:bg-bazar-gray-950/50">

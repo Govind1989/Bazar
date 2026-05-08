@@ -67,22 +67,22 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         onClick={onClose}
       />
 
-      <Card className="relative w-full max-w-md bg-bazar-white dark:bg-bazar-black border-2 border-bazar-black dark:border-bazar-white p-0 overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
-        <div className="p-8 border-b border-bazar-gray-100 dark:border-bazar-gray-900 flex justify-between items-center bg-bazar-gray-50 dark:bg-bazar-gray-950">
+      <Card className="relative w-full max-w-md bg-bazar-white dark:bg-bazar-black border-2 border-bazar-black dark:border-bazar-white p-0 overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300 rounded-2xl sm:rounded-3xl">
+        <div className="p-6 sm:p-8 border-b border-bazar-gray-100 dark:border-bazar-gray-900 flex justify-between items-center bg-bazar-gray-50 dark:bg-bazar-gray-950">
            <div>
-              <Typography variant="titleLg" className="font-black uppercase tracking-tighter">
+              <Typography variant="titleLg" className="font-black uppercase tracking-tighter text-xl sm:text-2xl">
                 {showRoleSelection ? "Select Role" : "Secure Login"}
               </Typography>
-              <Typography variant="bodySm" className="opacity-60 text-xs">
+              <Typography variant="bodySm" className="opacity-60 text-[10px] sm:text-xs">
                 {showRoleSelection ? "Choose your active session profile." : "Enter your credentials to continue."}
               </Typography>
            </div>
-           <Button variant="ghost" size="icon" onClick={onClose}>
-              <X className="w-5 h-5" />
+           <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 sm:h-10 sm:w-10">
+              <X className="w-4 h-4 sm:w-5 sm:h-5" />
            </Button>
         </div>
 
-        <div className="p-8">
+        <div className="p-6 sm:p-8">
           {!showRoleSelection ? (
             <form onSubmit={handleLogin} className="space-y-4">
               {error && (

@@ -55,8 +55,19 @@ export function Masonry<T extends { id: string | number }>({
   const layout = useMemo(() => {
     if (containerWidth === 0) return { positions: [], totalHeight: 0, columnCount: 0, actualColumnWidth: 0 };
 
-    const columnCount = Math.max(1, Math.floor((containerWidth + gap) / (columnWidth + gap)));
-    const actualColumnWidth = (containerWidth - (columnCount - 1) * gap) / columnCount;
+    // Strategic Column Calculation:
+    // If width < 640px (typical mobile), use 2 columns as requested for compact layout.
+    // Otherwise, calculate based on columnWidth.
+    let columnCount: number;
+    let currentGap = gap;
+    if (containerWidth < 640) {
+      columnCount = 2;
+      currentGap = Math.min(gap, 16); // More compact on mobile
+    } else {
+      columnCount = Math.max(1, Math.floor((containerWidth + gap) / (columnWidth + gap)));
+    }
+    
+    const actualColumnWidth = (containerWidth - (columnCount - 1) * currentGap) / columnCount;
     const columnHeights = new Array(columnCount).fill(0);
 
     const positions = items.map((item, index) => {
@@ -72,10 +83,10 @@ export function Masonry<T extends { id: string | number }>({
       }
 
       const top = minHeight;
-      const left = shortestColumnIndex * (actualColumnWidth + gap);
+      const left = shortestColumnIndex * (actualColumnWidth + currentGap);
       const height = predictHeight(item, actualColumnWidth);
 
-      columnHeights[shortestColumnIndex] += height + gap;
+      columnHeights[shortestColumnIndex] += height + currentGap;
 
       return {
         item,
