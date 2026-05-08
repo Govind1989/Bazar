@@ -7,6 +7,7 @@ import { USERS } from "@/data/users";
 import { VENDORS } from "@/data/mock";
 import { Calendar, Mail, MapPin, Phone, Star, ShieldCheck, TrendingUp, Gift, ArrowRight } from "lucide-react";
 import { useCampaignStore } from "@/store/useCampaignStore";
+import { Button } from "@/components/ui/button";
 
 export default function AccountOverview() {
   const { user } = useAuthStore();

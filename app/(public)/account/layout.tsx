@@ -45,16 +45,16 @@ export default function AccountLayout({ children }: { children: React.ReactNode 
 
   const menuItems = [
     { name: "Overview", href: "/account", icon: User },
+    { name: "Messages", href: "/account/messages", icon: MessageSquare },
     { name: "Explored Vendors", href: "/account/vendors", icon: Heart },
     { name: "Settings", href: "/account/settings", icon: Settings },
     { name: "Loyalty Rewards", href: "/account/rewards", icon: Gift },
     { name: "Preferences", href: "/account/preferences", icon: Sliders },
-    { name: "Messages", href: "/account/messages", icon: MessageSquare },
     { name: "Agentic Logs", href: "/account/logs", icon: Terminal },
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
+    <div className="max-w-7xl mx-auto px-4 py-24">
       <div className="flex flex-col md:flex-row gap-12">
         {/* Sidebar */}
         <aside className="w-full md:w-64 space-y-8">
