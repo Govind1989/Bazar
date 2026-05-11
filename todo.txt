@@ -21,10 +21,8 @@ Static Credentials for Testing:
 ──────────────────────────────────────────────────────────
                                     
 
-Excellent work till now, the design for desktop version is perfect, but the screen responsiveness is not exactly as par. Some pages
-are not screen responsive. Now study each view files or UI files in our repo make each files, ui components mobile screen responsive.
-For product masonry we will have two columns for moble view in compact layout. Update the screen responsive ness while strictly
-preserving the current desktop layout as it and updating for mltiple screen dynamicism with compact layout. Impress me.
+- Show campaigns of vendors when on cart, calendar with redeem option. 
+- Message and vendor follow options in vendor page or vendor listing cards.
 
 
 Study @AgenticTruth and study the current implementation added in our repo and then add the detail of the implementation of our

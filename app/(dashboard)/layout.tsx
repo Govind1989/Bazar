@@ -160,24 +160,30 @@ export default function DashboardLayout({
       {/* Main Content */}
       <main className="flex-1 lg:ml-64 flex flex-col w-full min-w-0">
         {/* Dashboard Header */}
-        <header className="h-16 border-b border-bazar-gray-100 dark:border-bazar-gray-900 flex items-center justify-between px-4 md:px-8 sticky top-0 bg-bazar-white/80 dark:bg-bazar-black/80 backdrop-blur-md z-[5]">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setIsSidebarOpen(true)}>
+        <header className="h-14 md:h-16 border-b border-bazar-gray-100 dark:border-bazar-gray-900 flex items-center justify-between px-4 md:px-8 sticky top-0 bg-bazar-white/80 dark:bg-bazar-black/80 backdrop-blur-md z-[20]">
+          <div className="flex items-center gap-2 md:gap-4">
+            <Button variant="ghost" size="icon" className="lg:hidden h-9 w-9" onClick={() => setIsSidebarOpen(true)}>
               <Menu className="w-5 h-5" />
             </Button>
-            <Typography variant="titleSm" className="uppercase tracking-widest text-xs opacity-60">
-              Overview
-            </Typography>
+            <div className="flex flex-col md:flex-row md:items-center gap-0 md:gap-2">
+              <Typography variant="titleSm" className="uppercase tracking-widest text-[10px] md:text-xs opacity-60">
+                Overview
+              </Typography>
+              <span className="hidden md:inline opacity-20">/</span>
+              <Typography variant="bodySm" className="text-[9px] md:text-[10px] font-mono opacity-40 uppercase truncate max-w-[100px] md:max-w-none">
+                {user?.name || 'Himalayan Kitchen'}
+              </Typography>
+            </div>
           </div>
-          <div className="flex items-center gap-4">
-            <Button size="sm" className="gap-2 px-3 md:px-4">
-              <Plus className="w-4 h-4" />
+          <div className="flex items-center gap-2 md:gap-4">
+            <Button size="sm" className="h-8 md:h-9 gap-2 px-3 md:px-4 text-[10px] md:text-xs uppercase tracking-widest font-bold">
+              <Plus className="w-3.5 h-3.5 md:w-4 h-4" />
               <span className="hidden sm:inline">Add Product</span>
             </Button>
           </div>
         </header>
 
-        <div className="flex-1 w-full">
+        <div className="flex-1 w-full overflow-x-hidden">
           {children}
         </div>
       </main>

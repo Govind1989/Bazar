@@ -232,7 +232,7 @@ export function Navbar() {
             <Button variant="ghost" size="sm" onClick={() => setIsAuthModalOpen(true)} className="h-8 px-2 sm:h-9 sm:px-4 text-[11px] sm:text-sm">
               {t('signIn')}
             </Button>
-            <Button size="sm" onClick={() => setIsAuthModalOpen(true)} className="h-8 px-3 sm:h-9 sm:px-4 text-[11px] sm:text-sm">
+            <Button size="sm" onClick={() => setIsAuthModalOpen(true)} className="hidden md:block h-8 px-3 sm:h-9 sm:px-4 text-[11px] sm:text-sm">
               {t('joinBazar')}
             </Button>
           </div>
