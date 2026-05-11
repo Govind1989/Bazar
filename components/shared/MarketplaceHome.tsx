@@ -293,7 +293,7 @@ export default function MarketplaceHome() {
       {/* ============================================================= */}
       {/*  PERSONALIZED OFFERS                                          */}
       {/* ============================================================= */}
-      {personalizedCampaigns.length > 0 && (
+      {/* {personalizedCampaigns.length > 0 && (
         <section className="px-4 sm:px-6 md:px-12 py-10 max-w-7xl mx-auto -mt-10 mb-10">
            <div className="flex items-center justify-between mb-8">
               <div>
@@ -322,7 +322,7 @@ export default function MarketplaceHome() {
                     className="relative group h-full"
                   >
                     <div className="h-full p-6 rounded-[2rem] bg-neutral-50 dark:bg-neutral-950 border border-neutral-200/50 dark:border-neutral-800/50 hover:border-neutral-900 dark:hover:border-white transition-all duration-500 flex flex-col justify-between overflow-hidden">
-                       {/* Background Pattern */}
+                       
                        <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity">
                           <Tag className="w-32 h-32 rotate-12" />
                        </div>
@@ -387,7 +387,7 @@ export default function MarketplaceHome() {
               })}
            </div>
         </section>
-      )}
+      )} */}
 
       {/* ============================================================= */}
       {/*  STICKY CATEGORY SELECTOR & SEARCH                            */}
