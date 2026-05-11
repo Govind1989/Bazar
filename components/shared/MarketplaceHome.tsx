@@ -30,6 +30,9 @@ import {
 import { ProductCard } from "./ProductCard";
 import { CategorySelectionMenu } from "./CategorySelectionMenu";
 import { useUserStore } from "@/store/useUserStore";
+import { useCampaignStore } from "@/store/useCampaignStore";
+import { Typography } from "@/components/ui/typography";
+import { Tag } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /* ------------------------------------------------------------------ */
@@ -100,9 +103,19 @@ const staggerContainer = {
 /*  Component                                                          */
 /* ------------------------------------------------------------------ */
 export default function MarketplaceHome() {
-  const { followedVendors, toggleFollowVendor, setActiveConversation } = useUserStore();
+  const { followedVendors, toggleFollowVendor, enrolledCampaignIds, toggleEnrollCampaign, setActiveConversation } = useUserStore();
+  const { campaigns } = useCampaignStore();
   const [activeTab, setActiveTab] = useState<TabType>("products");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
+  // Filter personalized campaigns based on enrollment or free status
+  const personalizedCampaigns = useMemo(() => {
+    return campaigns.filter(c => {
+      const isEnrolled = enrolledCampaignIds.includes(c.id) || followedVendors.includes(c.vendorId);
+      const isFree = c.type === 'SALE' || c.type === 'OCCASIONAL' || c.type === 'FREE_DELIVERY' || c.type === 'SOCIAL_SHOUTOUT';
+      return (isEnrolled || isFree) && c.status === 'ACTIVE';
+    }).slice(0, 4);
+  }, [campaigns, enrolledCampaignIds, followedVendors]);
 
   const isAll = selectedCategories.length === 0;
 
@@ -276,6 +289,105 @@ export default function MarketplaceHome() {
           </motion.div>
         </div>
       </section>
+
+      {/* ============================================================= */}
+      {/*  PERSONALIZED OFFERS                                          */}
+      {/* ============================================================= */}
+      {personalizedCampaigns.length > 0 && (
+        <section className="px-4 sm:px-6 md:px-12 py-10 max-w-7xl mx-auto -mt-10 mb-10">
+           <div className="flex items-center justify-between mb-8">
+              <div>
+                <Typography variant="titleSm" className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40 mb-2">Tailored for you</Typography>
+                <h2 className="text-2xl font-black uppercase tracking-tighter">Personalized Offers</h2>
+              </div>
+              <div className="hidden sm:flex gap-2">
+                 <div className="h-10 px-4 rounded-xl bg-neutral-100 dark:bg-neutral-900 flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                    <span className="text-[10px] font-black uppercase tracking-widest">{personalizedCampaigns.length} Active Deals</span>
+                 </div>
+              </div>
+           </div>
+           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {personalizedCampaigns.map((campaign, idx) => {
+                const vendor = VENDORS.find(v => v.id === campaign.vendorId);
+                const isEnrolled = enrolledCampaignIds.includes(campaign.id);
+                const isNew = new Date(campaign.createdAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+                
+                return (
+                  <motion.div
+                    key={campaign.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.1 }}
+                    className="relative group h-full"
+                  >
+                    <div className="h-full p-6 rounded-[2rem] bg-neutral-50 dark:bg-neutral-950 border border-neutral-200/50 dark:border-neutral-800/50 hover:border-neutral-900 dark:hover:border-white transition-all duration-500 flex flex-col justify-between overflow-hidden">
+                       {/* Background Pattern */}
+                       <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity">
+                          <Tag className="w-32 h-32 rotate-12" />
+                       </div>
+
+                       <div>
+                          <div className="flex justify-between items-start mb-6">
+                             <div className="relative">
+                                <div className="w-12 h-12 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 flex items-center justify-center p-2">
+                                   <Image 
+                                     src={vendor?.logo || ''} 
+                                     alt={vendor?.name || ''} 
+                                     width={32} 
+                                     height={32} 
+                                     className="object-contain"
+                                   />
+                                </div>
+                                {isNew && (
+                                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-fuchsia-500 rounded-full border-2 border-white dark:border-neutral-950" />
+                                )}
+                             </div>
+                             <div className={cn(
+                               "px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-[0.1em]",
+                               campaign.type === 'LOYALTY' ? "bg-purple-500/10 text-purple-500" : "bg-green-500/10 text-green-500"
+                             )}>
+                                {campaign.type}
+                             </div>
+                          </div>
+
+                          <Typography variant="titleSm" className="text-lg font-black uppercase tracking-tighter leading-none mb-2">
+                             {campaign.title}
+                          </Typography>
+                          <Typography variant="bodySm" className="text-[11px] opacity-60 font-bold uppercase tracking-wide line-clamp-2 mb-4">
+                             {campaign.description}
+                          </Typography>
+                       </div>
+
+                       <div className="space-y-4">
+                          <div className="flex items-baseline gap-1">
+                             <Typography variant="titleMd" className="text-3xl font-black tracking-tighter">
+                                {campaign.valueType === 'PERCENT' ? `${campaign.value}%` : `रु ${campaign.value}`}
+                             </Typography>
+                             <Typography variant="bodySm" className="text-[10px] font-black uppercase tracking-widest opacity-40">OFF</Typography>
+                          </div>
+                          
+                          <Button 
+                            className={cn(
+                              "w-full h-12 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all",
+                              isEnrolled ? "bg-neutral-100 dark:bg-neutral-900 text-neutral-900 dark:text-white" : "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900"
+                            )}
+                            onClick={() => toggleEnrollCampaign(campaign.id)}
+                          >
+                            {isEnrolled ? (
+                              <span className="flex items-center gap-2">
+                                <CheckCircle2 className="w-3 h-3" /> Enrolled
+                              </span>
+                            ) : "Enroll Now"}
+                          </Button>
+                       </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+           </div>
+        </section>
+      )}
 
       {/* ============================================================= */}
       {/*  STICKY CATEGORY SELECTOR & SEARCH                            */}

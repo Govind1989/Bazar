@@ -12,6 +12,10 @@ interface CalendarState {
   removeService: (serviceId: string, date: string) => void
   clearCalendar: () => void
   totalBookings: number
+  isOpen: boolean
+  setIsOpen: (open: boolean) => void
+  redemptionContext: { campaignId: string; vendorId: string } | null
+  setRedemptionContext: (ctx: { campaignId: string; vendorId: string } | null) => void
 }
 
 export const useCalendarStore = create<CalendarState>()(
@@ -19,6 +23,11 @@ export const useCalendarStore = create<CalendarState>()(
     (set, get) => ({
       bookedServices: [],
       totalBookings: 0,
+      isOpen: false,
+      setIsOpen: (isOpen) => set({ isOpen }),
+      redemptionContext: null,
+      setRedemptionContext: (redemptionContext) => set({ redemptionContext }),
+// ...
 
       addService: (service, date) => {
         const bookedServices = get().bookedServices

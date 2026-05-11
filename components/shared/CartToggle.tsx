@@ -3,6 +3,7 @@
 import { useCartStore } from "@/store/useCartStore";
 import { useCampaignStore } from "@/store/useCampaignStore";
 import { useUserStore } from "@/store/useUserStore";
+import { useCalendarStore } from "@/store/useCalendarStore";
 import { Button } from "@/components/ui/button";
 import { ShoppingBag, X, Minus, Plus, Trash2, Tag, Gift, CheckCircle2 } from "lucide-react";
 import { Typography } from "@/components/ui/typography";
@@ -17,12 +18,19 @@ export function CartToggle() {
   const { items, totalItems, totalPrice, removeItem, updateQuantity, clearCart } = useCartStore();
   const { campaigns } = useCampaignStore();
   const { enrolledCampaignIds, toggleEnrollCampaign } = useUserStore();
+  const { setIsOpen: setCalendarOpen, setRedemptionContext } = useCalendarStore();
   const [mounted, setMounted] = useState(false);
 
   // Avoid hydration mismatch
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const handleRedeemOnCalendar = (campaignId: string, vendorId: string) => {
+    setRedemptionContext({ campaignId, vendorId });
+    setIsOpen(false);
+    setCalendarOpen(true);
+  };
 
   const vendorCampaigns = useMemo(() => {
     const vendorIds = Array.from(new Set(items.map(item => item.vendorId)));
@@ -126,7 +134,11 @@ export function CartToggle() {
                                     {campaign.valueType === 'PERCENT' ? `${campaign.value}% OFF` : `रु ${campaign.value} OFF`}
                                   </Typography>
                                </div>
-                               <Button size="sm" className="h-8 px-4 rounded-lg text-[10px] font-black uppercase tracking-widest bg-green-500 hover:bg-green-600 text-white">
+                               <Button 
+                                 size="sm" 
+                                 className="h-8 px-4 rounded-lg text-[10px] font-black uppercase tracking-widest bg-green-500 hover:bg-green-600 text-white"
+                                 onClick={() => handleRedeemOnCalendar(campaign.id, campaign.vendorId)}
+                               >
                                   Redeem
                                </Button>
                             </div>

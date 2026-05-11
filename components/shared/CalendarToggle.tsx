@@ -12,8 +12,7 @@ import Image from "next/image";
 import { Portal } from "./Portal";
 
 export function CalendarToggle() {
-  const [isOpen, setIsOpen] = useState(false);
-  const { bookedServices, totalBookings, removeService, clearCalendar } = useCalendarStore();
+  const { bookedServices, totalBookings, removeService, clearCalendar, isOpen, setIsOpen, redemptionContext, setRedemptionContext } = useCalendarStore();
   const { campaigns } = useCampaignStore();
   const { enrolledCampaignIds, toggleEnrollCampaign } = useUserStore();
   const [mounted, setMounted] = useState(false);
@@ -22,6 +21,18 @@ export function CalendarToggle() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const redeemingCampaign = useMemo(() => {
+    if (!redemptionContext) return null;
+    return campaigns.find(c => c.id === redemptionContext.campaignId);
+  }, [redemptionContext, campaigns]);
+
+  const handleConfirmRedemption = () => {
+    // In a real app, this would apply a discount to the cart or create a booking
+    alert(`Successfully redeemed: ${redeemingCampaign?.title} for ${new Date().toLocaleDateString()}`);
+    setRedemptionContext(null);
+    setIsOpen(false);
+  };
 
   const serviceCampaigns = useMemo(() => {
     return bookedServices.flatMap(service => {
@@ -97,7 +108,39 @@ export function CalendarToggle() {
             </div>
 
             <div className="flex-1 overflow-y-auto p-4 sm:p-8 space-y-10 custom-scrollbar">
-              {bookedServices.length === 0 ? (
+              {/* Redemption Overlay */}
+              {redemptionContext && redeemingCampaign && (
+                <div className="p-6 rounded-3xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 shadow-2xl space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                   <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-2xl bg-white/10 dark:bg-neutral-900/10 flex items-center justify-center">
+                         <Tag className="w-5 h-5" />
+                      </div>
+                      <div>
+                         <Typography variant="titleSm" className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">Redemption Mode</Typography>
+                         <Typography variant="titleSm" className="text-sm font-black uppercase tracking-tighter">{redeemingCampaign.title}</Typography>
+                      </div>
+                   </div>
+                   <Typography variant="bodySm" className="text-[11px] opacity-70 font-bold uppercase tracking-wide">
+                      Select a date to apply this offer to your scheduled service.
+                   </Typography>
+                   <div className="pt-2">
+                      <Button 
+                        onClick={handleConfirmRedemption}
+                        className="w-full h-12 rounded-2xl bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white font-black uppercase tracking-widest text-[10px]"
+                      >
+                         Confirm Redemption
+                      </Button>
+                      <button 
+                        onClick={() => setRedemptionContext(null)}
+                        className="w-full mt-3 text-[9px] font-black uppercase tracking-widest opacity-40 hover:opacity-100"
+                      >
+                         Cancel Redemption
+                      </button>
+                   </div>
+                </div>
+              )}
+
+              {bookedServices.length === 0 && !redemptionContext ? (
                 <div className="h-full flex flex-col items-center justify-center text-center py-20">
                   <div className="w-20 h-20 rounded-3xl bg-bazar-gray-50 dark:bg-bazar-gray-950 flex items-center justify-center mb-6 opacity-20">
                     <Calendar className="w-10 h-10" />
