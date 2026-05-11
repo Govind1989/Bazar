@@ -5,9 +5,10 @@ import { Typography } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { ChevronDown, Search, Menu, X, ChevronRight, Tags } from "lucide-react";
+import { ChevronDown, Search, Menu, X, ChevronRight, Tags, Heart, MessageSquare } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCMSStore } from "@/store/useCMSStore";
+import { useUserStore } from "@/store/useUserStore";
 import { Button } from "../ui/button";
 
 interface VendorNavbarProps {
@@ -16,6 +17,7 @@ interface VendorNavbarProps {
 
 export function VendorNavbar({ vendor }: VendorNavbarProps) {
   const savedConfigs = useCMSStore((state) => state.savedConfigs);
+  const { followedVendors, toggleFollowVendor, setActiveConversation } = useUserStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -25,6 +27,7 @@ export function VendorNavbar({ vendor }: VendorNavbarProps) {
 
   const config = savedConfigs[vendor.id] || vendor.cmsConfig;
   const categories = config?.categories?.filter(c => c.status === 'active') || [];
+  const isFollowed = followedVendors.includes(vendor.id);
 
   return (
     <nav className="sticky top-16 z-40 w-full bg-white/90 dark:bg-bazar-black/90 backdrop-blur-md border-b border-bazar-gray-100 dark:border-bazar-gray-900">
@@ -35,29 +38,59 @@ export function VendorNavbar({ vendor }: VendorNavbarProps) {
              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl overflow-hidden border border-bazar-gray-100 dark:border-bazar-gray-900 transition-transform group-hover:scale-105">
                 <img src={vendor.logo} alt={vendor.name} className="w-full h-full object-cover" />
              </div>
-             <Typography variant="titleSm" className="font-black uppercase tracking-tighter text-[11px] sm:text-sm group-hover:text-bazar-gray-500 transition-colors truncate max-w-[120px] sm:max-w-none">
+             <Typography variant="titleSm" className="font-black uppercase tracking-tighter text-[11px] sm:text-sm group-hover:text-bazar-gray-500 transition-colors truncate max-w-[100px] sm:max-w-none">
                {vendor.name}
              </Typography>
           </Link>
+          
+          <div className="hidden md:flex items-center gap-2">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className={cn(
+                "h-8 rounded-lg text-[9px] font-black uppercase tracking-widest gap-2 border-2",
+                isFollowed && "bg-red-500 border-red-500 text-white hover:bg-red-600 hover:text-white"
+              )}
+              onClick={() => toggleFollowVendor(vendor.id)}
+            >
+              <Heart className={cn("w-3 h-3", isFollowed && "fill-current")} />
+              {isFollowed ? "Following" : "Follow"}
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="h-8 rounded-lg text-[9px] font-black uppercase tracking-widest gap-2 border-2"
+              onClick={() => setActiveConversation(vendor.id)}
+            >
+              <MessageSquare className="w-3 h-3" />
+              Message
+            </Button>
+          </div>
         </div>
 
         {/* Center: Search - hidden on extra small mobile, compact on small */}
-        <div className="hidden sm:block flex-1 max-w-md mx-4 md:mx-8">
+        <div className="hidden lg:block flex-1 max-w-sm mx-8">
           <div className="relative group">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 opacity-20 group-focus-within:opacity-100 transition-opacity" />
             <input 
               type="text" 
-              placeholder={`Search...`}
+              placeholder={`Search store...`}
               className="w-full bg-bazar-gray-50/50 dark:bg-bazar-gray-950/50 border border-bazar-gray-100 dark:border-bazar-gray-900 rounded-2xl py-2 pl-10 pr-4 text-[10px] sm:text-xs font-bold outline-none focus:ring-4 ring-bazar-black/5 dark:ring-bazar-white/5 focus:bg-white dark:focus:bg-bazar-black transition-all"
             />
           </div>
         </div>
 
-        {/* Right: Hamburger Toggle */}
+        {/* Right: Actions & Hamburger */}
         <div className="flex items-center gap-2 sm:gap-4">
-          <Button variant="ghost" size="icon" className="sm:hidden w-8 h-8">
-            <Search className="w-4 h-4" />
-          </Button>
+          <div className="flex md:hidden items-center gap-1">
+             <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full" onClick={() => toggleFollowVendor(vendor.id)}>
+                <Heart className={cn("w-4 h-4", isFollowed && "fill-red-500 text-red-500")} />
+             </Button>
+             <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full" onClick={() => setActiveConversation(vendor.id)}>
+                <MessageSquare className="w-4 h-4" />
+             </Button>
+          </div>
+          
           <button 
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className={cn(
@@ -68,7 +101,7 @@ export function VendorNavbar({ vendor }: VendorNavbarProps) {
             )}
           >
             <Typography variant="titleSm" className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] hidden sm:block">
-              {isMenuOpen ? "Close" : ""}
+              {isMenuOpen ? "Close" : "Store Menu"}
             </Typography>
             <div className="w-5 h-5 sm:w-6 sm:h-6 flex flex-col items-center justify-center gap-0.5 sm:gap-1">
               <span className={cn(

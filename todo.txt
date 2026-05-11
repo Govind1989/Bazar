@@ -21,7 +21,8 @@ Static Credentials for Testing:
 ──────────────────────────────────────────────────────────
                                     
 
-- Show campaigns of vendors when on cart, calendar with redeem option. 
+- Show campaigns of vendors where user is enrolled or free campaigns where users are not required to be enrolled
+ when on cart, calendar with redeem option. 
 - Message and vendor follow options in vendor page or vendor listing cards.
 
 

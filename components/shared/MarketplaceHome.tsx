@@ -24,9 +24,13 @@ import {
   BadgePercent,
   Sparkles,
   CheckCircle2,
+  Heart,
+  MessageSquare
 } from "lucide-react";
 import { ProductCard } from "./ProductCard";
 import { CategorySelectionMenu } from "./CategorySelectionMenu";
+import { useUserStore } from "@/store/useUserStore";
+import { cn } from "@/lib/utils";
 
 /* ------------------------------------------------------------------ */
 /*  Countdown Timer (client-only to avoid hydration mismatch)          */
@@ -96,6 +100,7 @@ const staggerContainer = {
 /*  Component                                                          */
 /* ------------------------------------------------------------------ */
 export default function MarketplaceHome() {
+  const { followedVendors, toggleFollowVendor, setActiveConversation } = useUserStore();
   const [activeTab, setActiveTab] = useState<TabType>("products");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
@@ -700,38 +705,64 @@ export default function MarketplaceHome() {
             Trusted Vendors
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
-            {trustedVendors.map((vendor) => (
-              <Link key={vendor.id} href={`/${vendor.slug}`}>
-                <Card className="p-3 sm:p-6 bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800 rounded-xl hover:border-neutral-900 dark:hover:border-white transition-colors cursor-pointer group h-full">
-                  <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 sm:gap-4 mb-3 sm:mb-4">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-neutral-100 dark:bg-neutral-900 overflow-hidden relative shrink-0">
-                      <Image
-                        src={vendor.logo}
-                        alt={vendor.name}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 640px) 40px, 48px"
-                      />
-                    </div>
-                    <div className="min-w-0">
-                      <h3 className="font-semibold text-neutral-900 dark:text-white group-hover:text-blue-500 transition-colors truncate text-sm sm:text-base">
-                        {vendor.name}
-                      </h3>
-                      <div className="flex items-center justify-center sm:justify-start gap-1 text-[10px] sm:text-xs text-neutral-500 dark:text-neutral-400">
-                        <Star className="w-3 h-3  fill-orange-400 text-orange-400" />
-                        <span className="font-medium text-neutral-900 dark:text-white">
-                          {vendor.rating}
-                        </span>
-                        <span className="hidden sm:inline">· {vendor.categories.join(', ')}</span>
+            {trustedVendors.map((vendor) => {
+              const isFollowed = followedVendors.includes(vendor.id);
+              return (
+                <div key={vendor.id} className="relative group/card">
+                  <Link href={`/${vendor.slug}`}>
+                    <Card className="p-3 sm:p-6 bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800 rounded-xl hover:border-neutral-900 dark:hover:border-white transition-colors cursor-pointer group h-full">
+                      <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 sm:gap-4 mb-3 sm:mb-4">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-neutral-100 dark:bg-neutral-900 overflow-hidden relative shrink-0">
+                          <Image
+                            src={vendor.logo}
+                            alt={vendor.name}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 640px) 40px, 48px"
+                          />
+                        </div>
+                        <div className="min-w-0">
+                          <h3 className="font-semibold text-neutral-900 dark:text-white group-hover:text-blue-500 transition-colors truncate text-sm sm:text-base">
+                            {vendor.name}
+                          </h3>
+                          <div className="flex items-center justify-center sm:justify-start gap-1 text-[10px] sm:text-xs text-neutral-500 dark:text-neutral-400">
+                            <Star className="w-3 h-3  fill-orange-400 text-orange-400" />
+                            <span className="font-medium text-neutral-900 dark:text-white">
+                              {vendor.rating}
+                            </span>
+                            <span className="hidden sm:inline">· {vendor.categories.join(', ')}</span>
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                      <p className="text-[11px] sm:text-sm text-neutral-500 dark:text-neutral-400 line-clamp-2 leading-relaxed hidden sm:block">
+                        {vendor.description}
+                      </p>
+                    </Card>
+                  </Link>
+
+                  {/* Hover Actions */}
+                  <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover/card:opacity-100 transition-opacity z-10">
+                    <Button 
+                      size="icon" 
+                      className={cn(
+                        "w-8 h-8 rounded-full border shadow-lg",
+                        isFollowed ? "bg-red-500 text-white border-red-500" : "bg-white dark:bg-black text-black dark:text-white border-neutral-200 dark:border-neutral-800"
+                      )}
+                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleFollowVendor(vendor.id); }}
+                    >
+                      <Heart className={cn("w-4 h-4", isFollowed && "fill-current")} />
+                    </Button>
+                    <Button 
+                      size="icon" 
+                      className="w-8 h-8 rounded-full bg-white dark:bg-black text-black dark:text-white border border-neutral-200 dark:border-neutral-800 shadow-lg"
+                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); setActiveConversation(vendor.id); }}
+                    >
+                      <MessageSquare className="w-4 h-4" />
+                    </Button>
                   </div>
-                  <p className="text-[11px] sm:text-sm text-neutral-500 dark:text-neutral-400 line-clamp-2 leading-relaxed hidden sm:block">
-                    {vendor.description}
-                  </p>
-                </Card>
-              </Link>
-            ))}
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>

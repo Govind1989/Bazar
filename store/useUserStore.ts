@@ -5,6 +5,7 @@ interface UserState {
   favoriteCategories: string[]
   favoriteSubCategories: string[]
   followedVendors: string[]
+  enrolledCampaignIds: string[]
   activeConversationVendorId: string | null
   isMessageModalOpen: boolean
   aiSettings: {
@@ -15,6 +16,7 @@ interface UserState {
   toggleFavoriteCategory: (categoryId: string) => void
   toggleFavoriteSubCategory: (subCategoryId: string, parentCategoryId: string) => void
   toggleFollowVendor: (vendorId: string) => void
+  toggleEnrollCampaign: (campaignId: string) => void
   setAiApiKey: (type: 'user' | 'vendor', key: string) => void
   setActiveConversation: (vendorId: string | null) => void
   setMessageModalOpen: (open: boolean) => void
@@ -26,6 +28,7 @@ export const useUserStore = create<UserState>()(
       favoriteCategories: [],
       favoriteSubCategories: [],
       followedVendors: [],
+      enrolledCampaignIds: [],
       activeConversationVendorId: null,
       isMessageModalOpen: false,
       aiSettings: {
@@ -57,6 +60,11 @@ export const useUserStore = create<UserState>()(
         followedVendors: state.followedVendors.includes(vendorId)
           ? state.followedVendors.filter(id => id !== vendorId)
           : [...state.followedVendors, vendorId]
+      })),
+      toggleEnrollCampaign: (campaignId) => set((state) => ({
+        enrolledCampaignIds: state.enrolledCampaignIds.includes(campaignId)
+          ? state.enrolledCampaignIds.filter(id => id !== campaignId)
+          : [...state.enrolledCampaignIds, campaignId]
       })),
       setAiApiKey: (type, key) => set((state) => ({
         aiSettings: {
