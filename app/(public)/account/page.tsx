@@ -4,6 +4,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { Typography } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";
 import { USERS } from "@/data/users";
+import {  motion } from "framer-motion";
 import { VENDORS } from "@/data/mock";
 import { Calendar, Mail, MapPin, Phone, Star, ShieldCheck, TrendingUp, Gift, ArrowRight } from "lucide-react";
 import { useCampaignStore } from "@/store/useCampaignStore";

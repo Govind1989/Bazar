@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Package, MoreVertical, Plus, Search, Filter, AlertTriangle } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import {  motion } from "framer-motion";
 
 export default function InventoryPage() {
   return (

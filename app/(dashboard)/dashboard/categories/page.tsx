@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Save, RotateCcw, Check, Tags } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { Card } from "@/components/ui/card";
 
 export default function DashboardCategoriesPage() {
   const { previewConfig, init, isDirty, save, reset } = useCMSStore();

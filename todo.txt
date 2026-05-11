@@ -25,6 +25,7 @@ Static Credentials for Testing:
 - Message and vendor follow options in vendor page or vendor listing cards.
 
 
+
 Study @AgenticTruth and study the current implementation added in our repo and then add the detail of the implementation of our
 development process and update the missing module or detail in our @AgenticTruth adhering to the current format preserving the 
 current informaton in the file. Impress me.

@@ -1,13 +1,40 @@
- <div className="flex space-x-4">
-            <button className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-neutral-900 rounded-full border border-neutral-200 dark:border-neutral-800 hover:border-fuchsia-500 transition-all group">
-              <BadgePercent className="w-4 h-4 text-orange-400 group-hover:text-fuchsia-600" />
-              <span className="text-[10px] text-orange-500 uppercase tracking-widest hidden md:inline">Sales and Offers</span>
-            </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-neutral-900 rounded-full border border-neutral-200 dark:border-neutral-800 hover:border-fuchsia-500 transition-all group">
-                <span className="relative flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500" />
-                </span>
-              <span className="text-[10px] text-orange-500 uppercase tracking-widest hidden md:inline">Flash Sale</span>
-            </button>
-          </div>
+[{
+	"resource": "/e:/Nextjs/Bazar/app/(admin)/)/layout.tsx",
+	"owner": "typescript",
+	"code": "2307",
+	"severity": 8,
+	"message": "Cannot find module '@/components/ui/typography' or its corresponding type declarations.",
+	"source": "ts",
+	"startLineNumber": 3,
+	"startColumn": 28,
+	"endLineNumber": 3,
+	"endColumn": 56,
+	"modelVersionId": 20,
+	"origin": "extHost1"
+},{
+	"resource": "/e:/Nextjs/Bazar/app/(admin)/)/layout.tsx",
+	"owner": "typescript",
+	"code": "2307",
+	"severity": 8,
+	"message": "Cannot find module '@/components/ui/button' or its corresponding type declarations.",
+	"source": "ts",
+	"startLineNumber": 4,
+	"startColumn": 24,
+	"endLineNumber": 4,
+	"endColumn": 48,
+	"modelVersionId": 20,
+	"origin": "extHost1"
+},{
+	"resource": "/e:/Nextjs/Bazar/app/(admin)/)/layout.tsx",
+	"owner": "typescript",
+	"code": "2307",
+	"severity": 8,
+	"message": "Cannot find module '@/store/useAuthStore' or its corresponding type declarations.",
+	"source": "ts",
+	"startLineNumber": 6,
+	"startColumn": 30,
+	"endLineNumber": 6,
+	"endColumn": 52,
+	"modelVersionId": 20,
+	"origin": "extHost1"
+}]
