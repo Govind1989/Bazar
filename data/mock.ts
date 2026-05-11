@@ -491,6 +491,8 @@ export interface Order {
   date: string;
   amount: number;
   status: 'paid' | 'pending' | 'shipped' | 'cancelled';
+  vendorId: string;
+  type: 'PRODUCT' | 'SERVICE';
 }
 
 export interface DashboardStats {
@@ -516,11 +518,11 @@ export const DASHBOARD_STATS: DashboardStats = {
 };
 
 export const RECENT_ORDERS: Order[] = [
-  { id: '#BZ-4401', customer: 'Priya Sharma', product: 'Wild honey 500g', date: 'Today, 2:14pm', amount: 1350, status: 'paid' },
-  { id: '#BZ-4400', customer: 'Rohan Thapa', product: 'Sel roti mix x3', date: 'Today, 11:30am', amount: 540, status: 'shipped' },
-  { id: '#BZ-4398', customer: 'Asha Gurung', product: 'Gundruk + Timur', date: 'Yesterday', amount: 570, status: 'paid' },
-  { id: '#BZ-4395', customer: 'Bikram KC', product: 'Himalayan salt 2kg', date: 'Yesterday', amount: 280, status: 'pending' },
-  { id: '#BZ-4391', customer: 'Sita Rai', product: 'Wild honey 1kg', date: 'Apr 30', amount: 850, status: 'shipped' },
+  { id: '#BZ-4401', customer: 'Priya Sharma', product: 'Wild honey 500g', date: 'Today, 2:14pm', amount: 1350, status: 'paid', vendorId: 'v2', type: 'PRODUCT' },
+  { id: '#BZ-4400', customer: 'Rohan Thapa', product: 'MacBook Air M3', date: 'Today, 11:30am', amount: 185000, status: 'shipped', vendorId: 'v1', type: 'PRODUCT' },
+  { id: '#BZ-4398', customer: 'Asha Gurung', product: 'Pashmina Shawl', date: 'Yesterday', amount: 5500, status: 'paid', vendorId: 'v8', type: 'PRODUCT' },
+  { id: '#BZ-4395', customer: 'Bikram KC', product: 'Home Interior Consult', date: 'Yesterday', amount: 2500, status: 'pending', vendorId: 'v4', type: 'SERVICE' },
+  { id: '#BZ-4391', customer: 'Sita Rai', product: 'Hand-carved Mandala Mask', date: 'Apr 30', amount: 3200, status: 'shipped', vendorId: 'v3', type: 'PRODUCT' },
 ];
 
 export interface Service {

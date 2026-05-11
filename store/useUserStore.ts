@@ -1,11 +1,39 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
+export interface Complaint {
+  id: string
+  itemId: string
+  itemName: string
+  itemType: 'PRODUCT' | 'SERVICE'
+  vendorId: string
+  reason: string
+  proofUrl?: string
+  proofType?: 'IMAGE' | 'VIDEO'
+  status: 'PENDING' | 'RESOLVED' | 'REJECTED'
+  createdAt: string
+}
+
+export interface Review {
+  id: string
+  itemId: string
+  itemName: string
+  itemType: 'PRODUCT' | 'SERVICE'
+  vendorId: string
+  rating: number
+  comment: string
+  proofUrl?: string
+  proofType?: 'IMAGE' | 'VIDEO'
+  createdAt: string
+}
+
 interface UserState {
   favoriteCategories: string[]
   favoriteSubCategories: string[]
   followedVendors: string[]
   enrolledCampaignIds: string[]
+  complaints: Complaint[]
+  reviews: Review[]
   activeConversationVendorId: string | null
   isMessageModalOpen: boolean
   aiSettings: {
@@ -17,6 +45,8 @@ interface UserState {
   toggleFavoriteSubCategory: (subCategoryId: string, parentCategoryId: string) => void
   toggleFollowVendor: (vendorId: string) => void
   toggleEnrollCampaign: (campaignId: string) => void
+  addComplaint: (complaint: Omit<Complaint, 'id' | 'status' | 'createdAt'>) => void
+  addReview: (review: Omit<Review, 'id' | 'createdAt'>) => void
   setAiApiKey: (type: 'user' | 'vendor', key: string) => void
   setActiveConversation: (vendorId: string | null) => void
   setMessageModalOpen: (open: boolean) => void
@@ -29,6 +59,8 @@ export const useUserStore = create<UserState>()(
       favoriteSubCategories: [],
       followedVendors: [],
       enrolledCampaignIds: [],
+      complaints: [],
+      reviews: [],
       activeConversationVendorId: null,
       isMessageModalOpen: false,
       aiSettings: {
@@ -65,6 +97,27 @@ export const useUserStore = create<UserState>()(
         enrolledCampaignIds: state.enrolledCampaignIds.includes(campaignId)
           ? state.enrolledCampaignIds.filter(id => id !== campaignId)
           : [...state.enrolledCampaignIds, campaignId]
+      })),
+      addComplaint: (complaint) => set((state) => ({
+        complaints: [
+          {
+            ...complaint,
+            id: Math.random().toString(36).substring(7),
+            status: 'PENDING',
+            createdAt: new Date().toISOString()
+          },
+          ...state.complaints
+        ]
+      })),
+      addReview: (review) => set((state) => ({
+        reviews: [
+          {
+            ...review,
+            id: Math.random().toString(36).substring(7),
+            createdAt: new Date().toISOString()
+          },
+          ...state.reviews
+        ]
       })),
       setAiApiKey: (type, key) => set((state) => ({
         aiSettings: {

@@ -15,7 +15,10 @@ import {
   Terminal, 
   LogOut,
   ChevronRight,
-  Heart
+  Heart,
+  ShieldAlert,
+  Star,
+  ShoppingBag
 } from "lucide-react";
 
 export default function AccountLayout({ children }: { children: React.ReactNode }) {
@@ -45,10 +48,13 @@ export default function AccountLayout({ children }: { children: React.ReactNode 
 
   const menuItems = [
     { name: "Overview", href: "/account", icon: User },
+    { name: "Order History", href: "/account/orders", icon: ShoppingBag },
     { name: "Messages", href: "/account/messages", icon: MessageSquare },
     { name: "Explored Vendors", href: "/account/vendors", icon: Heart },
     { name: "Settings", href: "/account/settings", icon: Settings },
     { name: "Loyalty Rewards", href: "/account/rewards", icon: Gift },
+    { name: "Reviews & Ratings", href: "/account/reviews", icon: Star },
+    { name: "Complains & Reports", href: "/account/complains", icon: ShieldAlert },
     { name: "Preferences", href: "/account/preferences", icon: Sliders },
     { name: "Agentic Logs", href: "/account/logs", icon: Terminal },
   ];

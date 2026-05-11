@@ -26,10 +26,9 @@ Static Credentials for Testing:
 - Message and vendor follow options in vendor page or vendor listing cards.
 
 - add a notification section on the navbar to show the app notification for the users with some static notfications for now. 
-- In user profile, povide a new section complains and reports where user will be able to post any complain for any produt or services
-they booked if not satisfied with inputs like reason of dissatisfaction and proof, can be image or video. Fetch the product or 
-service they have purchased from order history and on a simple click , icon user can post complain about the product or services.
-Each complains will be accumated in the new section complains and reports. Impress me.
+- In user profile, Add a new section order history, which shows the order history of user from multiple vendors, with easy
+wrtie review and coyou went on a loop, verify if the last task is complete.mments , and Complaints and Reports for each order they made with satisfaction of disastisfaction. and on 
+click we will resue the same modal we have in complaints and review section. Impress me
 
 Study @AgenticTruth and study the current implementation added in our repo and then add the detail of the implementation of our
 development process and update the missing module or detail in our @AgenticTruth adhering to the current format preserving the 

@@ -13,6 +13,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { User, Globe, Sun, Moon, LayoutDashboard, LayoutGrid, Sparkles, ChevronDown, Utensils, Shirt, Zap, TreePine, Armchair, Monitor, Smartphone, Calendar, MapPin, Clock, ShoppingBag, ArrowRight, Menu, X as CloseIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { CalendarToggle } from "./CalendarToggle";
+import { NotificationToggle } from "./NotificationToggle";
 import { motion, AnimatePresence } from "framer-motion";
 import { CATEGORIES, SERVICE_CATEGORIES, VENDORS } from "@/data/mock";
 import { usePathname } from "next/navigation";
@@ -197,6 +198,7 @@ export function Navbar() {
           {language.toUpperCase()}
         </Button>
         <div className="flex items-center gap-1 md:gap-2">
+          <NotificationToggle />
           <CartToggle />
           <CalendarToggle />
         </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Typography } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";
@@ -9,11 +10,22 @@ import { VENDORS } from "@/data/mock";
 import { Calendar, Mail, MapPin, Phone, Star, ShieldCheck, TrendingUp, Gift, ArrowRight } from "lucide-react";
 import { useCampaignStore } from "@/store/useCampaignStore";
 import { Button } from "@/components/ui/button";
+import { useUserStore } from "@/store/useUserStore";
+import { RECENT_ORDERS } from "@/data/mock";
+import { ShieldAlert, Package, ExternalLink } from "lucide-react";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { ReviewModal } from "@/components/shared/ReviewModal";
+import { ComplaintModal } from "@/components/shared/ComplaintModal";
 
 export default function AccountOverview() {
   const { user } = useAuthStore();
   const { campaigns } = useCampaignStore();
   
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [isComplaintModalOpen, setIsComplaintModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<any>(null);
+
   if (!user) return null;
 
   const followedVendors = VENDORS.filter(v => user.followedVendors.includes(v.id));
@@ -190,6 +202,8 @@ export default function AccountOverview() {
            ))}
         </div>
       </section>
+
+      
 
       {/* Security Status */}
       <div className="px-4 md:px-0 pb-10">

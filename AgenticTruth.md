@@ -75,8 +75,14 @@ This document serves as the foundational truth for all agentic AI entities inter
 #### `store/useUserStore.ts`
 - **Logic**: Manages the platform's social graph and AI preferences.
 - **Hierarchical Favoriting**: Favoriting a sub-category automatically triggers the "Favorite" state for its parent category.
+- **Dispute Resolution**: Centralizes the `complaints` state and `addComplaint` logic for platform-wide quality governance.
 - **Bazar Intelligence**: Stores `aiSettings` (API Keys, Preferred Model) for both Users and Vendors.
 - **Global Messaging Sync**: Centralizes `isMessageModalOpen` and `activeConversationVendorId`.
+
+### 3.5 Quality Assurance & Governance (NEW)
+#### `app/(public)/account/complains/page.tsx`
+- **Purpose**: Official Dispute Resolution Terminal.
+- **Logic**: Implements a high-fidelity audit interface for customer dissatisfaction reports. Features deep-linking via `orderId` query parameters for pre-filling complaint contexts. Supports multi-modal evidence submission (Images/Video) and real-time audit status tracking (Pending, Resolved, Rejected).
 
 #### `store/useAuthStore.ts`
 - **Logic**: Persistent authentication state. Supports role-switching (Customer/Vendor/SuperAdmin) and role-specific redirection logic. Includes `vendorId` mapping for seamless management of vendor-specific resources.
@@ -163,6 +169,18 @@ This document serves as the foundational truth for all agentic AI entities inter
 - **Legacy Icon Cleanup**: Systematic replacement of generic `MessageSquare` icons with purpose-driven directional cues in history modules.
 - **Enhanced Sidebar Sync**: Seamless integration of message history states across both dashboard architectures for a unified SPA-feel.
 
+### ✅ Phase 16: Quality Assurance & Dispute Resolution (NEW)
+- **Dispute Audit Terminal**: Implementation of a specialized "Complains & Reports" module for trust-based commerce.
+- **Evidence-Backed Governance**: Support for multi-modal proof (Images/Video) in dissatisfaction reports.
+- **Integrated Report Triggers**: Direct "Report" actions embedded within order history for frictionless dissatisfaction logging.
+- **Audit Tracking System**: Real-time visualization of complaint lifecycles with Investigation Subjects and Audit Timestamps.
+
+### ✅ Phase 17: Transactional Lifecycle & Integrated Feedback (NEW)
+- **Order History Terminal**: Implementation of a high-fidelity purchase history module.
+- **Integrated Review Loop**: Frictionless "Easy Integration" for reviews and comments directly from the order list.
+- **Dynamic Status Orchestration**: Visual tracking of order lifecycles (Paid, Shipped, Pending, Cancelled) with semantic iconography.
+- **Real-time Review Sync**: Seamless display of user-contributed reviews within the corresponding transaction context.
+
 ---
 
 ## 5. STRATEGIC ROADMAP
@@ -173,6 +191,30 @@ This document serves as the foundational truth for all agentic AI entities inter
 4.  **Vendor Performance Index**: Create a logic layer that "rates" vendors based on mock delivery speeds and customer feedback.
 5.  **Smart AI Assistant**: Activate the "Assistant" tab in the `FloatingDock` to provide context-aware platform help.
 
+## 6. DEVELOPMENT PROCESS
+BAZAR adheres to a rigorous **Research -> Strategy -> Execution -> Validation** lifecycle to ensure architectural integrity and premium UI/UX delivery.
+
+### 6.1 Research & Discovery
+- **Codebase Mapping**: Systematic use of `grep` and `glob` to understand existing patterns (e.g., CVA variants, Zustand persistence).
+- **Impact Analysis**: Identification of cross-cutting concerns (e.g., how a new account sub-page affects the global layout and sidebar) before first code change.
+- **Assumption Verification**: Empirical checks of existing data models (e.g., `RECENT_ORDERS` structure) to prevent regression.
+- **User Intent Alignment**: Deep-diving into requested workflows (e.g., "Easy Integration") to ensure implementation exceeds standard UX expectations.
+
+### 6.2 Strategic Architecture
+- **Alignment with Design System**: Ensuring new features leverage shared components (`Card`, `Typography`, `Button`) to maintain the "Adaptive Monochromatic" identity.
+- **Surgical State Design**: Designing minimal, persistent state extensions in Zustand to support new business logic without bloat.
+- **Modular Scalability**: Designing sub-pages (like `/account/orders`) to be self-contained yet deeply integrated with global stores.
+
+### 6.3 Implementation & Craft
+- **Surgical Code Updates**: Applying targeted changes while rigorously adhering to local naming conventions and ES module standards.
+- **UI/UX Polishing**: Leveraging `Framer Motion` for fluid interactions and `Lucide` for semantic iconography to deliver an "Impressive" user experience.
+- **Defensive Engineering**: Implementing robust null-checks and loading states (Suspense) for all data-driven modules.
+
+### 6.4 Verification & Finality
+- **End-to-End Validation**: Exhaustive testing of the entire user journey (e.g., Account -> Order History -> Review Submission -> State Update).
+- **Type Safety Enforcement**: Maintaining strict TypeScript integrity across all new interfaces and modules.
+- **Truth Source Synchronization**: Ensuring `@AgenticTruth.md` is updated in real-time to reflect the latest repository state.
+
 ---
 *Generated by Agentic Truth Engine*
-*Last Update: 2026-05-08 | Version 1.8*
+*Last Update: 2026-05-11 | Version 2.0*
