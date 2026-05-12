@@ -49,6 +49,7 @@ export default function AccountLayout({ children }: { children: React.ReactNode 
   const menuItems = [
     { name: "Overview", href: "/account", icon: User },
     { name: "Order History", href: "/account/orders", icon: ShoppingBag },
+    { name: "Memberships", href: "/account/memberships", icon: ShieldAlert },
     { name: "Messages", href: "/account/messages", icon: MessageSquare },
     { name: "Explored Vendors", href: "/account/vendors", icon: Heart },
     { name: "Settings", href: "/account/settings", icon: Settings },

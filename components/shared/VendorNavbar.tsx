@@ -192,6 +192,7 @@ export function VendorNavbar({ vendor }: VendorNavbarProps) {
                     <div className="flex items-center gap-4 sm:gap-6">
                        <Link href={`/${vendor.slug}`} className="text-[8px] sm:text-[10px] font-black uppercase tracking-widest hover:underline underline-offset-4">Home</Link>
                        <Link href={`/${vendor.slug}/deals`} className="text-[8px] sm:text-[10px] font-black uppercase tracking-widest hover:underline underline-offset-4">Deals</Link>
+                       <Link href={`/${vendor.slug}/membership`} className="text-[8px] sm:text-[10px] font-black uppercase tracking-widest hover:underline underline-offset-4">Membership</Link>
                        <Link href={`/${vendor.slug}/about`} className="text-[8px] sm:text-[10px] font-black uppercase tracking-widest hover:underline underline-offset-4">About</Link>
                     </div>
                  </div>

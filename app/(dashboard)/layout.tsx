@@ -33,6 +33,7 @@ const SIDEBAR_ITEMS = [
   { name: "Taxonomy", href: "/dashboard/categories", icon: Tags },
   { name: "Products", href: "/dashboard/inventory", icon: Package },
   { name: "Campaigns", href: "/dashboard/campaigns", icon: Gift },
+  { name: "Membership", href: "/dashboard/membership", icon: User },
   { name: "Reports", href: "/dashboard/reports", icon: BarChart3 },
   { name: "Settings", href: "/dashboard/settings", icon: Settings },
 ];

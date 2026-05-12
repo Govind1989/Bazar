@@ -20,15 +20,10 @@ Static Credentials for Testing:
   $env:ANALYZE="true"; npm run build                                                                                                                                       ? for shortcuts
 ──────────────────────────────────────────────────────────
                                     
+In Navbar, after login, in the capital initials name icon when user clicks, create two simple drop down menu , Dashboard and logout. 
+On click of the Dashboard open the logged in user dashboard and on logout option logout the user from the application.Move the current
+dashboard icon from navbar to he drop down and logout from the intial name icons to the logout dropdown option. Impress me.
 
-- Show campaigns of vendors with prodcust or date added from a vendor where user is enrolled or free campaigns where users are not required to be enrolled
- when on cart, calendar modal with redeem option. 
-- Message and vendor follow options in vendor page or vendor listing cards.
-
-- add a notification section on the navbar to show the app notification for the users with some static notfications for now. 
-- In user profile, Add a new section order history, which shows the order history of user from multiple vendors, with easy
-wrtie review and coyou went on a loop, verify if the last task is complete.mments , and Complaints and Reports for each order they made with satisfaction of disastisfaction. and on 
-click we will resue the same modal we have in complaints and review section. Impress me
 
 Study @AgenticTruth and study the current implementation added in our repo and then add the detail of the implementation of our
 development process and update the missing module or detail in our @AgenticTruth adhering to the current format preserving the 
