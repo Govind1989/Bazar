@@ -30,8 +30,9 @@ import { PRODUCTS } from "@/data/mock";
 import { Campaign, CampaignType, CampaignStatus, TargetType } from "@/types/campaign";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function CampaignsPage() {
+function CampaignsContent() {
   const { user } = useAuthStore();
   const searchParams = useSearchParams();
   const { campaigns, addCampaign, updateCampaign, deleteCampaign, refreshStatuses } = useCampaignStore();
@@ -439,6 +440,14 @@ export default function CampaignsPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function CampaignsPage() {
+  return (
+    <Suspense fallback={<div className="p-8"><Typography variant="bodySm" className="opacity-40 animate-pulse uppercase tracking-widest font-black text-xs">Loading campaigns...</Typography></div>}>
+      <CampaignsContent />
+    </Suspense>
   );
 }
 

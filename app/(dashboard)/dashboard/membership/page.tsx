@@ -26,8 +26,9 @@ import { MembershipPlan, MembershipType, RewardType } from "@/types/membership";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function MembershipDashboard() {
+function MembershipContent() {
   const { user } = useAuthStore();
   const searchParams = useSearchParams();
   const { getVendorPlans, addPlan, updatePlan, deletePlan, setVendorPin, getVendorPin } = useMembershipStore();
@@ -392,6 +393,14 @@ export default function MembershipDashboard() {
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+export default function MembershipDashboard() {
+  return (
+    <Suspense fallback={<div className="p-8"><Typography variant="bodySm" className="opacity-40 animate-pulse uppercase tracking-widest font-black text-xs">Initializing retention engine...</Typography></div>}>
+      <MembershipContent />
+    </Suspense>
   );
 }
 
