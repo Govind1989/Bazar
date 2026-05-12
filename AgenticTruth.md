@@ -175,11 +175,10 @@ This document serves as the foundational truth for all agentic AI entities inter
 - **Integrated Report Triggers**: Direct "Report" actions embedded within order history for frictionless dissatisfaction logging.
 - **Audit Tracking System**: Real-time visualization of complaint lifecycles with Investigation Subjects and Audit Timestamps.
 
-### ✅ Phase 17: Transactional Lifecycle & Integrated Feedback (NEW)
-- **Order History Terminal**: Implementation of a high-fidelity purchase history module.
-- **Integrated Review Loop**: Frictionless "Easy Integration" for reviews and comments directly from the order list.
-- **Dynamic Status Orchestration**: Visual tracking of order lifecycles (Paid, Shipped, Pending, Cancelled) with semantic iconography.
-- **Real-time Review Sync**: Seamless display of user-contributed reviews within the corresponding transaction context.
+### ✅ Phase 18: Strategic Navigation Refinement & Aesthetic Identity (NEW)
+- **Unified User Dropdown**: Consolidated Dashboard access and Session management into a single, high-fidelity dropdown menu in `Navbar`.
+- **Aesthetic Iconography**: Strategic use of `LayoutDashboard` and `LogOut` within the user context for intuitive navigation.
+- **Context-Aware Dashboard Routing**: Automatic resolution of dashboard paths based on the `activeRole` from `useAuthStore` (Admin -> `/admin`, Vendor -> `/dashboard`, Customer -> `/account`).
 
 ---
 
@@ -192,29 +191,31 @@ This document serves as the foundational truth for all agentic AI entities inter
 5.  **Smart AI Assistant**: Activate the "Assistant" tab in the `FloatingDock` to provide context-aware platform help.
 
 ## 6. DEVELOPMENT PROCESS
-BAZAR adheres to a rigorous **Research -> Strategy -> Execution -> Validation** lifecycle to ensure architectural integrity and premium UI/UX delivery.
+BAZAR adheres to a rigorous **Research -> Strategy -> Execution -> Validation** lifecycle, optimized for **Agentic Autonomy** and architectural integrity.
 
-### 6.1 Research & Discovery
-- **Codebase Mapping**: Systematic use of `grep` and `glob` to understand existing patterns (e.g., CVA variants, Zustand persistence).
-- **Impact Analysis**: Identification of cross-cutting concerns (e.g., how a new account sub-page affects the global layout and sidebar) before first code change.
-- **Assumption Verification**: Empirical checks of existing data models (e.g., `RECENT_ORDERS` structure) to prevent regression.
-- **User Intent Alignment**: Deep-diving into requested workflows (e.g., "Easy Integration") to ensure implementation exceeds standard UX expectations.
+### 6.1 Research & Discovery (The "Deep Dive")
+- **Codebase Mapping**: Systematic use of `grep` and `glob` to understand existing patterns (e.g., CVA variants, Zustand persistence) before proposing changes.
+- **Impact Analysis**: Identification of cross-cutting concerns (e.g., how a new account sub-page affects the global layout and sidebar) to ensure zero-regression delivery.
+- **Assumption Verification**: Empirical checks of existing data models (e.g., `RECENT_ORDERS` structure) to align with backend expectations.
+- **User Intent Alignment**: Translating high-level requests (e.g., "Impress me") into specific, high-fidelity UI/UX implementations using modern primitives.
 
-### 6.2 Strategic Architecture
-- **Alignment with Design System**: Ensuring new features leverage shared components (`Card`, `Typography`, `Button`) to maintain the "Adaptive Monochromatic" identity.
-- **Surgical State Design**: Designing minimal, persistent state extensions in Zustand to support new business logic without bloat.
-- **Modular Scalability**: Designing sub-pages (like `/account/orders`) to be self-contained yet deeply integrated with global stores.
+### 6.2 Strategic Architecture (The "Blueprint")
+- **Alignment with Design System**: Ensuring every new component leverages the "Adaptive Monochromatic" tokens and shared UI library.
+- **Surgical State Design**: Designing minimal, persistent state extensions in Zustand to support new business logic without architectural bloat.
+- **Modular Scalability**: Building self-contained modules (like `/account/orders`) that are globally aware but locally managed.
+- **Predictive UX**: Anticipating user needs (e.g., adding a "Dashboard" shortcut in the user profile) to reduce click-depth.
 
-### 6.3 Implementation & Craft
+### 6.3 Implementation & Craft (The "Execution")
 - **Surgical Code Updates**: Applying targeted changes while rigorously adhering to local naming conventions and ES module standards.
-- **UI/UX Polishing**: Leveraging `Framer Motion` for fluid interactions and `Lucide` for semantic iconography to deliver an "Impressive" user experience.
-- **Defensive Engineering**: Implementing robust null-checks and loading states (Suspense) for all data-driven modules.
+- **UI/UX Polishing**: Leveraging `Framer Motion` for fluid interactions and `Lucide` for semantic iconography to deliver a premium "SPA-feel".
+- **Defensive Engineering**: Implementing robust null-checks, loading states, and error boundaries for all data-driven modules.
+- **Accessibility & Performance**: Ensuring all interactions are keyboard-navigable and leveraging Next.js optimizations (e.g., `useRouter().refresh()`).
 
-### 6.4 Verification & Finality
-- **End-to-End Validation**: Exhaustive testing of the entire user journey (e.g., Account -> Order History -> Review Submission -> State Update).
+### 6.4 Verification & Finality (The "QA")
+- **End-to-End Validation**: Exhaustive testing of the entire user journey across multiple roles and themes.
 - **Type Safety Enforcement**: Maintaining strict TypeScript integrity across all new interfaces and modules.
-- **Truth Source Synchronization**: Ensuring `@AgenticTruth.md` is updated in real-time to reflect the latest repository state.
+- **Truth Source Synchronization**: Updating `@AgenticTruth.md` immediately after each major feature deployment to maintain a 1:1 map of the repository state.
 
 ---
 *Generated by Agentic Truth Engine*
-*Last Update: 2026-05-11 | Version 2.0*
+*Last Update: 2026-05-12 | Version 2.1*

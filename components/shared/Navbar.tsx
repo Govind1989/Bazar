@@ -10,20 +10,22 @@ import { AuthModal } from "./AuthModal";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useSystemStore } from "@/store/useSystemStore";
 import { useTranslation } from "@/hooks/useTranslation";
-import { User, Globe, Sun, Moon, LayoutDashboard, LayoutGrid, Sparkles, ChevronDown, Utensils, Shirt, Zap, TreePine, Armchair, Monitor, Smartphone, Calendar, MapPin, Clock, ShoppingBag, ArrowRight, Menu, X as CloseIcon } from "lucide-react";
+import { User, Globe, Sun, Moon, LayoutDashboard, LayoutGrid, Sparkles, ChevronDown, Utensils, Shirt, Zap, TreePine, Armchair, Monitor, Smartphone, Calendar, MapPin, Clock, ShoppingBag, ArrowRight, Menu, X as CloseIcon, LogOut } from "lucide-react";
 import { useTheme } from "next-themes";
 import { CalendarToggle } from "./CalendarToggle";
 import { NotificationToggle } from "./NotificationToggle";
 import { motion, AnimatePresence } from "framer-motion";
 import { CATEGORIES, SERVICE_CATEGORIES, VENDORS } from "@/data/mock";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const { user, isAuthenticated, activeRole, logout } = useAuthStore();
   const { language, setLanguage, marketplaceView, setMarketplaceView } = useSystemStore();
   const { theme, setTheme } = useTheme();
@@ -44,13 +46,11 @@ export function Navbar() {
       .slice(0, 2);
   };
 
-  const handleUserClick = () => {
-    if (isAuthenticated) {
-      logout();
-      window.location.reload();
-    } else {
-      setIsAuthModalOpen(true);
-    }
+  const handleLogout = () => {
+    logout();
+    setIsUserMenuOpen(false);
+    router.push('/');
+    router.refresh();
   };
 
   useEffect(() => {
@@ -203,23 +203,18 @@ export function Navbar() {
           <CalendarToggle />
         </div>
         {isAuthenticated ? (
-          <div className="flex items-center gap-1.5 sm:gap-3">
-            <Link href={activeRole === 'SuperAdmin' ? '/admin' : activeRole === 'Vendor' ? '/dashboard' : '/account'}>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="w-7 h-7 sm:w-8 sm:h-8 border border-bazar-gray-100 dark:border-bazar-gray-900 hover:border-bazar-black dark:hover:border-bazar-white transition-all"
-              >
-                <LayoutDashboard className="w-3.5 sm:w-4 h-4" />
-              </Button>
-            </Link>
-            
+          <div className="relative flex items-center gap-1.5 sm:gap-3">
             <button 
-              onClick={handleUserClick}
+              onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
               className="group relative flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full transition-transform active:scale-95"
             >
               {/* Thin Ring */}
-              <div className="absolute inset-0 rounded-full border border-bazar-black/10 dark:border-bazar-white/10 group-hover:border-bazar-black dark:group-hover:border-bazar-white transition-colors" />
+              <div className={cn(
+                "absolute inset-0 rounded-full border transition-colors",
+                isUserMenuOpen 
+                  ? "border-bazar-black dark:border-bazar-white bg-bazar-black/5 dark:bg-bazar-white/5" 
+                  : "border-bazar-black/10 dark:border-bazar-white/10 group-hover:border-bazar-black dark:group-hover:border-bazar-white"
+              )} />
               
               {/* Initials Container */}
               <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-bazar-gray-50 dark:bg-bazar-gray-950 flex items-center justify-center overflow-hidden">
@@ -228,6 +223,53 @@ export function Navbar() {
                 </Typography>
               </div>
             </button>
+
+            {/* User Dropdown Menu */}
+            <AnimatePresence>
+              {isUserMenuOpen && (
+                <>
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onClick={() => setIsUserMenuOpen(false)}
+                    className="fixed inset-0 z-40"
+                  />
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    className="absolute top-10 right-0 z-50 w-48 bg-white dark:bg-bazar-black border border-bazar-gray-200 dark:border-bazar-gray-800 rounded-2xl shadow-xl overflow-hidden py-2"
+                  >
+                    <div className="px-4 py-3 border-b border-bazar-gray-100 dark:border-bazar-gray-900 mb-1">
+                      <Typography variant="bodySm" className="font-black truncate block">
+                        {user?.name}
+                      </Typography>
+                      <Typography variant="bodySm" className="opacity-40 truncate block uppercase tracking-widest text-[8px]">
+                        {activeRole}
+                      </Typography>
+                    </div>
+
+                    <Link 
+                      href={activeRole === 'SuperAdmin' ? '/admin' : activeRole === 'Vendor' ? '/dashboard' : '/account'}
+                      onClick={() => setIsUserMenuOpen(false)}
+                      className="flex items-center gap-3 px-4 py-2 hover:bg-bazar-gray-50 dark:hover:bg-bazar-gray-950 transition-colors group"
+                    >
+                      <LayoutDashboard className="w-4 h-4 opacity-40 group-hover:opacity-100 transition-opacity" />
+                      <span className="text-xs font-bold uppercase tracking-tight">Dashboard</span>
+                    </Link>
+
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-3 px-4 py-2 hover:bg-red-50 dark:hover:bg-red-950/20 text-red-600 transition-colors group"
+                    >
+                      <LogOut className="w-4 h-4 opacity-70 group-hover:opacity-100 transition-opacity" />
+                      <span className="text-xs font-bold uppercase tracking-tight">Logout</span>
+                    </button>
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>
           </div>
         ) : (
           <div className="flex items-center gap-1 sm:gap-2">
