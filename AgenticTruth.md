@@ -79,6 +79,12 @@ This document serves as the foundational truth for all agentic AI entities inter
 - **Bazar Intelligence**: Stores `aiSettings` (API Keys, Preferred Model) for both Users and Vendors.
 - **Global Messaging Sync**: Centralizes `isMessageModalOpen` and `activeConversationVendorId`.
 
+#### `store/useMembershipStore.ts`
+- **Logic**: Vendor-Driven Loyalty Infrastructure. 
+  - **Plan Management**: Orchestrates Visit-based and Spend-based loyalty programs with customizable targets and reward types (Cashback, Free Delivery).
+  - **Trust Validation**: Implements 6-digit Secret PIN logic for in-store purchase verification.
+  - **Real-time Progress**: Calculates average transaction values to determine dynamic reward levels (e.g., "11th meal free").
+
 ### 3.5 Quality Assurance & Governance (NEW)
 #### `app/(public)/account/complains/page.tsx`
 - **Purpose**: Official Dispute Resolution Terminal.
@@ -179,6 +185,11 @@ This document serves as the foundational truth for all agentic AI entities inter
 - **Unified User Dropdown**: Consolidated Dashboard access and Session management into a single, high-fidelity dropdown menu in `Navbar`.
 - **Aesthetic Iconography**: Strategic use of `LayoutDashboard` and `LogOut` within the user context for intuitive navigation.
 - **Context-Aware Dashboard Routing**: Automatic resolution of dashboard paths based on the `activeRole` from `useAuthStore` (Admin -> `/admin`, Vendor -> `/dashboard`, Customer -> `/account`).
+
+### ✅ Phase 19: Comprehensive Membership Economy (NEW)
+- **Vendor-to-Customer Loyalty Bridge**: End-to-end infrastructure for private membership clubs.
+- **Dynamic Reward Resolution**: Automated calculation of reward values based on historical engagement patterns.
+- **In-Store Trust Protocol**: Deployment of 6-digit Secret PINs for secure, cross-channel transaction validation.
 
 ---
 
