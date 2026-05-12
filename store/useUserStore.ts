@@ -37,9 +37,16 @@ interface UserState {
   activeConversationVendorId: string | null
   isMessageModalOpen: boolean
   aiSettings: {
-    userApiKey?: string
-    vendorApiKey?: string
-    preferredModel: string
+    user: {
+      provider: 'google' | 'openai' | 'anthropic' | null
+      apiKey?: string
+      model: string
+    }
+    vendor: {
+      provider: 'google' | 'openai' | 'anthropic' | null
+      apiKey?: string
+      model: string
+    }
   }
   toggleFavoriteCategory: (categoryId: string) => void
   toggleFavoriteSubCategory: (subCategoryId: string, parentCategoryId: string) => void
@@ -47,7 +54,7 @@ interface UserState {
   toggleEnrollCampaign: (campaignId: string) => void
   addComplaint: (complaint: Omit<Complaint, 'id' | 'status' | 'createdAt'>) => void
   addReview: (review: Omit<Review, 'id' | 'createdAt'>) => void
-  setAiApiKey: (type: 'user' | 'vendor', key: string) => void
+  updateAiSettings: (role: 'user' | 'vendor', settings: Partial<UserState['aiSettings']['user']>) => void
   setActiveConversation: (vendorId: string | null) => void
   setMessageModalOpen: (open: boolean) => void
 }
@@ -64,14 +71,15 @@ export const useUserStore = create<UserState>()(
       activeConversationVendorId: null,
       isMessageModalOpen: false,
       aiSettings: {
-        preferredModel: 'gpt-4o'
+        user: { provider: null, model: 'gemini-1.5-pro' },
+        vendor: { provider: null, model: 'gemini-1.5-pro' }
       },
-      toggleFavoriteCategory: (categoryId) => set((state) => ({
+      toggleFavoriteCategory: (categoryId: string) => set((state) => ({
         favoriteCategories: state.favoriteCategories.includes(categoryId)
           ? state.favoriteCategories.filter(id => id !== categoryId)
           : [...state.favoriteCategories, categoryId]
       })),
-      toggleFavoriteSubCategory: (subCategoryId, parentCategoryId) => set((state) => {
+      toggleFavoriteSubCategory: (subCategoryId: string, parentCategoryId: string) => set((state) => {
         const isCurrentlyFav = state.favoriteSubCategories.includes(subCategoryId);
         const nextSubFavs = isCurrentlyFav
           ? state.favoriteSubCategories.filter(id => id !== subCategoryId)
@@ -88,17 +96,17 @@ export const useUserStore = create<UserState>()(
           favoriteCategories: nextCatFavs
         };
       }),
-      toggleFollowVendor: (vendorId) => set((state) => ({
+      toggleFollowVendor: (vendorId: string) => set((state) => ({
         followedVendors: state.followedVendors.includes(vendorId)
           ? state.followedVendors.filter(id => id !== vendorId)
           : [...state.followedVendors, vendorId]
       })),
-      toggleEnrollCampaign: (campaignId) => set((state) => ({
+      toggleEnrollCampaign: (campaignId: string) => set((state) => ({
         enrolledCampaignIds: state.enrolledCampaignIds.includes(campaignId)
           ? state.enrolledCampaignIds.filter(id => id !== campaignId)
           : [...state.enrolledCampaignIds, campaignId]
       })),
-      addComplaint: (complaint) => set((state) => ({
+      addComplaint: (complaint: Omit<Complaint, 'id' | 'status' | 'createdAt'>) => set((state) => ({
         complaints: [
           {
             ...complaint,
@@ -109,7 +117,7 @@ export const useUserStore = create<UserState>()(
           ...state.complaints
         ]
       })),
-      addReview: (review) => set((state) => ({
+      addReview: (review: Omit<Review, 'id' | 'createdAt'>) => set((state) => ({
         reviews: [
           {
             ...review,
@@ -119,10 +127,10 @@ export const useUserStore = create<UserState>()(
           ...state.reviews
         ]
       })),
-      setAiApiKey: (type, key) => set((state) => ({
+      updateAiSettings: (role: 'user' | 'vendor', settings: Partial<UserState['aiSettings']['user']>) => set((state) => ({
         aiSettings: {
           ...state.aiSettings,
-          [type === 'user' ? 'userApiKey' : 'vendorApiKey']: key
+          [role]: { ...state.aiSettings[role], ...settings }
         }
       })),
       setActiveConversation: (vendorId) => set({ 

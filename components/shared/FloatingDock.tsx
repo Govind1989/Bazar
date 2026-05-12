@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   MessageSquare, 
@@ -23,7 +24,7 @@ export function FloatingDock() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeModal, setActiveModal] = useState<'messages' | 'ai' | null>(null);
   const { user, activeRole } = useAuthStore();
-  const { aiSettings, setAiApiKey, isMessageModalOpen, setMessageModalOpen, activeConversationVendorId } = useUserStore();
+  const { aiSettings, isMessageModalOpen, setMessageModalOpen, activeConversationVendorId } = useUserStore();
 
   // Sync internal state with store
   useEffect(() => {
@@ -91,17 +92,43 @@ export function FloatingDock() {
                </Button>
             </div>
 
-            {/* Modal Content - Placeholder for now */}
+            {/* Modal Content */}
             <div className="flex-1 p-6 flex flex-col items-center justify-center text-center">
-               <div className="w-16 h-16 rounded-3xl bg-bazar-gray-100 dark:bg-bazar-gray-900 flex items-center justify-center mb-4 border border-bazar-gray-200 dark:border-bazar-gray-800">
-                  <Bot className="w-8 h-8 opacity-20" />
+               <div className={cn(
+                 "w-16 h-16 rounded-3xl flex items-center justify-center mb-4 border transition-all duration-500",
+                 (activeModal === 'ai' && aiSettings[isVendor ? 'vendor' : 'user']?.apiKey)
+                  ? "bg-green-100 dark:bg-green-950/30 border-green-200 dark:border-green-900 text-green-600"
+                  : "bg-bazar-gray-100 dark:bg-bazar-gray-900 border-bazar-gray-200 dark:border-bazar-gray-800 text-bazar-black/20"
+               )}>
+                  {activeModal === 'messages' ? <MessageSquare className="w-8 h-8 opacity-20" /> : <Bot className="w-8 h-8" />}
                </div>
                <Typography variant="titleSm" className="font-black uppercase tracking-tighter mb-2">
-                 Welcome to Bazar Intelligence
+                 {activeModal === 'messages' 
+                   ? "Messaging System" 
+                   : (aiSettings[isVendor ? 'vendor' : 'user']?.apiKey ? "Intelligence Active" : "Intelligence Offline")
+                 }
                </Typography>
                <Typography variant="bodySm" className="opacity-40 max-w-[250px]">
-                 Setup your API keys in the dashboard to enable advanced {activeModal === 'ai' ? 'autonomous tasks' : 'message routing'}.
+                 {activeModal === 'messages' 
+                   ? "Connect directly with our support team or vendors for real-time assistance."
+                   : (aiSettings[isVendor ? 'vendor' : 'user']?.apiKey 
+                      ? `Connected to ${aiSettings[isVendor ? 'vendor' : 'user'].provider} (${aiSettings[isVendor ? 'vendor' : 'user'].model}). How can I help you today?`
+                      : "Setup your API keys in the dashboard to enable advanced autonomous tasks and agentic workflows.")
+                 }
                </Typography>
+
+               {activeModal === 'ai' && !aiSettings[isVendor ? 'vendor' : 'user']?.apiKey && (
+                 <Button 
+                   variant="outline" 
+                   size="sm" 
+                   className="mt-6 rounded-xl font-black uppercase tracking-widest text-[10px]"
+                   asChild
+                 >
+                   <Link href={isVendor ? "/dashboard/settings/ai" : "/account/settings/ai"}>
+                     Configure Now
+                   </Link>
+                 </Button>
+               )}
             </div>
 
             {/* Modal Footer / Input */}

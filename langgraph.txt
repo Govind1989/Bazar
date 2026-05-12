@@ -1,0 +1,140 @@
+# BAZAR ENTERPRISE AGENTIC INFRASTRUCTURE (LANGGRAPH)
+
+## 1. ARCHITECTURAL PHILOSOPHY: MODULAR AUTONOMY
+The Bazar Agentic System is built on the principle of **Plug-and-Play Intelligence**. Instead of hardcoding business logic into the
+ AI, we define a **Tool Registry** where capabilities are registered as modular functions. The LangGraph orchestration layer acts
+  as a "Cognitive Router," dynamically selecting and executing the right tool based on the user's intent and role-based permissions.
+
+### Key Enterprise Pillars:
+- **Role-Based Tool Access (RBTA)**: Tools are partitioned by user role (Vendor vs. Customer).
+- **Stateful Persistence**: Multi-turn conversations with contextual memory across sessions.
+- **Traceability**: Ready for LangSmith integration to audit agentic decisions.
+- **Thought-Stream Streaming**: Real-time visualization of the agent's internal reasoning.
+
+---
+
+## 2. MODULAR TOOL REGISTRY PATTERN
+
+We define tools as standalone, typed modules that can be registered into the agent's workspace.
+
+### Tool Definition Interface
+```typescript
+interface BazarTool {
+  name: string;
+  description: string;
+  schema: z.ZodObject<any>; // For validation and LLM prompting
+  role: 'VENDOR' | 'CUSTOMER' | 'SUPERADMIN' | 'ALL';
+  execute: (args: any, context: AgentContext) => Promise<any>;
+}
+```
+
+### The Registry Store
+```typescript
+// registry/index.ts
+export const ToolRegistry: BazarTool[] = [
+  ...InventoryTools,
+  ...PricingTools,
+  ...MarketingTools,
+  ...ConciergeTools,
+];
+
+// Utility to fetch tools based on active role
+export const getToolsForRole = (role: UserRole) => 
+  ToolRegistry.filter(t => t.role === role || t.role === 'ALL');
+```
+
+---
+
+## 3. CORE ORCHESTRATION (THE GRAPH)
+
+The graph is designed to be **Reasoning-First**. It follows a **Plan -> Act -> Verify** loop that is entirely tool-agnostic.
+
+### Unified Agent State
+```typescript
+interface AgentState {
+  messages: BaseMessage[];
+  next: string; // Routing state
+  context: {
+    vendorId?: string;
+    userId: string;
+    role: UserRole;
+    preferences: Record<string, any>;
+  };
+  errors: string[];
+}
+```
+
+### Production-Grade Graph Logic
+```typescript
+const createBazarGraph = (tools: BazarTool[]) => {
+  const workflow = new StateGraph(AgentState)
+    .addNode("planner", planNode)       // Analyzes intent & selects potential tools
+    .addNode("executor", executeNode)   // Securely runs tool calls
+    .addNode("evaluator", evaluateNode) // Checks if tool output solved the intent
+    .addNode("responder", respondNode); // Streams final UX response
+
+  workflow.addEdge(START, "planner");
+  workflow.addConditionalEdges("executor", shouldContinue, {
+    continue: "evaluator",
+    retry: "executor",
+    end: "responder"
+  });
+  
+  return workflow.compile({ checkpointer: new MemorySaver() });
+};
+```
+
+---
+
+## 4. ENTERPRISE INTEGRATION MODULES
+
+### Module A: The Secure Bridge (API Layer)
+Located in `app/api/agent/route.ts`, this handles the handoff from the frontend to the LLM.
+
+- **Context Injection**: Automatically pulls the `vendorId` and `activeRole` from the session.
+- **API Key Proxy**: Uses the keys stored in `useUserStore` securely via server-side environment variables or secret management.
+- **Stream Multiplexing**: Streams `thought` objects (metadata) and `content` chunks (text) simultaneously.
+
+### Module B: The Multi-Tenant Toolset
+Each tool is a "Surgical Action" that interacts with our existing business logic.
+
+- **Example: `UpdatePriceTool`**:
+  1. Validates `vendorId` from context (Security).
+  2. Calls `useCMSStore` logic on the server-side.
+  3. Returns a structured status (Success/Fail) with reasoning.
+
+---
+
+## 5. THOUGHT-PROCESS STREAMING (UX/UI)
+
+To achieve the "Fluidic Experience," we implement a specialized `StreamHandler`.
+
+### The Streaming Protocol
+Each chunk from the server is prefixed with a **Header** to define its type:
+- `[THOUGHT]`: Internal reasoning for the "Engaging Spinner".
+- `[TOOL_CALL]`: Identification of which tool is being used.
+- `[CONTENT]`: Final user-facing text.
+- `[ACTION]`: UI triggers (e.g., "Open Cart", "Show Comparison Table").
+
+---
+
+## 6. PRODUCTION ROADMAP (DEVELOPMENT MODULES)
+
+### Module 1: The Registry & Core Graph
+- Implement the `BazarTool` interface and Registry system.
+- Build the `StateGraph` with a robust ReAct (Reasoning + Acting) loop.
+
+### Module 2: Security & Context
+- Implement middleware to inject `userContext` into every agent call.
+- Secure tool execution with role-based checks.
+
+### Module 3: Advanced Streaming UI
+- Refactor `FloatingDock.tsx` to handle the multiplexed stream.
+- Create a `ThoughtTerminal` component that visualizes the agent's logic with GSAP animations.
+
+### Module 4: Rapid Tool Onboarding
+- Migrate specific use cases (Price Opt, Inventory, etc.) into the new `BazarTool` format.
+- Add support for "UI-Generative" tools (tools that return React components or JSON for templates).
+
+---
+*Enterprise Agentic Blueprint | Bazar 2026*

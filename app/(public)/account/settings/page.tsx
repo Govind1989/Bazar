@@ -6,7 +6,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { Save, Lock, User as UserIcon } from "lucide-react";
+import { Save, Lock, User as UserIcon, Bot, ChevronRight } from "lucide-react";
+import Link from "next/link";
 
 export default function AccountSettings() {
   const { user } = useAuthStore();
@@ -52,6 +53,29 @@ export default function AccountSettings() {
               <Save className="w-4 h-4 mr-2" />
               Save Changes
            </Button>
+        </section>
+
+        <hr className="border-bazar-gray-100 dark:border-bazar-gray-900" />
+
+        <section className="space-y-6">
+           <div className="flex items-center gap-2 mb-4">
+              <Bot className="w-4 h-4 opacity-40" />
+              <Typography variant="titleSm" className="font-black uppercase tracking-widest text-[10px]">Bazar Intelligence</Typography>
+           </div>
+           
+           <Card className="p-6 border-2 border-dashed border-bazar-gray-200 dark:border-bazar-gray-800 bg-transparent hover:bg-bazar-gray-50 dark:hover:bg-bazar-gray-950 transition-colors group">
+              <div className="flex items-center justify-between">
+                 <div className="space-y-1">
+                    <Typography variant="titleSm" className="font-black text-xs uppercase tracking-tight">AI Settings & Autonomous Tools</Typography>
+                    <Typography variant="bodySm" className="text-[10px] opacity-40">Connect your LLM provider to enable your personal shopping concierge.</Typography>
+                 </div>
+                 <Link href="/account/settings/ai">
+                    <Button variant="ghost" size="icon" className="rounded-full group-hover:translate-x-1 transition-transform">
+                       <ChevronRight className="w-4 h-4" />
+                    </Button>
+                 </Link>
+              </div>
+           </Card>
         </section>
 
         <hr className="border-bazar-gray-100 dark:border-bazar-gray-900" />

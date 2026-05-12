@@ -4,11 +4,19 @@ import { Typography } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { User, Palette, Shield, Bell, CreditCard, ChevronRight, Globe, Zap } from "lucide-react";
+import { User, Palette, Shield, Bell, CreditCard, ChevronRight, Globe, Zap, Bot } from "lucide-react";
 import Link from "next/link";
 
 export default function SettingsLandingPage() {
   const sections = [
+    {
+      title: "Bazar Intelligence",
+      description: "Connect your LLM provider and configure autonomous agentic tools.",
+      icon: Bot,
+      href: "/dashboard/settings/ai",
+      color: "purple",
+      badge: "Agentic"
+    },
     {
       title: "Store Profile",
       description: "Manage your public store information, logo, and contact details.",

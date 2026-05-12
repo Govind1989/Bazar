@@ -1,14 +1,20 @@
- useSearchParams() should be wrapped in a suspense boundary at page "/dashboard/membership". Read more: https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
-    at g (E:\Nextjs\Bazar\.next\server\chunks\4281.js:15:49694)
-    at m (E:\Nextjs\Bazar\.next\server\chunks\4281.js:38:21627)
-    at D (E:\Nextjs\Bazar\.next\server\app\(dashboard)\dashboard\membership\page.js:2:11717)
-    at n3 (E:\Nextjs\Bazar\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:2:82831)
-    at n6 (E:\Nextjs\Bazar\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:2:84601)
-    at n5 (E:\Nextjs\Bazar\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:2:104801)
-    at n7 (E:\Nextjs\Bazar\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:2:102219)
-    at n8 (E:\Nextjs\Bazar\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:2:83183)
-    at n6 (E:\Nextjs\Bazar\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:2:84647)
-    at n6 (E:\Nextjs\Bazar\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:2:101560)
-Error occurred prerendering page "/dashboard/membership". Read more: https://nextjs.org/docs/messages/prerender-error
-Export encountered an error on /(dashboard)/dashboard/membership/page: /dashboard/membership, exiting the build.
- ⨯ Next.js build worker exited with code: 1 and signal: null
+## Error Type
+Runtime TypeError
+
+## Error Message
+can't access property "apiKey", currentSettings is undefined
+
+
+    at AISettings (components\shared\AISettings.tsx:36:40)
+    at VendorAISettingsPage (app\(dashboard)\dashboard\settings\ai\page.tsx:8:7)
+
+## Code Frame
+  34 |   const currentSettings = aiSettings[role];
+  35 |   
+> 36 |   const [apiKey, setApiKey] = useState(currentSettings.apiKey || "");
+     |                                        ^
+  37 |   const [isTesting, setIsTesting] = useState(false);
+  38 |   const [testResult, setTestResult] = useState<'success' | 'error' | null>(null);
+  39 |
+
+Next.js version: 15.5.15 (Webpack)
