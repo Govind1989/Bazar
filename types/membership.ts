@@ -16,7 +16,7 @@ export interface MembershipPlan {
   isOnlineOnlyReward: boolean; // True for things like Free Delivery
   
   // Validation
-  secretPin: string; // 4-digit numerical pin for in-store validation
+  secretPin: string; // 6-digit numerical pin for in-store validation
   
   // Meta
   status: 'ACTIVE' | 'INACTIVE';

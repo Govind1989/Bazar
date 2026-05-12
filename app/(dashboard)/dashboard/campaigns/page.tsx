@@ -29,9 +29,11 @@ import { useCMSStore } from "@/store/useCMSStore";
 import { PRODUCTS } from "@/data/mock";
 import { Campaign, CampaignType, CampaignStatus, TargetType } from "@/types/campaign";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSearchParams } from "next/navigation";
 
 export default function CampaignsPage() {
   const { user } = useAuthStore();
+  const searchParams = useSearchParams();
   const { campaigns, addCampaign, updateCampaign, deleteCampaign, refreshStatuses } = useCampaignStore();
   const { previewConfig, init: initCMS } = useCMSStore();
   const [filter, setFilter] = useState<CampaignStatus | 'ALL'>('ALL');
@@ -40,6 +42,15 @@ export default function CampaignsPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
 
   const vendorId = user?.vendorId || 'v1';
+
+  // Check for auto-open action
+  useEffect(() => {
+    if (searchParams.get('action') === 'new') {
+      setIsModalOpen(true);
+      // Clean up URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, [searchParams]);
 
   // Form State
   const [formData, setFormData] = useState<Omit<Campaign, 'id' | 'status' | 'userCount' | 'totalSales' | 'createdAt'>>({

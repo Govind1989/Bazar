@@ -20,9 +20,13 @@ Static Credentials for Testing:
   $env:ANALYZE="true"; npm run build                                                                                                                                       ? for shortcuts
 ──────────────────────────────────────────────────────────
                                     
-In Navbar, after login, in the capital initials name icon when user clicks, create two simple drop down menu , Dashboard and logout. 
+In Navbar, after login, currently user is able to logout when clicked on the capital initials name icon when user clicks, create two simple drop down menu , Dashboard and logout. 
 On click of the Dashboard open the logged in user dashboard and on logout option logout the user from the application.Move the current
-dashboard icon from navbar to he drop down and logout from the intial name icons to the logout dropdown option. Impress me.
+dashboard icon from navbar to the drop down and logout from the intial name icons to the logout dropdown option. Impress me.
+
+Remove the Add product we have on top of the vendor dashbaord, place the functional theme toggle and functional language toggle in 
+place of the Add product bottom in the vendor dashboard. Also make the sidebar easily expandable and collapsible in our desktop version.
+ When collapsed hide the labels only show icons but on hover the labels shall be displayed.
 
 
 Study @AgenticTruth and study the current implementation added in our repo and then add the detail of the implementation of our

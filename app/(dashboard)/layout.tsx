@@ -177,10 +177,38 @@ export default function DashboardLayout({
             </div>
           </div>
           <div className="flex items-center gap-2 md:gap-4">
-            <Button size="sm" className="h-8 md:h-9 gap-2 px-3 md:px-4 text-[10px] md:text-xs uppercase tracking-widest font-bold">
-              <Plus className="w-3.5 h-3.5 md:w-4 h-4" />
-              <span className="hidden sm:inline">Add Product</span>
-            </Button>
+            <AnimatePresence>
+               <div className="relative group">
+                  <Button size="sm" className="h-8 md:h-9 gap-2 px-3 md:px-4 text-[10px] md:text-xs uppercase tracking-widest font-black rounded-xl bg-bazar-black dark:bg-bazar-white text-white dark:text-bazar-black group">
+                    <Plus className="w-3.5 h-3.5 md:w-4 md:h-4 group-hover:rotate-90 transition-transform duration-500" />
+                    <span className="hidden sm:inline">Quick Create</span>
+                  </Button>
+                  
+                  {/* Dropdown Menu */}
+                  <div className="absolute top-full right-0 mt-2 w-56 bg-white dark:bg-bazar-black border-2 border-bazar-black dark:border-bazar-white rounded-2xl shadow-2xl opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 z-50 overflow-hidden">
+                     <div className="p-2 space-y-1">
+                        <QuickActionItem 
+                          icon={Package} 
+                          label="New Product" 
+                          description="Add to inventory" 
+                          href="/dashboard/inventory?action=new" 
+                        />
+                        <QuickActionItem 
+                          icon={Gift} 
+                          label="Marketing Offer" 
+                          description="Flash sales & deals" 
+                          href="/dashboard/campaigns?action=new" 
+                        />
+                        <QuickActionItem 
+                          icon={User} 
+                          label="Membership Club" 
+                          description="Loyalty programs" 
+                          href="/dashboard/membership?action=new" 
+                        />
+                     </div>
+                  </div>
+               </div>
+            </AnimatePresence>
           </div>
         </header>
 
@@ -191,3 +219,18 @@ export default function DashboardLayout({
     </div>
   );
 }
+
+function QuickActionItem({ icon: Icon, label, description, href }: any) {
+  return (
+    <Link href={href} className="flex items-center gap-3 p-3 rounded-xl hover:bg-bazar-gray-50 dark:hover:bg-bazar-gray-950 transition-colors group/item">
+       <div className="w-10 h-10 rounded-lg bg-bazar-gray-50 dark:bg-bazar-gray-950 flex items-center justify-center border border-bazar-gray-100 dark:border-bazar-gray-900 group-hover/item:bg-white dark:group-hover/item:bg-bazar-black transition-colors">
+          <Icon className="w-5 h-5 opacity-40 group-hover/item:opacity-100 transition-opacity" />
+       </div>
+       <div>
+          <Typography variant="bodySm" className="text-[10px] font-black uppercase tracking-widest">{label}</Typography>
+          <Typography variant="bodySm" className="text-[8px] opacity-40 uppercase font-bold tracking-tighter">{description}</Typography>
+       </div>
+    </Link>
+  );
+}
+

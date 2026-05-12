@@ -1,32 +1,76 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Typography } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useMembershipStore } from "@/store/useMembershipStore";
+import { VENDORS } from "@/data/mock";
 import { 
-  User, 
   Plus, 
   QrCode, 
-  Settings, 
   Users, 
   Trophy, 
-  History,
   TrendingUp,
-  ChevronRight,
   ShieldCheck,
-  Target
+  Target,
+  Edit2,
+  Trash2,
+  X as CloseIcon,
+  Save,
+  Gift
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { MembershipPlan, MembershipType, RewardType } from "@/types/membership";
+import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export default function MembershipDashboard() {
   const { user } = useAuthStore();
-  const { getVendorPlans, plans, userMemberships } = useMembershipStore();
-  const vendorPlans = getVendorPlans(user?.vendorId || 'v1');
+  const searchParams = useSearchParams();
+  const { getVendorPlans, addPlan, updatePlan, deletePlan, setVendorPin, getVendorPin } = useMembershipStore();
+  
+  const vendor = VENDORS.find(v => v.id === user?.vendorId) || VENDORS[0];
+  const vendorPlans = getVendorPlans(vendor.id);
   
   const [showQR, setShowQR] = useState(false);
+  const [editingPlan, setEditingPlan] = useState<MembershipPlan | null>(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  
+  const [globalPin, setLocalGlobalPin] = useState(getVendorPin(vendor.id));
+  const [isPinEditing, setIsPinEditing] = useState(false);
+
+  // Check for auto-open action
+  useEffect(() => {
+    if (searchParams.get('action') === 'new') {
+      setIsFormOpen(true);
+      // Clean up URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, [searchParams]);
+
+  const handleOpenForm = (plan?: MembershipPlan) => {
+    setEditingPlan(plan || null);
+    setIsFormOpen(true);
+  };
+
+  const handleCloseForm = () => {
+    setIsFormOpen(false);
+    setEditingPlan(null);
+  };
+
+  const handleSavePin = () => {
+    if (globalPin.length === 6) {
+      setVendorPin(vendor.id, globalPin);
+      // Update all existing plans to use this pin for consistency
+      vendorPlans.forEach(plan => {
+        updatePlan(plan.id, { secretPin: globalPin });
+      });
+      setIsPinEditing(false);
+    }
+  };
 
   // Mock enrolled users for demonstration
   const enrolledUsers = [
@@ -41,47 +85,126 @@ export default function MembershipDashboard() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <Typography variant="titleSm" className="uppercase tracking-[0.3em] text-[10px] opacity-40 mb-2 font-black">
-            Customer Retention
+            Retention & Loyalty Engine
           </Typography>
           <Typography variant="displaySm" className="text-3xl md:text-5xl tracking-tighter font-black">
-            Membership <span className="text-bazar-gray-300">Club</span>
+            Customer <span className="text-bazar-gray-300">Club</span>
           </Typography>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
           <Button 
             variant="outline" 
-            className="h-12 px-6 gap-2 uppercase font-black tracking-widest text-[10px]"
+            className="h-12 px-6 gap-2 uppercase font-black tracking-widest text-[10px] rounded-xl border-2"
             onClick={() => setShowQR(!showQR)}
           >
             <QrCode className="w-4 h-4" />
-            {showQR ? "Hide QR" : "Store QR"}
+            {showQR ? "Close Toolkit" : "Merchant Toolkit"}
           </Button>
-          <Button className="h-12 px-6 gap-2 uppercase font-black tracking-widest text-[10px]">
+          <Link href="/dashboard/campaigns">
+            <Button 
+              variant="outline"
+              className="h-12 px-6 gap-2 uppercase font-black tracking-widest text-[10px] rounded-xl border-2"
+            >
+              <Gift className="w-4 h-4" />
+              Marketing Hub
+            </Button>
+          </Link>
+          <Button 
+            className="h-12 px-6 gap-2 uppercase font-black tracking-widest text-[10px] rounded-xl bg-bazar-black dark:bg-bazar-white text-white dark:text-bazar-black"
+            onClick={() => handleOpenForm()}
+          >
             <Plus className="w-4 h-4" />
-            New Campaign
+            New Membership
           </Button>
         </div>
       </div>
 
-      {showQR && (
-        <Card className="p-8 md:p-12 border-2 border-dashed border-bazar-black/10 dark:border-bazar-white/10 bg-bazar-gray-50/50 dark:bg-bazar-gray-950/50 flex flex-col items-center text-center animate-in slide-in-from-top duration-500">
-          <div className="bg-white p-6 rounded-3xl shadow-2xl mb-8 group hover:scale-105 transition-transform duration-500 cursor-pointer">
-            <img 
-              src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://bazar.com/vendor/${user?.vendorId}/membership`} 
-              alt="Store QR Code"
-              className="w-48 h-48 md:w-64 md:h-64"
-            />
-          </div>
-          <Typography variant="titleMd" className="mb-2 uppercase tracking-widest font-black">In-Store QR Code</Typography>
-          <Typography variant="bodySm" className="opacity-40 max-w-md mb-8">
-            Print this QR code and place it at your billing counter. Customers can scan to join your membership club and track their rewards.
-          </Typography>
-          <div className="flex gap-4">
-             <Button variant="outline" size="sm" className="uppercase font-bold tracking-widest text-[9px]">Download PDF</Button>
-             <Button variant="outline" size="sm" className="uppercase font-bold tracking-widest text-[9px]">Print Sticker</Button>
-          </div>
-        </Card>
-      )}
+      <AnimatePresence>
+        {showQR && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="overflow-hidden"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-12">
+               <Card className="p-8 md:p-12 border-2 border-bazar-black dark:border-bazar-white bg-bazar-gray-50/50 dark:bg-bazar-gray-950/50 flex flex-col items-center text-center rounded-[2.5rem]">
+                  <div className="bg-white p-6 rounded-3xl shadow-2xl mb-8 group hover:scale-105 transition-transform duration-500 cursor-pointer">
+                    <img 
+                      src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://bazar.com/vendor/${vendor.slug}/membership`} 
+                      alt="Store QR Code"
+                      className="w-48 h-48 md:w-56 md:h-56"
+                    />
+                  </div>
+                  <Typography variant="titleMd" className="mb-2 uppercase tracking-widest font-black text-sm">Storefront QR Gateway</Typography>
+                  <Typography variant="bodySm" className="opacity-40 max-w-xs mb-8 text-[10px] leading-relaxed uppercase font-bold tracking-widest">
+                    Place this at your POS. Customers scan to join, track progress, and validate purchases instantly.
+                  </Typography>
+                  <div className="flex gap-4">
+                     <Button variant="outline" size="sm" className="h-10 px-4 uppercase font-black tracking-widest text-[8px] rounded-lg">Download Kit</Button>
+                     <Button variant="outline" size="sm" className="h-10 px-4 uppercase font-black tracking-widest text-[8px] rounded-lg">Order Stickers</Button>
+                  </div>
+               </Card>
+
+               <Card className="p-8 md:p-12 border-2 border-dashed border-bazar-gray-200 dark:border-bazar-gray-800 bg-white dark:bg-bazar-black rounded-[2.5rem] flex flex-col justify-center">
+                  <div className="space-y-8">
+                     <div>
+                        <Typography variant="titleMd" className="mb-2 uppercase tracking-[0.2em] font-black text-sm">Security Configuration</Typography>
+                        <Typography variant="bodySm" className="opacity-40 text-xs leading-relaxed max-w-md">
+                          Set a unique 6-digit PIN for your store. Your staff will use this to validate customer purchases on their phones during checkout.
+                        </Typography>
+                     </div>
+                     
+                     <div className="space-y-4">
+                        <div className="flex items-center gap-4">
+                           <div className="flex-1 space-y-2">
+                              <label className="text-[10px] font-black uppercase tracking-widest opacity-40 ml-2">Global Validation PIN</label>
+                              <div className="relative group">
+                                 <input 
+                                    type="text"
+                                    value={globalPin}
+                                    onChange={(e) => setLocalGlobalPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                                    readOnly={!isPinEditing}
+                                    className={cn(
+                                       "w-full h-16 bg-bazar-gray-50 dark:bg-bazar-gray-950 border-2 border-bazar-gray-100 dark:border-bazar-gray-900 rounded-2xl px-6 text-2xl font-mono font-black tracking-[0.5em] outline-none transition-all",
+                                       isPinEditing && "border-bazar-black dark:border-bazar-white bg-white dark:bg-bazar-black"
+                                    )}
+                                 />
+                                 {!isPinEditing && (
+                                    <Button 
+                                       variant="ghost" 
+                                       size="icon" 
+                                       className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity"
+                                       onClick={() => setIsPinEditing(true)}
+                                    >
+                                       <Edit2 className="w-4 h-4" />
+                                    </Button>
+                                 )}
+                              </div>
+                           </div>
+                           <div className="pt-6">
+                              <Button 
+                                 className="h-16 w-16 rounded-2xl"
+                                 disabled={!isPinEditing || globalPin.length !== 6}
+                                 onClick={handleSavePin}
+                              >
+                                 <Save className="w-5 h-5" />
+                              </Button>
+                           </div>
+                        </div>
+                        <div className="p-4 bg-amber-50 dark:bg-amber-950/20 rounded-2xl border border-amber-200/50 dark:border-amber-800/50 flex items-start gap-4">
+                           <ShieldCheck className="w-5 h-5 text-amber-600 shrink-0 mt-1" />
+                           <Typography variant="bodySm" className="text-[10px] text-amber-700 dark:text-amber-400 leading-relaxed font-bold uppercase tracking-widest">
+                             Warning: Changing your PIN will require all active staff to re-authenticate their validation sessions.
+                           </Typography>
+                        </div>
+                     </div>
+                  </div>
+               </Card>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -115,7 +238,30 @@ export default function MembershipDashboard() {
           
           <div className="space-y-4">
             {vendorPlans.map((plan) => (
-              <Card key={plan.id} className="p-6 md:p-8 hover:border-bazar-black dark:hover:border-bazar-white transition-all duration-500 group">
+              <Card key={plan.id} className="p-6 md:p-8 hover:border-bazar-black dark:hover:border-bazar-white transition-all duration-500 group relative overflow-hidden">
+                <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                   <Button 
+                    variant="outline" 
+                    size="icon" 
+                    className="h-8 w-8 rounded-lg bg-white dark:bg-bazar-black"
+                    onClick={() => handleOpenForm(plan)}
+                   >
+                     <Edit2 className="w-3.5 h-3.5" />
+                   </Button>
+                   <Button 
+                    variant="outline" 
+                    size="icon" 
+                    className="h-8 w-8 rounded-lg bg-white dark:bg-bazar-black text-red-500 border-red-500/20 hover:bg-red-50"
+                    onClick={() => {
+                      if(confirm("Are you sure you want to delete this campaign?")) {
+                        deletePlan(plan.id);
+                      }
+                    }}
+                   >
+                     <Trash2 className="w-3.5 h-3.5" />
+                   </Button>
+                </div>
+
                 <div className="flex justify-between items-start mb-6">
                   <div>
                     <div className="flex items-center gap-3 mb-2">
@@ -124,7 +270,7 @@ export default function MembershipDashboard() {
                     </div>
                     <Typography variant="bodySm" className="opacity-40 max-w-sm">{plan.description}</Typography>
                   </div>
-                  <div className="flex flex-col items-end gap-2">
+                  <div className="flex flex-col items-end gap-2 pr-12">
                     <div className="bg-bazar-gray-100 dark:bg-bazar-gray-900 p-3 rounded-2xl">
                       <ShieldCheck className="w-5 h-5 opacity-20 group-hover:opacity-100 transition-opacity" />
                     </div>
@@ -156,11 +302,16 @@ export default function MembershipDashboard() {
                   </div>
                   <div>
                     <Typography variant="bodySm" className="text-[9px] uppercase font-black opacity-30 mb-1">Secret PIN</Typography>
-                    <Typography variant="bodySm" className="font-mono font-bold tracking-[0.3em]">****</Typography>
+                    <Typography variant="bodySm" className="font-mono font-bold tracking-[0.2em]">{plan.secretPin}</Typography>
                   </div>
                 </div>
               </Card>
             ))}
+            {vendorPlans.length === 0 && (
+              <div className="py-20 text-center border-2 border-dashed border-bazar-gray-100 dark:border-bazar-gray-900 rounded-3xl">
+                <Typography variant="bodySm" className="opacity-30 italic">No membership campaigns created yet.</Typography>
+              </div>
+            )}
           </div>
         </div>
 
@@ -214,13 +365,181 @@ export default function MembershipDashboard() {
               <div>
                 <Typography variant="titleMd" className="font-black mb-1">Validation Tip</Typography>
                 <Typography variant="bodySm" className="opacity-60 text-xs leading-relaxed">
-                  Always ask for the customer's phone number or scan their personal QR code before entering the 4-digit PIN to validate their in-store purchase.
+                  Always ask for the customer's phone number or scan their personal QR code before entering the 6-digit PIN to validate their in-store purchase.
                 </Typography>
               </div>
             </div>
           </Card>
         </div>
       </div>
+
+      {/* Form Modal */}
+      <AnimatePresence>
+        {isFormOpen && (
+          <MembershipPlanForm 
+            vendorId={user?.vendorId || 'v1'}
+            plan={editingPlan}
+            onClose={handleCloseForm}
+            onSave={(data) => {
+              if (editingPlan) {
+                updatePlan(editingPlan.id, data);
+              } else {
+                addPlan(data);
+              }
+              handleCloseForm();
+            }}
+          />
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function MembershipPlanForm({ vendorId, plan, onClose, onSave }: { 
+  vendorId: string, 
+  plan: MembershipPlan | null, 
+  onClose: () => void, 
+  onSave: (data: any) => void 
+}) {
+  const { getVendorPin } = useMembershipStore();
+  const [formData, setFormData] = useState({
+    vendorId,
+    title: plan?.title || "",
+    description: plan?.description || "",
+    type: plan?.type || "VISIT_BASED" as MembershipType,
+    rewardType: plan?.rewardType || "CASHBACK_PERCENT" as RewardType,
+    targetVisits: plan?.targetVisits || 10,
+    rewardValue: plan?.rewardValue || 100,
+    rewardDescription: plan?.rewardDescription || "",
+    isOnlineOnlyReward: plan?.isOnlineOnlyReward || false,
+    secretPin: plan?.secretPin || getVendorPin(vendorId),
+    status: plan?.status || "ACTIVE" as const,
+  });
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="absolute inset-0 bg-bazar-black/60 backdrop-blur-md"
+        onClick={onClose}
+      />
+      <motion.div
+        initial={{ scale: 0.95, opacity: 0, y: 20 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.95, opacity: 0, y: 20 }}
+        className="relative w-full max-w-2xl bg-white dark:bg-bazar-black rounded-[2.5rem] border border-bazar-gray-100 dark:border-bazar-gray-900 shadow-2xl overflow-hidden"
+      >
+        <div className="p-8 md:p-12 space-y-8">
+           <div className="flex justify-between items-center">
+              <div>
+                <Typography variant="titleSm" className="uppercase tracking-[0.3em] text-[10px] opacity-40 mb-1 font-black">
+                  Campaign Management
+                </Typography>
+                <Typography variant="titleMd" className="text-2xl font-black uppercase tracking-widest">
+                  {plan ? "Edit Campaign" : "New Membership"}
+                </Typography>
+              </div>
+              <Button variant="ghost" size="icon" className="rounded-2xl" onClick={onClose}>
+                <CloseIcon className="w-5 h-5" />
+              </Button>
+           </div>
+
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Campaign Title</label>
+                  <input 
+                    type="text"
+                    value={formData.title}
+                    onChange={e => setFormData({...formData, title: e.target.value})}
+                    placeholder="e.g. Platinum Foodie Club"
+                    className="w-full h-12 bg-bazar-gray-50 dark:bg-bazar-gray-950 border border-bazar-gray-100 dark:border-bazar-gray-900 rounded-xl px-4 text-sm font-bold outline-none focus:ring-2 ring-bazar-black/5"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Reward Type</label>
+                  <select 
+                    value={formData.rewardType}
+                    onChange={e => setFormData({...formData, rewardType: e.target.value as RewardType, isOnlineOnlyReward: e.target.value === 'FREE_DELIVERY'})}
+                    className="w-full h-12 bg-bazar-gray-50 dark:bg-bazar-gray-950 border border-bazar-gray-100 dark:border-bazar-gray-900 rounded-xl px-4 text-sm font-bold outline-none appearance-none"
+                  >
+                    <option value="CASHBACK_PERCENT">Cashback / Discount %</option>
+                    <option value="FREE_DELIVERY">Free Delivery (Online Only)</option>
+                    <option value="FLAT_DISCOUNT">Flat Cash Discount</option>
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Target {formData.rewardType === 'FREE_DELIVERY' ? 'Orders' : 'Visits'}</label>
+                  <input 
+                    type="number"
+                    value={formData.targetVisits}
+                    onChange={e => setFormData({...formData, targetVisits: parseInt(e.target.value)})}
+                    className="w-full h-12 bg-bazar-gray-50 dark:bg-bazar-gray-950 border border-bazar-gray-100 dark:border-bazar-gray-900 rounded-xl px-4 text-sm font-bold outline-none focus:ring-2 ring-bazar-black/5"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Reward Value {formData.rewardType === 'CASHBACK_PERCENT' ? '(%)' : formData.rewardType === 'FLAT_DISCOUNT' ? '(NPR)' : ''}</label>
+                  <input 
+                    type="number"
+                    disabled={formData.rewardType === 'FREE_DELIVERY'}
+                    value={formData.rewardValue}
+                    onChange={e => setFormData({...formData, rewardValue: parseInt(e.target.value)})}
+                    className="w-full h-12 bg-bazar-gray-50 dark:bg-bazar-gray-950 border border-bazar-gray-100 dark:border-bazar-gray-900 rounded-xl px-4 text-sm font-bold outline-none focus:ring-2 ring-bazar-black/5 disabled:opacity-20"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Validation PIN (6-Digits)</label>
+                  <input 
+                    type="text"
+                    maxLength={6}
+                    value={formData.secretPin}
+                    onChange={e => setFormData({...formData, secretPin: e.target.value.replace(/\D/g, '')})}
+                    className="w-full h-12 bg-bazar-gray-50 dark:bg-bazar-gray-950 border border-bazar-gray-100 dark:border-bazar-gray-900 rounded-xl px-4 text-sm font-mono font-bold tracking-[0.5em] outline-none focus:ring-2 ring-bazar-black/5"
+                  />
+                </div>
+                <div className="flex items-center gap-3 pt-6">
+                   <div 
+                    className={cn(
+                      "w-12 h-6 rounded-full p-1 cursor-pointer transition-colors duration-500",
+                      formData.isOnlineOnlyReward ? "bg-blue-500" : "bg-bazar-gray-200 dark:bg-bazar-gray-800"
+                    )}
+                    onClick={() => setFormData({...formData, isOnlineOnlyReward: !formData.isOnlineOnlyReward})}
+                   >
+                     <div className={cn("w-4 h-4 rounded-full bg-white transition-transform duration-500", formData.isOnlineOnlyReward ? "translate-x-6" : "")} />
+                   </div>
+                   <Typography variant="bodySm" className="text-[10px] font-black uppercase tracking-widest opacity-60">Online Only Campaign</Typography>
+                </div>
+              </div>
+           </div>
+
+           <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Description</label>
+              <textarea 
+                rows={3}
+                value={formData.description}
+                onChange={e => setFormData({...formData, description: e.target.value})}
+                placeholder="Describe the value proposition to your customers..."
+                className="w-full bg-bazar-gray-50 dark:bg-bazar-gray-950 border border-bazar-gray-100 dark:border-bazar-gray-900 rounded-2xl p-4 text-sm font-bold outline-none focus:ring-2 ring-bazar-black/5 resize-none"
+              />
+           </div>
+
+           <div className="flex gap-4 pt-4">
+              <Button variant="outline" className="flex-1 h-14 uppercase font-black tracking-widest text-xs rounded-2xl" onClick={onClose}>Cancel</Button>
+              <Button 
+                className="flex-1 h-14 gap-3 uppercase font-black tracking-widest text-xs rounded-2xl"
+                onClick={() => onSave(formData)}
+              >
+                <Save className="w-4 h-4" />
+                {plan ? "Update Campaign" : "Publish Campaign"}
+              </Button>
+           </div>
+        </div>
+      </motion.div>
     </div>
   );
 }

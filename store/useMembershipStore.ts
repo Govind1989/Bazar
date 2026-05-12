@@ -6,10 +6,16 @@ interface MembershipState {
   plans: MembershipPlan[]
   userMemberships: UserMembership[]
   purchases: MembershipPurchase[]
+  vendorPins: Record<string, string> // vendorId -> 6-digit pin
   
   // Plan Management
   addPlan: (plan: Omit<MembershipPlan, 'id' | 'enrolledUsers' | 'totalRedemptions' | 'createdAt'>) => void
   updatePlan: (id: string, updates: Partial<MembershipPlan>) => void
+  deletePlan: (id: string) => void
+  
+  // PIN Management
+  setVendorPin: (vendorId: string, pin: string) => void
+  getVendorPin: (vendorId: string) => string
   
   // User Actions
   enrollInPlan: (userId: string, vendorId: string, planId: string) => void
@@ -45,7 +51,7 @@ export const useMembershipStore = create<MembershipState>()(
           rewardValue: 100,
           rewardDescription: 'Free meal up to average value',
           isOnlineOnlyReward: false,
-          secretPin: '1234',
+          secretPin: '123456',
           status: 'ACTIVE',
           enrolledUsers: 45,
           totalRedemptions: 12,
@@ -62,7 +68,7 @@ export const useMembershipStore = create<MembershipState>()(
           rewardValue: 0,
           rewardDescription: 'Free Delivery on your next online order',
           isOnlineOnlyReward: true,
-          secretPin: '5678',
+          secretPin: '567890',
           status: 'ACTIVE',
           enrolledUsers: 120,
           totalRedemptions: 34,
@@ -71,6 +77,19 @@ export const useMembershipStore = create<MembershipState>()(
       ],
       userMemberships: [],
       purchases: [],
+      vendorPins: {
+        'v1': '882299'
+      },
+
+      setVendorPin: (vendorId, pin) => {
+        set((state) => ({
+          vendorPins: { ...state.vendorPins, [vendorId]: pin }
+        }));
+      },
+
+      getVendorPin: (vendorId) => {
+        return get().vendorPins[vendorId] || '882299';
+      },
 
       addPlan: (planData) => {
         const id = `plan-${Math.random().toString(36).substr(2, 9)}`;
@@ -87,6 +106,13 @@ export const useMembershipStore = create<MembershipState>()(
       updatePlan: (id, updates) => {
         set((state) => ({
           plans: state.plans.map((p) => (p.id === id ? { ...p, ...updates } : p))
+        }));
+      },
+
+      deletePlan: (id) => {
+        set((state) => ({
+          plans: state.plans.filter((p) => p.id !== id),
+          userMemberships: state.userMemberships.filter((m) => m.planId !== id)
         }));
       },
 
