@@ -20,6 +20,11 @@ Static Credentials for Testing:
   $env:ANALYZE="true"; npm run build                                                                                                                                       ? for shortcuts
 ──────────────────────────────────────────────────────────
 
+The messge chat interface in the FloatingDock is meant for user message communication. currently we are showing the agentic chat
+ in message chat also. The agentic chat is to be completed from another chat window below the message communication. Make chagnes.
+ Leave the human communication channel to be static and ready for further websocket implementation for later with few messages of static data. 
+And in our agentic logs, when hovered, the review and continue is perfect, but when i want to delete the conversation, user 
+is not able to click on the delete icon since the hover presents review and continue and themessage continues. Resolve
 
 
 Study @AgenticTruth and study the current implementation added in our repo and then add the detail of the implementation of our

@@ -1,20 +1,15 @@
-## Error Type
-Runtime TypeError
+./lib/agent/graph.ts:32:22
+Type error: No overload matches this call.
+  Overload 1 of 2, '(model: string, fields?: Omit<GoogleGenerativeAIChatInput, "model"> | undefined): ChatGoogleGenerativeAI', gave the following error.
+    Argument of type '{ modelName: string; maxOutputTokens: number; }' is not assignable to parameter of type 'string'.
+  Overload 2 of 2, '(fields: GoogleGenerativeAIChatInput): ChatGoogleGenerativeAI', gave the following error.
+    Object literal may only specify known properties, and 'modelName' does not exist in type 'GoogleGenerativeAIChatInput'.
 
-## Error Message
-can't access property "apiKey", currentSettings is undefined
-
-
-    at AISettings (components\shared\AISettings.tsx:36:40)
-    at VendorAISettingsPage (app\(dashboard)\dashboard\settings\ai\page.tsx:8:7)
-
-## Code Frame
-  34 |   const currentSettings = aiSettings[role];
-  35 |   
-> 36 |   const [apiKey, setApiKey] = useState(currentSettings.apiKey || "");
-     |                                        ^
-  37 |   const [isTesting, setIsTesting] = useState(false);
-  38 |   const [testResult, setTestResult] = useState<'success' | 'error' | null>(null);
-  39 |
-
-Next.js version: 15.5.15 (Webpack)
+  30 |     // Initialize model (assuming Google Gemini as primary)
+  31 |     // Keys will be passed from the frontend and handled via environment/proxy
+> 32 |     this.model = new ChatGoogleGenerativeAI({
+     |                      ^
+  33 |       modelName: "gemini-1.5-pro",
+  34 |       maxOutputTokens: 2048,
+  35 |     }).bindTools(this.tools);
+Next.js build worker exited with code: 1 and signal: null

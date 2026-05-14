@@ -69,176 +69,89 @@ This document serves as the foundational truth for all agentic AI entities inter
 - **Logic**: Strategic interceptor for multi-tenant subdomains and route-based session guards.
 
 ### 3.3 State & Business Logic Orchestration
-#### `store/useSystemStore.ts`
-- **Logic**: Global Platform Configuration. Manages `language` (EN/NP) and `marketplaceView` (Classic vs. Social). Persisted to `bazar-system-storage`.
-
 #### `store/useUserStore.ts`
-- **Logic**: Manages the platform's social graph and AI preferences.
+- **Logic**: Manages the platform's social graph, AI preferences, and **Agentic Sessions**.
+- **Agentic Sessions**: Groups messages, internal reasoning (`THOUGHT`), and system executions (`TOOL_CALL`) into coherent, role-segregated conversational threads. Supports full session lifecycle (Create, Update, Resume, Delete).
 - **Hierarchical Favoriting**: Favoriting a sub-category automatically triggers the "Favorite" state for its parent category.
 - **Dispute Resolution**: Centralizes the `complaints` state and `addComplaint` logic for platform-wide quality governance.
 - **Bazar Intelligence**: Stores `aiSettings` (API Keys, Preferred Model) for both Users and Vendors.
-- **Global Messaging Sync**: Centralizes `isMessageModalOpen` and `activeConversationVendorId`.
+- **Global Messaging Sync**: Centralizes human-to-human contact states.
 
-#### `store/useMembershipStore.ts`
-- **Logic**: Vendor-Driven Loyalty Infrastructure. 
-  - **Plan Management**: Orchestrates Visit-based and Spend-based loyalty programs with customizable targets and reward types (Cashback, Free Delivery).
-  - **Trust Validation**: Implements 6-digit Secret PIN logic for in-store purchase verification.
-  - **Real-time Progress**: Calculates average transaction values to determine dynamic reward levels (e.g., "11th meal free").
+#### `lib/agent/graph.ts`
+- **Purpose**: LangGraph Orchestration Engine.
+- **Logic**: Implements a stateful **ReAct (Reasoning + Acting)** loop using `@langchain/langgraph`. Orchestrates the flow between the `Planner` (LLM call), `Executor` (Tool dispatch), and `Responder`. Streams multiplexed data chunks (`THOUGHT`, `TOOL_CALL`, `CONTENT`) back to the frontend.
 
-### 3.5 Quality Assurance & Governance (NEW)
-#### `app/(public)/account/complains/page.tsx`
-- **Purpose**: Official Dispute Resolution Terminal.
-- **Logic**: Implements a high-fidelity audit interface for customer dissatisfaction reports. Features deep-linking via `orderId` query parameters for pre-filling complaint contexts. Supports multi-modal evidence submission (Images/Video) and real-time audit status tracking (Pending, Resolved, Rejected).
+#### `lib/agent/tools.ts`
+- **Purpose**: Modular Tool Registry.
+- **Logic**: Defines system capabilities using `DynamicStructuredTool`. Enforces strict **Role-Based Tool Access (RBTA)**: Vendors get Inventory/Pricing modules; Customers get Marketplace Discovery. Tools are grounded via the `KnowledgeEngine`.
 
-#### `store/useAuthStore.ts`
-- **Logic**: Persistent authentication state. Supports role-switching (Customer/Vendor/SuperAdmin) and role-specific redirection logic. Includes `vendorId` mapping for seamless management of vendor-specific resources.
-
-#### `store/useCMSStore.ts`
-- **Logic**: Multi-tenant Configuration & Taxonomy Management. Handles real-time preview and persistence of vendor-specific storefront configurations, including the management of `VendorCategory` and `VendorSubCategory` lifecycles (Create, Update, Archive).
+#### `lib/ai/knowledge.ts`
+- **Purpose**: RAG Context Bridge.
+- **Logic**: Transforms static prototype data (`PRODUCTS`, `VENDORS`, `SERVICES`) into structured, searchable context for the LLM. Grounding source for all agentic product searches.
 
 ### 3.4 Shared Architectural Components
-#### `components/templates/TemplateEngine.tsx`
-- **Purpose**: Dynamic Layout Orchestrator.
-- **Logic**: Resolves the correct layout template (`GoldFood`, `Minimal`, etc.) from the `TemplateRegistry` based on the vendor's CMS configuration.
-
 #### `components/shared/FloatingDock.tsx`
 - **Purpose**: The "Agentic Command Center". 
 - **Logic**: Dual-Mode interaction hub. 
-  - **Messaging Mode**: Direct Human-to-Human contact, synchronized with the global messaging store.
-  - **AI Mode**: Role-aware assistant ("User Assistant" vs. "Vendor Assistant"). Includes placeholder logic for API-driven autonomous tasks.
+  - **Human Support Channel**: Direct human-to-human contact using `MOCK_CONVERSATIONS`, WebSocket-ready.
+  - **Intelligence Assistant**: Session-based agentic interface with auto-scrolling history, interaction-level deletion, and HITL selection triggers.
 
-#### `components/shared/AuthModal.tsx`
-- **Logic**: Unified authentication gateway. Supports multi-role user accounts with a "Role Selection" phase. Implements role-based redirection: `SuperAdmin` -> `/admin`, `Vendor` -> `/dashboard`, `Customer` -> `/account`.
+#### `components/shared/AgenticSelectionModal.tsx`
+- **Purpose**: Human-in-the-Loop (HITL) Interceptor.
+- **Logic**: Presents matched options (Products/Vendors) for user validation when the agent detects multiple results, ensuring safe autonomous transitions.
 
-#### `components/shared/Jobs.tsx`
-- **Purpose**: Career discovery interface.
-- **Logic**: Multi-dimensional filtering (Job Type, Sector) and real-time search across job titles and vendor names.
+#### `components/shared/SessionChatHistory.tsx`
+- **Purpose**: Unified Intelligence Hub UI.
+- **Logic**: Renders session previews across all dashboards. Supports "Review & Resume" and surgical deletion of interaction threads.
 
 ---
 
 ## 4. IMPLEMENTATION STATUS
 
-### ✅ Phase 1-5: Core Infrastructure
+### ✅ Phase 1-21: Foundation & Modular LLM
 - Unified App Router, Monochromatic System, Atomic UI.
-- Multi-Tenant Storefronts (`/[vendor]`) & Service Economy Hubs.
-- Persistence-ready Shopping Cart & WYSIWYG Store Customizer.
-- Vendor Dashboard & Super Admin "BAZAR OS".
+- Multi-Tenant Storefronts, CMS Customizer, & BAZAR OS.
+- LangGraph modular registry & static knowledge bridge.
 
-### ✅ Phase 6: Prototype Readiness
-- **Omni-Search Orchestrator**: Global CMD+K discovery.
-- **Transactional Flow**: 3-step Checkout (Shipping -> Payment -> Success).
-- **Mobile Experience**: PWA Shell Simulator for high-fidelity mobile previews.
-- **Linguistic Engine**: Full English & Nepali infrastructure.
-- **Authentication**: Role-aware Mock system with selection logic.
-
-### ✅ Phase 7: Adaptive Design System
-- **next-themes Integration**: Seamless Dark/Light mode orchestration.
-- **Semantic Tokenization**: Tailwind config refactored for theme-aware colors.
-- **Iconography**: Dynamic Sun/Moon toggle with state-aware rendering.
-
-### ✅ Phase 8: Social & Discovery Engine
-- **Compact Discovery UI**: Refactored Category Catalog with high-density cards and sub-category favoriting.
-- **Advanced Partner Filtering**: Vendor discovery hub with category-based radio filtering and real-time craft search.
-- **Agentic Messaging Bridge**: Integrated "Message" triggers that bridge discovery and transaction.
-- **Career Ecosystem**: Full end-to-end Jobs module with multi-vendor listings and sector-specific discovery.
-
-### ✅ Phase 9: Socio-Ecommerce & Adaptive Layouts
-- **MarketPlaceSocio**: Redesign of the storefront as a social-first experience with masonry feeds and interactive tags.
-- **Strategic UI Toggling**: Implementation of `marketplaceView` in `useSystemStore` for on-the-fly paradigm transitions.
-- **Story Architecture**: Animated vendor stories with immersive full-screen views.
-
-### ✅ Phase 10: High-Fidelity C2C Marketplace
-- **P2P Trading Hub**: Dedicated interface for peer-to-peer transactions featuring localized discovery.
-- **Trust Infrastructure**: Simulated escrow support and verification signals.
-
-### ✅ Phase 11: Specialized Vertical Templates
-- **Advanced Food Templates**: Launch of `GoldFood`, `PlatinumFood`, and `SilverFood` templates with parallax effects and premium menu grids.
-
-### ✅ Phase 12: Bazar Intelligence & AI Integration
-- **Agentic Hub**: Enhanced `FloatingDock` with specialized AI assistance for different user roles.
-- **AI Configuration**: Secured Zustand-based storage for user/vendor API keys to enable private LLM-driven features.
-- **Context-Aware Assistance**: Proactive help system ready for LLM grounding.
-
-### ✅ Phase 13: Advanced Taxonomy & Multi-Tenant Logic (NEW)
-- **Two-Column Taxonomy Drill-Down**: Refactored `CategoryManager` for structured Category -> Sub-category management.
-- **Strategic vendorId Mapping**: Seamless synchronization between Vendor Users and their Storefronts, resolving legacy ID mismatch bugs.
-- **Hamburger-First Navigation**: Global vendor categories moved to a specialized sidebar in `VendorNavbar` for aesthetic minimalism.
-
-### ✅ Phase 14: Loyalty & Campaigns Ecosystem (NEW)
-- **Vendor Campaign Architect**: Full-featured creation suite for multi-type campaigns (Flash Sales, Loyalty, Referrals, Occasional, Social Shoutouts, Free Delivery).
-- **Targeting Precision**: Logic for applying campaigns to entire catalogs, specific categories, sub-categories, or individual products.
-- **Automated Lifecycle Management**: Status orchestration (Upcoming, Active, Expired) based on temporal logic.
-- **User Reward Tracking**: Real-time progress visualization in the User Dashboard for loyalty targets with "Cash Out" simulation.
-
-### ✅ Phase 15: Unified Messaging & Navigation Refinement (NEW)
-- **Omni-Directional Message Toggle**: Refactored the history sidebar toggle in both Vendor and User dashboards to use dynamic `ChevronLeft` and `ChevronRight` icons for intuitive navigation.
-- **Legacy Icon Cleanup**: Systematic replacement of generic `MessageSquare` icons with purpose-driven directional cues in history modules.
-- **Enhanced Sidebar Sync**: Seamless integration of message history states across both dashboard architectures for a unified SPA-feel.
-
-### ✅ Phase 16: Quality Assurance & Dispute Resolution (NEW)
-- **Dispute Audit Terminal**: Implementation of a specialized "Complains & Reports" module for trust-based commerce.
-- **Evidence-Backed Governance**: Support for multi-modal proof (Images/Video) in dissatisfaction reports.
-- **Integrated Report Triggers**: Direct "Report" actions embedded within order history for frictionless dissatisfaction logging.
-- **Audit Tracking System**: Real-time visualization of complaint lifecycles with Investigation Subjects and Audit Timestamps.
-
-### ✅ Phase 18: Strategic Navigation Refinement & Aesthetic Identity (NEW)
-- **Unified User Dropdown**: Consolidated Dashboard access and Session management into a single, high-fidelity dropdown menu in `Navbar`.
-- **Aesthetic Iconography**: Strategic use of `LayoutDashboard` and `LogOut` within the user context for intuitive navigation.
-- **Context-Aware Dashboard Routing**: Automatic resolution of dashboard paths based on the `activeRole` from `useAuthStore` (Admin -> `/admin`, Vendor -> `/dashboard`, Customer -> `/account`).
-
-### ✅ Phase 19: Comprehensive Membership Economy (NEW)
-- **Vendor-to-Customer Loyalty Bridge**: End-to-end infrastructure for private membership clubs.
-- **Dynamic Reward Resolution**: Automated calculation of reward values based on historical engagement patterns.
-- **In-Store Trust Protocol**: Deployment of 6-digit Secret PINs for secure, cross-channel transaction validation.
-
-### ✅ Phase 20: LangGraph Enterprise Intelligence (NEW)
-- **Modular Agentic Autonomy**: Shift to a dynamic "Tool Registry" model where intelligence capabilities are added as plug-and-Play modules.
-- **Role-Based Tool Access (RBTA)**: Implementation of security boundaries for tool execution based on User/Vendor roles.
-- **Multiplexed Thought Streaming**: Advanced UI strategy for streaming internal monologue (`[THOUGHT]`), tool-calls (`[TOOL]`), and user-facing content (`[CONTENT]`).
-- **Surgical Tool Execution**: Tool-agnostic graph nodes (`Planner`, `Executor`, `Evaluator`) designed for production-level scalability and error recovery.
-
-### ✅ Phase 21: Modular LLM Infrastructure & Knowledge Engine (NEW)
-- **LLM Factory Pattern**: Deployment of a modular provider system supporting Google Gemini with room for OpenAI and Anthropic expansion.
-- **Static Knowledge Bridge**: Creation of the `KnowledgeEngine` to transform prototype `@data/**` into structured context for RAG (Retrieval Augmented Generation).
-- **Sovereign AI Settings**: Implementation of the `AISettings` terminal across all dashboards (Admin, Vendor, User) for private API key management.
-- **Fluidic AI UX**: Premium configuration interface with real-time connection testing and enterprise-grade security messaging.
+### ✅ Phase 22: Session-Based Intelligence & HITL (NEW)
+- **Unified Agentic Sessions**: Refactored store to group reasoning and messages into coherent threads.
+- **Cross-Dashboard Audit Hubs**: Deployment of specialized "Intelligence Hubs" in User, Vendor, and Admin panels.
+- **Human-in-the-Loop Orchestration**: Integration of selection modals for multi-match search results.
+- **Granular Interaction Control**: Hover-based deletion for both sessions and individual messages.
+- **Role-Segregated Auditing**: Automatic filtering of sessions based on user context (Shop Intelligence vs. Personal Audit).
 
 ---
 
 ## 5. STRATEGIC ROADMAP
 
 1.  **AI-Scaffolding Simulation**: Demonstrate how a vendor can "generate" a store description using the platform's AI primitives.
-2.  **Live Real-time Mocking**: Integrate WebSockets/SSE mocks for "New Order" notifications in the Vendor Dashboard.
+2.  **Live WebSocket Integration**: Replace static human support data with real-time bidirectional messaging.
 3.  **Analytics Visualization**: Implement GSAP/Framer charts for the "BAZAR OS" platform GMV view.
 4.  **Vendor Performance Index**: Create a logic layer that "rates" vendors based on mock delivery speeds and customer feedback.
-5.  **Smart AI Assistant**: Activate the "Assistant" tab in the `FloatingDock` to provide context-aware platform help.
 
 ## 6. DEVELOPMENT PROCESS
 BAZAR adheres to a rigorous **Research -> Strategy -> Execution -> Validation** lifecycle, optimized for **Agentic Autonomy** and architectural integrity.
 
 ### 6.1 Research & Discovery (The "Deep Dive")
 - **Codebase Mapping**: Systematic use of `grep` and `glob` to understand existing patterns (e.g., CVA variants, Zustand persistence) before proposing changes.
-- **Impact Analysis**: Identification of cross-cutting concerns (e.g., how a new account sub-page affects the global layout and sidebar) to ensure zero-regression delivery.
-- **Assumption Verification**: Empirical checks of existing data models (e.g., `RECENT_ORDERS` structure) to align with backend expectations.
-- **User Intent Alignment**: Translating high-level requests (e.g., "Impress me") into specific, high-fidelity UI/UX implementations using modern primitives.
+- **Dependency Orchestration**: Resolving complex peer-dependency conflicts (e.g., `@langchain/core` versioning) using `--legacy-peer-deps` for stable integration.
+- **Impact Analysis**: Identification of cross-cutting concerns (e.g., how session persistence affects global layout and sidebar) to ensure zero-regression delivery.
 
 ### 6.2 Strategic Architecture (The "Blueprint")
-- **Alignment with Design System**: Ensuring every new component leverages the "Adaptive Monochromatic" tokens and shared UI library.
-- **Surgical State Design**: Designing minimal, persistent state extensions in Zustand to support new business logic without architectural bloat.
-- **Modular Scalability**: Building self-contained modules (like `/account/orders`) that are globally aware but locally managed.
-- **Predictive UX**: Anticipating user needs (e.g., adding a "Dashboard" shortcut in the user profile) to reduce click-depth.
+- **Reasoning-First Orchestration**: Designing LangGraph workflows that prioritize transparency (Streaming `THOUGHT` logs) before action.
+- **Sovereign Key Management**: Implementing dynamic API key injection at the request level, ensuring no secrets are persisted on central servers.
+- **Modular Scalability**: Building self-contained tools with Zod schema validation for type-safe LLM tool-calling.
 
 ### 6.3 Implementation & Craft (The "Execution")
-- **Surgical Code Updates**: Applying targeted changes while rigorously adhering to local naming conventions and ES module standards.
-- **UI/UX Polishing**: Leveraging `Framer Motion` for fluid interactions and `Lucide` for semantic iconography to deliver a premium "SPA-feel".
-- **Defensive Engineering**: Implementing robust null-checks, loading states, and error boundaries for all data-driven modules.
-- **Accessibility & Performance**: Ensuring all interactions are keyboard-navigable and leveraging Next.js optimizations (e.g., `useRouter().refresh()`).
+- **Multiplexed Streaming**: Engineering an API bridge that delivers raw data chunks for real-time UI synchronization of chat and logs.
+- **Fluidic UX Polishing**: Leveraging `Framer Motion` and `Lucide` to deliver a premium, monochromatic "alive" feel in the Floating Dock and Intelligence Hubs.
+- **Surgical State Design**: Designing minimal, persistent state extensions in Zustand to support complex session grouping without architectural bloat.
 
 ### 6.4 Verification & Finality (The "QA")
-- **End-to-End Validation**: Exhaustive testing of the entire user journey across multiple roles and themes.
-- **Type Safety Enforcement**: Maintaining strict TypeScript integrity across all new interfaces and modules.
+- **Role-Aware Validation**: Exhaustive testing of the entire user journey across Customer, Vendor, and Admin roles to ensure strict data segregation.
+- **Type Safety Enforcement**: Maintaining strict TypeScript integrity across LangGraph nodes, Tool definitions, and selection schemas.
 - **Truth Source Synchronization**: Updating `@AgenticTruth.md` immediately after each major feature deployment to maintain a 1:1 map of the repository state.
 
 ---
 *Generated by Agentic Truth Engine*
-*Last Update: 2026-05-12 | Version 2.1*
+*Last Update: 2026-05-14 | Version 2.2*

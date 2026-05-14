@@ -31,7 +31,8 @@ const ADMIN_SIDEBAR_ITEMS = [
   { name: "Vendors", href: "/admin/vendors", icon: Store, description: "Merchant Management" },
   { name: "Categories", href: "/admin/categories", icon: Layers, description: "Taxonomy Tree" },
   { name: "Users", href: "/admin/users", icon: Users2, description: "Customer Base" },
-  { name: "System Logs", href: "/admin/logs", icon: Terminal, description: "Audit Trails" },
+  { name: "Agentic Logs", href: "/admin/agentic-logs", icon: Terminal, description: "Intelligence Audit" },
+  { name: "System Logs", href: "/admin/logs", icon: Activity, description: "Audit Trails" },
   { name: "Settings", href: "/admin/settings", icon: Settings, description: "OS Configuration" },
 ];
 

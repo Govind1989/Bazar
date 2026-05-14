@@ -6,14 +6,14 @@ import { Typography } from "@/components/ui/typography";
 import { SessionChatHistory } from "@/components/shared/SessionChatHistory";
 import { Terminal, Search } from "lucide-react";
 
-export default function UserAgenticLogs() {
+export default function VendorAgenticLogs() {
   const { user } = useAuthStore();
   const { agenticSessions, setActiveSession, setMessageModalOpen, deleteAgenticSession } = useUserStore();
 
   if (!user) return null;
 
-  // Filter for customer role sessions
-  const userSessions = agenticSessions.filter(s => s.role === 'CUSTOMER');
+  // Filter for vendor role sessions
+  const vendorSessions = agenticSessions.filter(s => s.role === 'VENDOR');
 
   const handleSessionSelect = (id: string) => {
     setActiveSession(id);
@@ -21,12 +21,12 @@ export default function UserAgenticLogs() {
   };
 
   return (
-    <div className="space-y-12 animate-in fade-in duration-700">
+    <div className="p-8 space-y-12 animate-in fade-in duration-700">
       {/* Header */}
       <section className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
         <div>
-          <Typography variant="titleLg" className="font-black uppercase tracking-tighter mb-2 text-3xl">Intelligence Audit</Typography>
-          <Typography variant="bodySm" className="opacity-40 font-bold uppercase tracking-widest text-[10px]">Your personal agentic command history</Typography>
+          <Typography variant="titleLg" className="font-black uppercase tracking-tighter mb-2 text-3xl">Shop Intelligence</Typography>
+          <Typography variant="bodySm" className="opacity-40 font-bold uppercase tracking-widest text-[10px]">Autonomous inventory & pricing optimizations</Typography>
         </div>
         
         <div className="relative w-full md:w-64">
@@ -41,20 +41,10 @@ export default function UserAgenticLogs() {
 
       {/* History Grid */}
       <SessionChatHistory 
-        sessions={userSessions} 
+        sessions={vendorSessions} 
         onSessionSelect={handleSessionSelect}
         onSessionDelete={deleteAgenticSession}
       />
-
-      {/* Active Core Status */}
-      <div className="p-8 border-2 border-dashed border-bazar-gray-100 dark:border-bazar-gray-900 rounded-3xl flex flex-col items-center justify-center text-center opacity-40 grayscale group hover:grayscale-0 hover:opacity-100 transition-all">
-         <div className="relative">
-           <Terminal className="w-8 h-8 mb-4 animate-pulse" />
-           <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full animate-ping" />
-         </div>
-         <Typography variant="titleSm" className="font-black uppercase tracking-[0.4em] text-xs">Live Context Synchronization</Typography>
-         <Typography variant="bodySm" className="text-[10px] mt-2 font-bold uppercase tracking-widest opacity-60">Autonomous core is ready for cross-tenant operations</Typography>
-      </div>
     </div>
   );
 }

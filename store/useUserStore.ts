@@ -27,6 +27,21 @@ export interface Review {
   createdAt: string
 }
 
+export interface AgenticSession {
+  id: string
+  role: 'CUSTOMER' | 'VENDOR' | 'SUPERADMIN'
+  title: string
+  startTime: string
+  lastUpdateTime: string
+  interactions: Array<{
+    id: string
+    timestamp: string
+    type: 'USER' | 'THOUGHT' | 'TOOL_CALL' | 'CONTENT' | 'ACTION'
+    content: string
+    metadata?: Record<string, any>
+  }>
+}
+
 interface UserState {
   favoriteCategories: string[]
   favoriteSubCategories: string[]
@@ -34,6 +49,8 @@ interface UserState {
   enrolledCampaignIds: string[]
   complaints: Complaint[]
   reviews: Review[]
+  agenticSessions: AgenticSession[]
+  activeSessionId: string | null
   activeConversationVendorId: string | null
   isMessageModalOpen: boolean
   aiSettings: {
@@ -54,6 +71,11 @@ interface UserState {
   toggleEnrollCampaign: (campaignId: string) => void
   addComplaint: (complaint: Omit<Complaint, 'id' | 'status' | 'createdAt'>) => void
   addReview: (review: Omit<Review, 'id' | 'createdAt'>) => void
+  createAgenticSession: (role: AgenticSession['role'], title: string) => string
+  addInteraction: (sessionId: string, interaction: Omit<AgenticSession['interactions'][0], 'id' | 'timestamp'>) => void
+  deleteInteraction: (sessionId: string, interactionId: string) => void
+  deleteAgenticSession: (sessionId: string) => void
+  setActiveSession: (sessionId: string | null) => void
   updateAiSettings: (role: 'user' | 'vendor', settings: Partial<UserState['aiSettings']['user']>) => void
   setActiveConversation: (vendorId: string | null) => void
   setMessageModalOpen: (open: boolean) => void
@@ -68,6 +90,8 @@ export const useUserStore = create<UserState>()(
       enrolledCampaignIds: [],
       complaints: [],
       reviews: [],
+      agenticSessions: [],
+      activeSessionId: null,
       activeConversationVendorId: null,
       isMessageModalOpen: false,
       aiSettings: {
@@ -127,7 +151,50 @@ export const useUserStore = create<UserState>()(
           ...state.reviews
         ]
       })),
-      updateAiSettings: (role: 'user' | 'vendor', settings: Partial<UserState['aiSettings']['user']>) => set((state) => ({
+      createAgenticSession: (role, title) => {
+        const id = Math.random().toString(36).substring(7);
+        const newSession: AgenticSession = {
+          id,
+          role,
+          title,
+          startTime: new Date().toISOString(),
+          lastUpdateTime: new Date().toISOString(),
+          interactions: []
+        };
+        set((state) => ({
+          agenticSessions: [newSession, ...state.agenticSessions],
+          activeSessionId: id
+        }));
+        return id;
+      },
+      addInteraction: (sessionId, interaction) => set((state) => ({
+        agenticSessions: state.agenticSessions.map(s => 
+          s.id === sessionId 
+            ? { 
+                ...s, 
+                lastUpdateTime: new Date().toISOString(),
+                interactions: [...s.interactions, { 
+                  ...interaction, 
+                  id: Math.random().toString(36).substring(7),
+                  timestamp: new Date().toISOString() 
+                }] 
+              }
+            : s
+        )
+      })),
+      deleteInteraction: (sessionId, interactionId) => set((state) => ({
+        agenticSessions: state.agenticSessions.map(s => 
+          s.id === sessionId 
+            ? { ...s, interactions: s.interactions.filter(i => i.id !== interactionId) }
+            : s
+        )
+      })),
+      deleteAgenticSession: (sessionId) => set((state) => ({
+        agenticSessions: state.agenticSessions.filter(s => s.id !== sessionId),
+        activeSessionId: state.activeSessionId === sessionId ? null : state.activeSessionId
+      })),
+      setActiveSession: (sessionId) => set({ activeSessionId: sessionId }),
+      updateAiSettings: (role, settings: Partial<UserState['aiSettings']['user']>) => set((state) => ({
         aiSettings: {
           ...state.aiSettings,
           [role]: { ...state.aiSettings[role], ...settings }

@@ -26,7 +26,8 @@ import {
   Sun,
   Moon,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Terminal
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -35,6 +36,7 @@ import { cn } from "@/lib/utils";
 const SIDEBAR_ITEMS = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Messages", href: "/dashboard/messages", icon: MessageSquare },
+  { name: "Agentic Logs", href: "/dashboard/agentic-logs", icon: Terminal },
   { name: "Sales Channels", href: "/dashboard/sales-channels", icon: Globe },
   { name: "Orders", href: "/dashboard/orders", icon: ShoppingBag },
   { name: "Taxonomy", href: "/dashboard/categories", icon: Tags },
