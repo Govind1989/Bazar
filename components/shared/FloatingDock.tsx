@@ -25,6 +25,7 @@ export function FloatingDock() {
   const [activeModal, setActiveModal] = useState<'messages' | 'ai' | null>(null);
   const { user, activeRole } = useAuthStore();
   const { aiSettings, isMessageModalOpen, setMessageModalOpen, activeConversationVendorId } = useUserStore();
+  const [message, setMessage] = useState("");
 
   // Sync internal state with store
   useEffect(() => {
@@ -39,6 +40,22 @@ export function FloatingDock() {
   const handleCloseModal = () => {
     setActiveModal(null);
     setMessageModalOpen(false);
+  };
+
+  const handleSendMessage = () => {
+    if (!message.trim()) return;
+    
+    // In a real app, this would send to a backend or AI service
+    console.log(`Sending ${activeModal} message:`, message);
+    
+    // Clear input after sending
+    setMessage("");
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSendMessage();
+    }
   };
 
   const isVendor = activeRole === 'Vendor' || activeRole === 'SuperAdmin';
@@ -136,10 +153,18 @@ export function FloatingDock() {
                <div className="relative">
                   <input 
                     type="text" 
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    onKeyDown={handleKeyDown}
                     placeholder="Type a message..."
                     className="w-full bg-white dark:bg-bazar-black border-2 border-bazar-gray-100 dark:border-bazar-gray-900 rounded-2xl py-3 pl-4 pr-12 outline-none focus:border-bazar-black dark:focus:border-bazar-white transition-all text-sm"
                   />
-                  <Button size="icon" className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-xl">
+                  <Button 
+                    onClick={handleSendMessage}
+                    disabled={!message.trim()}
+                    size="icon" 
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-xl"
+                  >
                     <Send className="w-4 h-4" />
                   </Button>
                </div>

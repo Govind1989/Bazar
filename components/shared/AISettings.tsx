@@ -70,40 +70,55 @@ export function AISettings({ role }: AISettingsProps) {
   
   const [apiKey, setApiKey] = useState(currentSettings.apiKey || "");
   const [modelName, setModelName] = useState(currentSettings.model || "gemini-1.5-pro");
+  const [selectedProvider, setSelectedProvider] = useState(currentSettings.provider || 'google');
   const [isTesting, setIsTesting] = useState(false);
   const [testResult, setTestResult] = useState<'success' | 'error' | null>(null);
+  const [isEstablished, setIsEstablished] = useState(false);
+
+  // Check if settings are different from saved state
+  const isDirty = 
+    selectedProvider !== currentSettings.provider || 
+    apiKey !== currentSettings.apiKey || 
+    modelName !== currentSettings.model;
 
   // Sync state when currentSettings changes (after hydration)
   useEffect(() => {
     if (mounted && currentSettings) {
       setApiKey(currentSettings.apiKey || "");
       setModelName(currentSettings.model || "gemini-1.5-pro");
+      setSelectedProvider(currentSettings.provider || 'google');
+      // If we have an API key, we can consider it established initially
+      if (currentSettings.apiKey) {
+        setIsEstablished(true);
+        setTestResult('success');
+      }
     }
-  }, [mounted, currentSettings?.apiKey, currentSettings?.model]);
+  }, [mounted, currentSettings?.apiKey, currentSettings?.model, currentSettings?.provider]);
 
   const handleProviderSelect = (providerId: string) => {
     const provider = PROVIDERS.find(p => p.id === providerId);
-    updateAiSettings(role, { 
-      provider: providerId as any,
-      model: provider?.defaultModel || modelName
-    });
+    setSelectedProvider(providerId as any);
     if (provider) {
       setModelName(provider.defaultModel);
     }
+    setIsEstablished(false);
   };
 
   const handleSave = () => {
     updateAiSettings(role, { 
+      provider: selectedProvider as any,
       apiKey,
       model: modelName
     });
-    // In a real app, we would encrypt this before storing
+    setTestResult('success');
+    setIsEstablished(true);
   };
 
   const handleTest = async () => {
     if (!apiKey) return;
     setIsTesting(true);
     setTestResult(null);
+    setIsEstablished(false);
     try {
       // Simulate API validation
       await new Promise(resolve => setTimeout(resolve, 1500));
@@ -123,7 +138,7 @@ export function AISettings({ role }: AISettingsProps) {
     </div>;
   }
 
-  const activeProvider = PROVIDERS.find(p => p.id === currentSettings.provider) || PROVIDERS[0];
+  const activeProvider = PROVIDERS.find(p => p.id === selectedProvider) || PROVIDERS[0];
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
@@ -154,7 +169,7 @@ export function AISettings({ role }: AISettingsProps) {
                  onClick={() => handleProviderSelect(provider.id)}
                  className={cn(
                    "p-4 cursor-pointer transition-all border-2 group relative overflow-hidden h-full flex flex-col justify-between",
-                   currentSettings.provider === provider.id 
+                   selectedProvider === provider.id 
                     ? "border-bazar-black dark:border-bazar-white bg-bazar-gray-50 dark:bg-bazar-gray-950" 
                     : "border-transparent hover:border-bazar-gray-200 dark:hover:border-bazar-gray-800 bg-white dark:bg-bazar-black"
                  )}
@@ -162,7 +177,7 @@ export function AISettings({ role }: AISettingsProps) {
                   <div>
                     <div className="flex items-start justify-between relative z-10">
                        <span className="text-2xl">{provider.icon}</span>
-                       {currentSettings.provider === provider.id && (
+                       {selectedProvider === provider.id && (
                          <CheckCircle2 className="w-4 h-4 text-green-500" />
                        )}
                     </div>
@@ -253,7 +268,9 @@ export function AISettings({ role }: AISettingsProps) {
                  )}>
                     {testResult === 'success' ? <CheckCircle2 className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
                     <Typography variant="bodySm" className="text-[10px] font-bold uppercase tracking-wide">
-                       {testResult === 'success' ? "Connection established successfully!" : "Invalid API Key. Please check your credentials."}
+                       {testResult === 'success' 
+                         ? (isEstablished ? "Connection established successfully!" : "Connection validated successfully!") 
+                         : "Invalid API Key. Please check your credentials."}
                     </Typography>
                  </div>
                )}
@@ -272,7 +289,7 @@ export function AISettings({ role }: AISettingsProps) {
 
                <Button 
                  onClick={handleSave} 
-                 disabled={!apiKey || !modelName}
+                 disabled={!apiKey || !modelName || !isDirty}
                  className="w-full h-12 rounded-xl font-black uppercase tracking-widest bg-bazar-black text-white hover:bg-bazar-gray-800 dark:bg-bazar-white dark:text-bazar-black dark:hover:bg-bazar-gray-200"
                >
                  <Zap className="w-4 h-4 mr-2 fill-current" />
