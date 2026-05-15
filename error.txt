@@ -1,14 +1,11 @@
-[{
-	"resource": "/e:/Nextjs/Bazar/components/shared/FloatingDock.tsx",
-	"owner": "typescript",
-	"code": "1005",
-	"severity": 8,
-	"message": "',' expected.",
-	"source": "ts",
-	"startLineNumber": 171,
-	"startColumn": 3,
-	"endLineNumber": 171,
-	"endColumn": 9,
-	"modelVersionId": 24,
-	"origin": "extHost1"
-}]
+./components/admin/VendorSaaSModal.tsx:4:10
+Type error: Module '"@/data/admin-deep"' has no exported member 'SUBSCRIPTION_PLANS'.
+
+  2 |
+  3 | import { Vendor } from "@/data/mock";
+> 4 | import { SUBSCRIPTION_PLANS, MODULE_REGISTRY } from "@/data/admin-deep";
+    |          ^
+  5 | import { SubscriptionTier, ModulePermission } from "@/types/saas";
+  6 | import { Typography } from "@/components/ui/typography";
+  7 | import { Card } from "@/components/ui/card";
+Next.js build worker exited with code: 1 and signal: null

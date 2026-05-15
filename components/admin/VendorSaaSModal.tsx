@@ -1,7 +1,7 @@
 "use client";
 
 import { Vendor } from "@/data/mock";
-import { SUBSCRIPTION_PLANS, MODULE_REGISTRY } from "@/data/admin-deep";
+import { MODULE_REGISTRY } from "@/data/admin-deep";
 import { SubscriptionTier, ModulePermission } from "@/types/saas";
 import { Typography } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";

@@ -38,31 +38,83 @@ export default function AdminVendorsPage() {
   };
 
   return (
-    <div className="p-6 md:p-10 space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="p-4 md:p-10 space-y-6 md:space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-        <div>
-          <Typography variant="displaySm" className="text-3xl md:text-4xl font-black uppercase tracking-tighter">Merchants Hub</Typography>
-          <Typography variant="bodyMd" className="text-bazar-gray-500 mt-2 font-medium">Manage and audit platform vendors.</Typography>
+        <div className="space-y-1">
+          <Typography variant="displaySm" className="text-2xl md:text-4xl font-black uppercase tracking-tighter">Merchants Hub</Typography>
+          <Typography variant="bodyMd" className="text-bazar-gray-500 font-medium text-xs md:text-sm">Manage and audit platform vendors.</Typography>
         </div>
         <div className="flex items-center gap-3 w-full md:w-auto">
           <div className="relative flex-1 md:w-80 group">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 opacity-30 group-focus-within:opacity-100 transition-opacity" />
             <input 
               type="text" 
-              placeholder="Filter by merchant name..." 
+              placeholder="Search merchants..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-bazar-gray-50 dark:bg-bazar-gray-950 border border-bazar-gray-200 dark:border-bazar-gray-800 rounded-2xl text-sm outline-none focus:ring-4 focus:ring-black/5 dark:focus:ring-white/5 transition-all font-medium"
+              className="w-full pl-12 pr-4 py-2.5 md:py-3 bg-bazar-gray-50 dark:bg-bazar-gray-950 border border-bazar-gray-200 dark:border-bazar-gray-800 rounded-xl md:rounded-2xl text-xs md:text-sm outline-none focus:ring-4 focus:ring-black/5 dark:focus:ring-white/5 transition-all font-medium"
             />
           </div>
-          <Button variant="outline" size="icon" className="h-12 w-12 rounded-2xl">
-            <Filter className="w-5 h-5 opacity-40" />
+          <Button variant="outline" size="icon" className="h-10 w-10 md:h-12 md:w-12 rounded-xl md:rounded-2xl shrink-0">
+            <Filter className="w-4 h-4 md:w-5 md:h-5 opacity-40" />
           </Button>
         </div>
       </div>
 
-      <Card className="overflow-hidden border-bazar-gray-200 dark:border-bazar-gray-800 bg-bazar-white dark:bg-bazar-black shadow-2xl shadow-black/5">
-        <div className="overflow-x-auto">
+      <Card className="overflow-hidden border-bazar-gray-200 dark:border-bazar-gray-800 bg-bazar-white dark:bg-bazar-black shadow-2xl shadow-black/5 rounded-2xl md:rounded-[32px]">
+        {/* Mobile Card View (Visible only on small screens) */}
+        <div className="md:hidden divide-y divide-bazar-gray-100 dark:divide-bazar-gray-900">
+           {isLoading ? (
+             [1,2,3].map(i => <div key={i} className="p-4 h-24 animate-pulse bg-bazar-gray-50/50" />)
+           ) : filteredVendors?.map((vendor) => (
+             <div key={vendor.id} className="p-4 space-y-4">
+                <div className="flex justify-between items-start">
+                   <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-bazar-gray-100 dark:bg-bazar-gray-900 flex items-center justify-center font-black opacity-40 border border-bazar-gray-200 dark:border-bazar-gray-800">
+                         {vendor.name.charAt(0)}
+                      </div>
+                      <div>
+                         <Typography variant="titleSm" className="font-black text-sm leading-none mb-1">{vendor.name}</Typography>
+                         <TierBadge tier={vendor.tier} size="sm" />
+                      </div>
+                   </div>
+                   <div className="flex items-center gap-2">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg" onClick={() => openSaaSModal(vendor)}>
+                         <Settings2 className="w-3.5 h-3.5 text-fuchsia-600" />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg">
+                         <ExternalLink className="w-3.5 h-3.5 opacity-40" />
+                      </Button>
+                   </div>
+                </div>
+                <div className="flex justify-between items-end pt-2">
+                   <div className="space-y-1">
+                      <Typography variant="bodySm" className="text-[9px] opacity-40 uppercase font-black tracking-widest">MTD Revenue</Typography>
+                      <Typography variant="bodyMd" className="text-xs font-black">NPR {vendor.revenue.toLocaleString()}</Typography>
+                   </div>
+                   <div className="flex flex-col items-end gap-1">
+                      <div className={cn(
+                        "flex items-center gap-1 text-[9px] font-black",
+                        vendor.growth >= 0 ? "text-green-500" : "text-red-500"
+                      )}>
+                        {vendor.growth >= 0 ? <TrendingUp className="w-2.5 h-2.5" /> : <TrendingDown className="w-2.5 h-2.5" />}
+                        {Math.abs(vendor.growth)}%
+                      </div>
+                      <div className={cn(
+                        "px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest border",
+                        vendor.status === 'active' ? "bg-green-500/10 text-green-600 border-green-500/20" :
+                        vendor.status === 'pending' ? "bg-amber-500/10 text-amber-600 border-amber-500/20" : "bg-red-500/10 text-red-600 border-red-500/20"
+                      )}>
+                        {vendor.status}
+                      </div>
+                   </div>
+                </div>
+             </div>
+           ))}
+        </div>
+
+        {/* Desktop Table View (Hidden on small screens) */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-bazar-gray-100 dark:border-bazar-gray-900 bg-bazar-gray-50/50 dark:bg-bazar-gray-950/50">
