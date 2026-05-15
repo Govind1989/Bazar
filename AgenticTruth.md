@@ -104,21 +104,35 @@ This document serves as the foundational truth for all agentic AI entities inter
 - **Purpose**: Unified Intelligence Hub UI.
 - **Logic**: Renders session previews across all dashboards. Supports "Review & Resume" and surgical deletion of interaction threads.
 
+### 3.5 SaaS Infrastructure & Platform Governance (BAZAR OS)
+#### `app/(admin)/admin/`
+- **Merchants Hub** (`vendors/page.tsx`): Lifecycle management for vendors. Integrates `VendorSaaSModal` for surgical tier upgrades and module overrides.
+- **SaaS Console** (`subscriptions/page.tsx`): Global plan management. Integrates `PlanModuleEditor` for inline entitlement configuration across Free, Silver, Gold, and Platinum tiers.
+- **Deep Intelligence** (`reports/page.tsx`): Platform-wide behavioral analytics. Features a multi-stage Conversion Funnel and real-time behavioral event streaming.
+- **Financial Engine** (`billing/page.tsx`): MRR tracking and automated payout reconciliation. Monitors gateway latency (Stripe, Khalti) for system integrity.
+- **Communication Hubs**:
+    - **Messages Hub** (`messages/page.tsx`): High-fidelity, monochromatic chat bridge for direct admin-to-merchant engagement.
+    - **Broadcast Engine** (`broadcast/page.tsx`): Platform-wide outreach tool with audience targeting (by role or SaaS tier).
+
+#### `data/saas.ts` & `admin-deep.ts`
+- **Purpose**: SaaS Operational Truth.
+- **Logic**: Defines the standard module set and entitlement matrix. Stores immutable audit trails and behavioral schemas for platform intelligence.
+
 ---
 
 ## 4. IMPLEMENTATION STATUS
 
-### ✅ Phase 1-21: Foundation & Modular LLM
+### ✅ Phase 1-22: Foundation, LLM, & Intelligence Hubs
 - Unified App Router, Monochromatic System, Atomic UI.
-- Multi-Tenant Storefronts, CMS Customizer, & BAZAR OS.
-- LangGraph modular registry & static knowledge bridge.
+- LangGraph modular registry and session-based Intelligence Hubs.
+- Human-in-the-Loop (HITL) orchestration and HITL selection triggers.
 
-### ✅ Phase 22: Session-Based Intelligence & HITL (NEW)
-- **Unified Agentic Sessions**: Refactored store to group reasoning and messages into coherent threads.
-- **Cross-Dashboard Audit Hubs**: Deployment of specialized "Intelligence Hubs" in User, Vendor, and Admin panels.
-- **Human-in-the-Loop Orchestration**: Integration of selection modals for multi-match search results.
-- **Granular Interaction Control**: Hover-based deletion for both sessions and individual messages.
-- **Role-Segregated Auditing**: Automatic filtering of sessions based on user context (Shop Intelligence vs. Personal Audit).
+### ✅ Phase 23: BAZAR OS — SaaS Command Center (NEW)
+- **Multi-Tenant SaaS Layer**: Full implementation of subscription tiers and granular module permissions.
+- **Merchant Lifecycle Control**: Automated vendor auditing with surgical module overrides.
+- **Behavioral Intelligence**: Deployment of platform-wide funnel analytics and real-time traffic feeds.
+- **Unified Admin UX**: Harmonized layout with Vendor Dashboard, including theme/language toggles and standardized nomenclature ("Log out").
+- **Platform-wide Outreach**: Integration of Admin Messages and targeted Broadcast Engines.
 
 ---
 
@@ -126,7 +140,7 @@ This document serves as the foundational truth for all agentic AI entities inter
 
 1.  **AI-Scaffolding Simulation**: Demonstrate how a vendor can "generate" a store description using the platform's AI primitives.
 2.  **Live WebSocket Integration**: Replace static human support data with real-time bidirectional messaging.
-3.  **Analytics Visualization**: Implement GSAP/Framer charts for the "BAZAR OS" platform GMV view.
+3.  **Advanced White-Labeling**: Implement dynamic DNS mapping for Platinum tier vendor domains.
 4.  **Vendor Performance Index**: Create a logic layer that "rates" vendors based on mock delivery speeds and customer feedback.
 
 ## 6. DEVELOPMENT PROCESS

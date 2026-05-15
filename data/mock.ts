@@ -1,4 +1,8 @@
 import { VendorCMS } from "@/types/cms";
+import { SUBSCRIPTION_PLANS, VENDOR_SUBSCRIPTIONS, SAAS_STATS } from "./saas";
+import { SubscriptionTier } from "@/types/saas";
+
+export { SUBSCRIPTION_PLANS, VENDOR_SUBSCRIPTIONS, SAAS_STATS };
 
 export interface Category {
   id: string;
@@ -606,7 +610,13 @@ export const PLATFORM_STATS: PlatformStats = {
   vendorGrowth: 8.5
 };
 
-export const ALL_VENDORS: (Vendor & { status: 'active' | 'pending' | 'suspended', joinedDate: string })[] = [
+export const ALL_VENDORS: (Vendor & { 
+  status: 'active' | 'pending' | 'suspended', 
+  joinedDate: string,
+  tier: SubscriptionTier,
+  revenue: number,
+  growth: number
+})[] = [
   {
     id: 'v1',
     name: 'Apple Store NP',
@@ -616,7 +626,10 @@ export const ALL_VENDORS: (Vendor & { status: 'active' | 'pending' | 'suspended'
     categories: ['electronics', 'computers', 'mobiles'],
     rating: 4.9,
     status: 'active',
-    joinedDate: 'Jan 12, 2024'
+    joinedDate: 'Jan 12, 2024',
+    tier: 'PLATINUM',
+    revenue: 12500000,
+    growth: 12.5
   },
   {
     id: 'v2',
@@ -627,7 +640,10 @@ export const ALL_VENDORS: (Vendor & { status: 'active' | 'pending' | 'suspended'
     categories: ['foods'],
     rating: 4.7,
     status: 'active',
-    joinedDate: 'Feb 05, 2024'
+    joinedDate: 'Feb 05, 2024',
+    tier: 'GOLD',
+    revenue: 450000,
+    growth: 8.2
   },
   {
     id: 'v7',
@@ -637,8 +653,11 @@ export const ALL_VENDORS: (Vendor & { status: 'active' | 'pending' | 'suspended'
     logo: 'https://api.dicebear.com/7.x/initials/svg?seed=New',
     categories: ['electronics'],
     rating: 0,
-    status: 'active',
-    joinedDate: 'Today'
+    status: 'pending',
+    joinedDate: 'Today',
+    tier: 'FREE',
+    revenue: 0,
+    growth: 0
   },
   {
     id: 'v8',
@@ -649,7 +668,10 @@ export const ALL_VENDORS: (Vendor & { status: 'active' | 'pending' | 'suspended'
     categories: ['wearables'],
     rating: 4.2,
     status: 'suspended',
-    joinedDate: 'Dec 20, 2023'
+    joinedDate: 'Dec 20, 2023',
+    tier: 'SILVER',
+    revenue: 85000,
+    growth: -2.4
   }
 ];
 
