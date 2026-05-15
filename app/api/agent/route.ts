@@ -3,7 +3,7 @@ import { BazarGraph } from "@/lib/agent/graph";
 import { AgentContext } from "@/lib/agent/types";
 
 export async function POST(req: NextRequest) {
-  const { message, context, apiKey } = await req.json();
+  const { message, context, apiKey, modelName } = await req.json();
 
   if (!message || !context) {
     return new Response("Missing message or context", { status: 400 });
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
       const graph = new BazarGraph(context, (log) => {
         const jsonChunk = `DATA:${JSON.stringify(log)}\n`;
         controller.enqueue(encoder.encode(jsonChunk));
-      });
+      }, apiKey, modelName);
 
       await graph.run(message, context);
       controller.close();

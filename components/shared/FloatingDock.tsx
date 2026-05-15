@@ -80,6 +80,7 @@ export function FloatingDock() {
       const role = activeRole === 'Vendor' ? 'VENDOR' : activeRole === 'SuperAdmin' ? 'SUPERADMIN' : 'CUSTOMER';
       const aiRole = activeRole === 'Vendor' ? 'vendor' : 'user';
       const apiKey = aiSettings[aiRole]?.apiKey;
+      const modelName = aiSettings[aiRole]?.model;
 
       if (!sessionId) {
         sessionId = createAgenticSession(role as any, userMsg.slice(0, 30) + "...");
@@ -97,6 +98,7 @@ export function FloatingDock() {
           body: JSON.stringify({
             message: userMsg,
             apiKey: apiKey,
+            modelName: modelName,
             context: {
               userId: user?.id || 'anonymous',
               role: role,
